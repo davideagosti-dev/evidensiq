@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evidensiq.dev/schemas/conformance/v0.1/manifest.schema.json",
+  "title": "Evidensiq Conformance Manifest",
+  "description": "Language-neutral conformance fixture manifest for Business Context Specification v0.1.",
+  "type": "object",
+  "required": ["manifestVersion", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "manifestVersion": {
+      "type": "string",
+      "const": "0.1",
+      "description": "Conformance manifest contract version."
+    },
+    "entries": {
+      "type": "array",
+      "description": "Conformance fixture entries. May be empty until the fixture corpus is populated.",
+      "items": { "$ref": "#/$defs/ManifestEntry" }
+    }
+  },
+  "$defs": {
+    "ConformanceLevel": {
+      "type": "string",
+      "enum": ["L1", "L2", "L3", "L4"]
+    },
+    "DiagnosticSeverity": {
+      "type": "string",
+      "enum": ["error", "warning"]
+    },
+    "ExpectedDiagnostic": {
+      "type": "object",
+      "required": ["ruleId", "level", "severity", "path"],
+      "additionalProperties": false,
+      "properties": {
+        "ruleId": {
+          "type": "string",
+          "pattern": "^EVI-L[1-4]-\\d{3}$",
+          "description": "Stable conformance rule identifier."
+        },
+        "level": { "$ref": "#/$defs/ConformanceLevel" },
+        "severity": { "$ref": "#/$defs/DiagnosticSeverity" },
+        "path": {
+          "type": "string",
+          "description": "RFC 6901 JSON Pointer to the diagnostic location."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional human-readable notes for fixture authors."
+        }
+      }
+    },
+    "ManifestEntry": {
+      "type": "object",
+      "required": ["id", "fixture", "targetLevel", "expectedValid"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stable entry identifier within this manifest."
+        },
+        "fixture": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Relative path to the fixture document from the repository root."
+        },
+        "targetLevel": { "$ref": "#/$defs/ConformanceLevel" },
+        "expectedValid": {
+          "type": "boolean",
+          "description": "Whether the fixture is expected to pass validation at targetLevel."
+        },
+        "expectedDiagnostics": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ExpectedDiagnostic" },
+          "description": "Expected diagnostics when expectedValid is false or warnings are asserted."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional human-readable notes for fixture authors."
+        }
+      }
+    }
+  }
+}
