@@ -2,25 +2,60 @@
 
 This roadmap describes planned phases for Evidensiq. Phases are ordered by dependency and maturity — **no delivery dates are promised**.
 
-## Current Phase: Phase 0 — Foundation and Specification
+## Phase 0 — Foundation / Initial Specification
 
-**Status: In progress**
+**Status: Complete**
 
 Deliverables:
 
 - [x] Repository foundation (license, governance, contributing, security)
-- [x] Architecture documentation
-- [x] Business Context Specification v0.1
+- [x] Initial architecture documentation
+- [x] Business Context Specification v0.1 (initial)
 - [x] JSON Schema for `business-context.json`
 - [x] Terminology and semantic invariants
 - [x] Open source and public interest documentation
-- [ ] Community feedback on specification
 
-Phase 0 establishes the semantic contract. No runtime code is included.
+Phase 0 established the initial semantic contract. No runtime code is included.
 
 ---
 
-## Phase 1 — TypeScript Reference Core
+## Phase 1 — Specification & Reference Architecture
+
+**Status: In progress**
+
+Goals:
+
+- Lock the business context architecture
+- Reference business scenario
+- Conformance and evaluation model
+- Phase 1 architecture gate
+
+### Deliverables
+
+| Item | Description | Status |
+|------|-------------|--------|
+| **EVI-1.1** | Specification Review & Architecture Lock | In progress |
+| **EVI-1.2** | Reference Business Scenario | Planned |
+| **EVI-1.3** | Conformance & Evaluation Model | Planned |
+| **EVI-1.4** | Phase 1 Architecture Gate | Planned |
+
+EVI-1.1 delivers:
+
+- Assertion/Fact model correction
+- Temporal and conflict semantics
+- Provenance/trust model
+- Confidence model
+- Recommendation assessment
+- Context projection contract
+- Conformance model (L1–L4)
+- Serialization and versioning rules
+- Roadmap alignment
+
+No runtime code in Phase 1.
+
+---
+
+## Phase 2 — TypeScript Reference Implementation
 
 **Status: Planned**
 
@@ -28,11 +63,12 @@ Goals:
 
 - Reference implementation of the deterministic core in TypeScript
 - Schema validation for `business-context.json`
+- L1–L4 conformance support
 - Entity, relationship, and provenance management
 - Temporal validity and conflict representation
 - Confidence model implementation
 - Context projection API
-- Recommendation pipeline (validation and status tracking)
+- Recommendation assessment pipeline
 - Serialization and deserialization
 
 Non-goals:
@@ -43,7 +79,7 @@ Non-goals:
 
 ---
 
-## Phase 2 — .NET Reference Core
+## Phase 3 — .NET Reference Implementation
 
 **Status: Planned**
 
@@ -58,26 +94,7 @@ Rationale: Enterprise adoption requires first-class .NET support alongside TypeS
 
 ---
 
-## Phase 3 — Evaluation and Conformance
-
-**Status: Planned**
-
-Goals:
-
-- Conformance test suite for specification compliance
-- Evaluation methodology for:
-  - Evidence coverage
-  - Contradiction rate
-  - Unsupported assertion rate
-  - Constraint violation rate
-  - Stale evidence rate
-  - Recommendation stability
-- Counterfactual evaluation tooling
-- Reference scenario benchmarks (e.g., Northstar Manufacturing)
-
----
-
-## Phase 4 — Runtime Adapters
+## Phase 4 — Integrations / Adapters
 
 **Status: Planned**
 
@@ -93,7 +110,7 @@ Adapters sit **below** Evidensiq. Each adapter is independently versioned and ma
 
 ---
 
-## Phase 5 — Ecosystem and Interoperability
+## Phase 5 — Public Alpha / Ecosystem Validation
 
 **Status: Planned**
 
@@ -104,12 +121,13 @@ Goals:
 - Specification versioning and migration tooling
 - Expanded reference scenarios
 - Potential working groups for domain-specific extensions
+- Public alpha release and ecosystem validation
 
 ---
 
 ## Principles Across All Phases
 
-1. **Semantic invariants are preserved** — SOURCE ≠ EVIDENCE ≠ FACT ≠ INFERENCE ≠ RECOMMENDATION
+1. **Semantic invariants are preserved** — SOURCE ≠ EVIDENCE ≠ ASSERTION ≠ FACT ≠ INFERENCE ≠ RECOMMENDATION
 2. **Provider neutrality** — no lock-in to specific AI providers or platforms
 3. **Deterministic core first** — AI-assisted capabilities are candidates subject to validation
 4. **Portable format** — `business-context.json` remains the interoperability bridge
@@ -119,7 +137,7 @@ Goals:
 
 - Open a GitHub issue with the `roadmap` label
 - Propose specification changes with documented rationale
-- Contribute to Phase 0 documentation and review
+- Contribute to specification documentation and review
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
 
@@ -127,4 +145,5 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
 
 - [Architecture](architecture/architecture.md)
 - [Business Context Specification](specification/business-context-spec.md)
+- [Conformance](specification/conformance.md)
 - [Funding](funding.md)
