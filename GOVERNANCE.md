@@ -47,7 +47,7 @@ All substantive project decisions should be traceable through public GitHub hist
 
 The Evidensiq specification (`docs/specification/`, `specification/`) is the primary artifact of this project. Governance principles for the spec:
 
-1. Semantic invariants (SOURCE ≠ EVIDENCE ≠ FACT ≠ INFERENCE ≠ RECOMMENDATION) must not be weakened without explicit, documented justification.
+1. Semantic invariants (SOURCE ≠ EVIDENCE, EVIDENCE ≠ ASSERTION, ASSERTION ≠ FACT, FACT ≠ INFERENCE, INFERENCE ≠ RECOMMENDATION; and DATA ≠ INSTRUCTION) must not be weakened without explicit, documented justification.
 2. Provider neutrality must be preserved; the specification must not favor a specific AI provider, agent framework, or cloud platform.
 3. Breaking changes require a version bump and migration notes.
 4. Early specification (v0.1) is explicitly extensible; perfection is not required, but clarity and consistency are.

@@ -99,7 +99,7 @@ Business context infrastructure serves a public interest function:
 
 1. **Interoperability** — Organizations should not be locked into a single AI provider's context model
 2. **Auditability** — Open specifications enable inspection, critique, and improvement
-3. **Trust** — Transparent semantic invariants (SOURCE ≠ EVIDENCE ≠ FACT) build confidence in AI reasoning
+3. **Trust** — Transparent semantic invariants (SOURCE ≠ EVIDENCE ≠ ASSERTION ≠ FACT ≠ INFERENCE ≠ RECOMMENDATION) build confidence in AI reasoning
 4. **Innovation** — Open infrastructure enables adapters, tools, and integrations from any contributor
 5. **Neutrality** — A provider-neutral specification cannot be captured by a single vendor's roadmap
 

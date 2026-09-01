@@ -29,7 +29,8 @@ The following invariants are foundational and must not be broken without explici
 
 ```
 SOURCE ≠ EVIDENCE
-EVIDENCE ≠ FACT
+EVIDENCE ≠ ASSERTION
+ASSERTION ≠ FACT
 FACT ≠ INFERENCE
 INFERENCE ≠ RECOMMENDATION
 ```
