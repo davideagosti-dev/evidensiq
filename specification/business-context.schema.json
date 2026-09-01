@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evidensiq.dev/schemas/business-context/v0.1/business-context.schema.json",
+  "title": "Evidensiq Business Context",
+  "description": "Early specification v0.1 — portable business context artifact for evidence-backed reasoning. Conservative and extensible.",
+  "type": "object",
+  "required": ["specVersion"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URI reference to this JSON Schema."
+    },
+    "specVersion": {
+      "type": "string",
+      "const": "0.1",
+      "description": "Evidensiq Business Context Specification version."
+    },
+    "organization": {
+      "$ref": "#/$defs/OrganizationRef",
+      "description": "Primary organization this context describes."
+    },
+    "entities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Entity" },
+      "description": "Business entities (products, segments, metrics, goals, etc.)."
+    },
+    "relations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Relation" },
+      "description": "Relationships between entities."
+    },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Source" },
+      "description": "Evidence sources (origins of raw business information)."
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Evidence" },
+      "description": "Evidence artifacts derived from sources."
+    },
+    "signals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Signal" },
+      "description": "Observed patterns or changes warranting attention."
+    },
+    "inferences": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Inference" },
+      "description": "Derived analytical conclusions."
+    },
+    "recommendations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Recommendation" },
+      "description": "Validated actionable proposals."
+    },
+    "conflicts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Conflict" },
+      "description": "Unresolved or acknowledged conflicting values."
+    },
+    "metadata": {
+      "$ref": "#/$defs/Metadata",
+      "description": "Document-level metadata."
+    }
+  },
+  "$defs": {
+    "Id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier within this document."
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 date-time."
+    },
+    "TrustClassification": {
+      "type": "string",
+      "enum": ["trusted", "untrusted", "external", "user-provided", "system-generated"],
+      "description": "Source or evidence trust level."
+    },
+    "ConfidenceDimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "evidenceStrength": { "type": "string" },
+        "sourceReliability": { "type": "string" },
+        "evidenceFreshness": { "type": "string" },
+        "inferenceConfidence": { "type": "string" },
+        "modelConfidence": { "type": "string" }
+      },
+      "description": "Multi-dimensional confidence. Avoid single numeric model scores."
+    },
+    "TemporalFields": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "validFrom": { "$ref": "#/$defs/DateTime" },
+        "validUntil": { "$ref": "#/$defs/DateTime" },
+        "observedAt": { "$ref": "#/$defs/DateTime" }
+      }
+    },
+    "OrganizationRef": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "name": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "Entity": {
+      "type": "object",
+      "required": ["id", "type"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "type": {
+          "type": "string",
+          "description": "Entity primitive type (Organization, Product, Service, CustomerSegment, Channel, Process, Metric, Goal, Constraint, Competitor, etc.)."
+        },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "validFrom": { "$ref": "#/$defs/DateTime" },
+        "validUntil": { "$ref": "#/$defs/DateTime" },
+        "observedAt": { "$ref": "#/$defs/DateTime" },
+        "evidenceIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" }
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Extensible entity-specific properties."
+        }
+      }
+    },
+    "Relation": {
+      "type": "object",
+      "required": ["from", "to", "type"],
+      "additionalProperties": true,
+      "properties": {
+        "from": { "$ref": "#/$defs/Id" },
+        "to": { "$ref": "#/$defs/Id" },
+        "type": {
+          "type": "string",
+          "description": "Relationship type (targets, acquiredVia, produces, measures, constrains, competesWith, supports, etc.)."
+        },
+        "observedAt": { "$ref": "#/$defs/DateTime" },
+        "evidenceIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" }
+        }
+      }
+    },
+    "Source": {
+      "type": "object",
+      "required": ["id", "type"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "type": { "const": "Source" },
+        "name": { "type": "string" },
+        "reference": {
+          "type": "string",
+          "description": "URI or path reference to the source origin."
+        },
+        "trustClassification": { "$ref": "#/$defs/TrustClassification" }
+      }
+    },
+    "Evidence": {
+      "type": "object",
+      "required": ["id", "type", "sourceId"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "type": { "const": "Evidence" },
+        "sourceId": { "$ref": "#/$defs/Id" },
+        "contentRef": {
+          "type": "string",
+          "description": "Reference to evidence content (file path, URI, or inline ref)."
+        },
+        "observedAt": { "$ref": "#/$defs/DateTime" },
+        "trustClassification": { "$ref": "#/$defs/TrustClassification" },
+        "description": { "type": "string" }
+      }
+    },
+    "Signal": {
+      "type": "object",
+      "required": ["id", "type"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "type": { "const": "Signal" },
+        "description": { "type": "string" },
+        "evidenceIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" }
+        },
+        "observedAt": { "$ref": "#/$defs/DateTime" },
+        "status": {
+          "type": "string",
+          "enum": ["active", "resolved", "superseded"]
+        },
+        "confidence": { "$ref": "#/$defs/ConfidenceDimensions" }
+      }
+    },
+    "Inference": {
+      "type": "object",
+      "required": ["id", "type"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "type": { "const": "Inference" },
+        "description": { "type": "string" },
+        "basedOn": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" },
+          "description": "IDs of signals, facts, or other inferences."
+        },
+        "confidence": { "$ref": "#/$defs/ConfidenceDimensions" }
+      }
+    },
+    "Recommendation": {
+      "type": "object",
+      "required": ["id", "type", "status"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "type": { "const": "Recommendation" },
+        "description": { "type": "string" },
+        "rationale": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["candidate", "supported", "conflicted", "insufficient-evidence", "stale", "rejected"]
+        },
+        "evidenceIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" }
+        },
+        "inferenceIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" }
+        },
+        "constraintIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" }
+        },
+        "confidence": { "$ref": "#/$defs/ConfidenceDimensions" }
+      }
+    },
+    "Conflict": {
+      "type": "object",
+      "required": ["id", "status"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "subject": { "$ref": "#/$defs/Id" },
+        "predicate": { "type": "string" },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "value": {},
+              "evidenceIds": {
+                "type": "array",
+                "items": { "$ref": "#/$defs/Id" }
+              },
+              "observedAt": { "$ref": "#/$defs/DateTime" }
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["unresolved", "acknowledged", "resolved"]
+        }
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "createdAt": { "$ref": "#/$defs/DateTime" },
+        "updatedAt": { "$ref": "#/$defs/DateTime" },
+        "generator": { "type": "string" }
+      }
+    }
+  }
+}
