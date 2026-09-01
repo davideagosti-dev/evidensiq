@@ -1,16 +1,24 @@
 # Terminology
 
-This document defines core terms used in the Evidensiq specification. Definitions reflect the early v0.1 model and may be refined in future versions.
+This document defines core terms used in the Evidensiq specification. Definitions reflect the v0.1 architecture-lock model (EVI-1.1).
 
 ## Semantic Hierarchy
 
 Evidensiq enforces a strict separation between layers of business knowledge:
 
 ```
-SOURCE → EVIDENCE → ASSERTION/FACT → INFERENCE → RECOMMENDATION
+SOURCE → EVIDENCE → ASSERTION → FACT → SIGNAL → INFERENCE → RECOMMENDATION
 ```
 
-Each layer has distinct meaning and must not be conflated.
+Each layer has distinct meaning and must not be conflated:
+
+```
+SOURCE ≠ EVIDENCE
+EVIDENCE ≠ ASSERTION
+ASSERTION ≠ FACT
+FACT ≠ INFERENCE
+INFERENCE ≠ RECOMMENDATION
+```
 
 ## Core Terms
 
@@ -20,7 +28,7 @@ A **source** is the origin of raw business information — a system, document, p
 
 Examples: CRM system, PDF report, website, CSV export, user input, internal database.
 
-A source is not evidence itself; it is the provenance anchor for evidence.
+A source is not evidence itself; it is the provenance anchor for evidence. Source requires `ProvenanceMetadata`.
 
 ### Evidence
 
@@ -28,41 +36,35 @@ A source is not evidence itself; it is the provenance anchor for evidence.
 
 Examples: a row in `sales.csv`, a paragraph in `support.md`, a CRM field value, a metric reading at a point in time.
 
-Evidence carries provenance (which source, when observed) and may carry trust metadata.
+Evidence carries provenance (which source, when observed) and optional trust metadata.
 
 **SOURCE ≠ EVIDENCE**
 
-### Assertion / Fact
+Evidence content MUST NOT acquire instructional authority.
 
-An **assertion** (or **fact**) is a structured claim about the business, supported by one or more evidence items.
+### Assertion
 
-Examples: "Product B Q3 revenue was $1.2M", "Average delivery time is 14 days", "Company goal is to grow Product B revenue by 20%."
+An **assertion** is a structured, persisted claim about the business, supported by one or more evidence items via `evidenceIds`.
 
-Assertions may have temporal validity (`validFrom`, `validUntil`, `observedAt`).
+Examples: "Product B Q3 revenue was $1.2M", "Average delivery time is 14 days."
 
-**EVIDENCE ≠ FACT** — A fact is a validated, structured claim; evidence is the raw support.
+Assertions are first-class objects in the `assertions` array with required fields: `id`, `type`, `subject`, `predicate`, `value`, `evidenceIds`, `observedAt`, `classification`.
 
-### Inference
+**EVIDENCE ≠ ASSERTION** — Evidence is raw support; assertions are structured claims.
 
-An **inference** is a derived conclusion from one or more facts, signals, or other inferences.
+Evidence → Assertion linkage is through `Assertion.evidenceIds`, NOT through Relation.
 
-Examples: "Product B sales decline correlates with delivery complaint increase", "Supplier bottleneck may be constraining fulfillment capacity."
+### Fact
 
-Inferences are not recommendations; they represent analytical conclusions.
+A **fact** is NOT a persisted object. It is a semantic view:
 
-**FACT ≠ INFERENCE**
+An Assertion where `classification` = `"validated"` AND `validation.result` = `"valid"` under an explicitly recorded `validation.policyId`.
 
-### Recommendation
+There is no `facts` collection and no `Fact` schema type.
 
-A **recommendation** is an actionable proposal, validated against evidence and constraints, with traceable rationale.
+**ASSERTION ≠ FACT** — All facts are validated assertions; not all assertions are facts.
 
-Examples: "Do not increase acquisition spend yet", "Prioritize supplier lead time reduction before marketing expansion."
-
-Recommendations carry status (candidate, supported, conflicted, etc.) and must reference supporting evidence.
-
-**INFERENCE ≠ RECOMMENDATION**
-
-## Analytical Objects
+Default Fact validation policy: `evidensiq.default-fact-v0.1`
 
 ### Signal
 
@@ -72,69 +74,123 @@ Examples: "Product B sales declining", "Delivery complaints increasing."
 
 Signals reference evidence and may trigger inference.
 
-### Opportunity
+### Inference
 
-An **opportunity** is a identified potential for positive business outcome, derived from analysis.
+An **inference** is a derived conclusion from one or more signals, validated assertions, or other inferences.
 
-### Risk
+Examples: "Product B sales decline correlates with delivery complaint increase", "Supplier bottleneck may constrain fulfillment capacity."
 
-A **risk** is an identified potential for negative business outcome, derived from analysis.
+Inferences are not recommendations; they represent analytical conclusions.
+
+**FACT ≠ INFERENCE**
+
+### Inference Kind
+
+Opportunity and Risk are expressed through `inferenceKind` on Inference — not as separate collections:
+
+| Value | Meaning |
+|-------|---------|
+| `analytical` | General analytical conclusion (default) |
+| `opportunity` | Potential positive outcome |
+| `risk` | Potential negative outcome |
+
+### Recommendation
+
+A **recommendation** is an actionable proposal, assessed against evidence and constraints, with traceable rationale.
+
+Examples: "Do not increase acquisition spend yet", "Prioritize supplier lead time reduction before marketing expansion."
+
+Recommendations carry derived status and must reference supporting evidence.
+
+**INFERENCE ≠ RECOMMENDATION**
 
 ## Trust and Provenance
 
-### Provenance
+### ProvenanceMetadata
 
-**Provenance** is metadata tracing an object back to its source, including identity, observation time, and trust classification.
+Orthogonal provenance dimensions replacing the former conflated trust classification:
 
-Minimum trust classifications:
+| Dimension | Values | Meaning |
+|-----------|--------|---------|
+| `originScope` | `internal`, `external` | Origin relative to organization |
+| `acquisitionMethod` | `user-provided`, `system-generated`, `imported`, `unknown` | How content was acquired |
+| `trustAssessment` | `trusted`, `untrusted`, `unknown` | Trust assessment (default: `unknown`) |
 
-| Classification | Meaning |
-|----------------|---------|
-| `trusted` | Verified internal source |
-| `untrusted` | Unknown or unverified origin |
-| `external` | Third-party origin |
-| `user-provided` | Explicitly submitted by a user |
-| `system-generated` | Produced by automated process |
+**trustAssessment ≠ authorization.** Trust assessment does not grant execution authority.
 
-### Temporal Semantics
+Source: `ProvenanceMetadata` required.
+Evidence: optional, may inherit Source semantics.
+Assertion: optional override only where necessary.
 
-Business facts support temporal dimensions:
+## Temporal Semantics
+
+Valid-time convention: **`[validFrom, validUntil)`**
 
 | Field | Meaning |
 |-------|---------|
-| `validFrom` | When the fact became true |
-| `validUntil` | When the fact ceased to be true (if applicable) |
-| `observedAt` | When the fact was observed or recorded |
+| `validFrom` | Inclusive start of validity |
+| `validUntil` | Exclusive end of validity |
+| `observedAt` | Record time — when entered or observed |
 
-Distinguish **FALSE** (currently untrue) from **WAS TRUE** (historically true but no longer valid).
+Missing `validFrom`: unbounded past. Missing `validUntil`: unbounded future.
+
+When both exist, `validUntil` MUST be strictly greater than `validFrom`.
+
+### Historical Change vs. Contradiction vs. Supersession
+
+| Concept | Condition | Result |
+|---------|-----------|--------|
+| Historical change | Non-overlapping valid-time for same subject+predicate | No conflict, no supersession |
+| Contradiction | Overlapping valid-time, incompatible values | Conflict |
+| Correction | Explicit replacement of inaccurate record | May use supersession |
+| Supersession | `classification` = `superseded`, `supersededBy` set | Explicit only |
+
+NEVER infer supersession solely because a later temporal value exists.
 
 ## Conflict
 
-A **conflict** exists when multiple evidence items or assertions support incompatible values for the same subject.
+A **conflict** indexes incompatible assertions via `assertionIds` (minimum 2).
 
-Evidensiq does not arbitrarily resolve conflicts. It represents:
+Evidensiq does not arbitrarily resolve conflicts. Conflicts preserve:
 
-- Conflicting values
-- Source and evidence references
-- Observation times
-- Freshness indicators
-- Unresolved/conflicted status
+- Referenced assertions and their evidence
+- Provenance
+- Resolution metadata when resolved
+
+Conflict kinds: `contradiction`, `uncertainty`.
+Conflict statuses: `unresolved`, `acknowledged`, `resolved`.
 
 ## Confidence
 
-Confidence is **multi-dimensional**. Avoid meaningless single values like `confidence: 0.97`.
+Confidence is **multi-dimensional** with normative enum values:
 
-Dimensions include:
+| Dimension | Values |
+|-----------|--------|
+| `evidenceStrength` | `none`, `weak`, `moderate`, `strong` |
+| `sourceReliability` | `low`, `moderate`, `high`, `unknown` |
+| `inferenceConfidence` | `low`, `moderate`, `high` |
 
-| Dimension | Meaning |
-|-----------|---------|
-| `evidenceStrength` | How strongly evidence supports a claim |
-| `sourceReliability` | Trustworthiness of the source |
-| `evidenceFreshness` | Recency of supporting evidence |
-| `inferenceConfidence` | Confidence in derived conclusions |
-| `modelConfidence` | Model's self-assessed confidence (lowest trust) |
+`evidenceFreshness` is L4 policy-derived — not persisted normatively.
 
-An `overallConfidence` aggregate may exist as application-defined or policy-derived — not as a model-generated default.
+`modelConfidence` is absent from normative core. Model self-assessment, if represented, uses `modelSelfAssessment` as diagnostic extension-only.
+
+`overallConfidence` is NOT normative core.
+
+Do not use arbitrary floating-point confidence scores in the normative v0.1 contract.
+
+## Relation
+
+**Relation is Entity → Entity only.**
+
+Core v0.1 relation types (exactly seven):
+
+`targets`, `acquiredVia`, `produces`, `measures`, `constrains`, `competesWith`, `partOf`
+
+Do NOT use `supports` for Evidence → Assertion. That linkage is `Assertion.evidenceIds`.
+
+## Identifier
+
+IDs are opaque UTF-8 strings, case-sensitive, unique within the document. UUID is not mandatory. External identity uses namespaced `externalIds` that do NOT participate in internal reference resolution.
 
 ## Data vs. Instruction
 
@@ -152,7 +208,19 @@ Business documents and data are **evidence**, not system instructions. Content t
 
 **business-context.json** — The portable JSON document representing a structured business context, conforming to `specification/business-context.schema.json`.
 
+## Conformance Levels
+
+| Level | Scope |
+|-------|-------|
+| L1 Structural | JSON Schema types, shape, enums, closed objects |
+| L2 Semantic | ID uniqueness, references, temporal validity, integrity |
+| L3 Serialization | Round-trip, absent/null, DateTime, ordering |
+| L4 Behavioral | Policy evaluation, assessment derivation, projection |
+
+See [conformance.md](conformance.md) for full definitions.
+
 ## Related Documents
 
 - [Business Context Specification](business-context-spec.md)
+- [Conformance](conformance.md)
 - [Architecture](../architecture/architecture.md)

@@ -28,25 +28,44 @@ This policy covers:
 - Documentation that defines security-relevant boundaries
 - Future reference implementations and adapters (when they exist)
 
+## Core Security Invariants
+
+### DATA ≠ INSTRUCTION
+
+Business content is **evidence**, never privileged system instructions. This invariant applies throughout the specification:
+
+- Evidence content MUST NOT acquire instructional authority
+- Evidence content cannot modify execution authority, system instructions, or tool permissions
+- Context projection consumers MUST treat all business-context content as data
+- Applications integrating Evidensiq MUST NOT concatenate raw business documents into system prompts without structural separation
+
+### trustAssessment ≠ authorization
+
+Provenance `trustAssessment` (`trusted`, `untrusted`, `unknown`) describes a trust claim — it does NOT grant authorization. A `trusted` assessment does not confer permission to execute actions, override constraints, or elevate privilege.
+
 ## Threat Model Considerations
 
 ### Prompt Injection and Indirect Prompt Injection
 
-Business documents, CRM exports, support tickets, and other evidence sources may contain text that resembles instructions ("ignore previous instructions", "you are now...", etc.). Evidensiq is designed with the invariant **DATA ≠ INSTRUCTION**:
+Business documents, CRM exports, support tickets, and other evidence sources may contain text that resembles instructions ("ignore previous instructions", "you are now...", etc.).
 
-- Business content is **evidence**, never privileged system instructions.
-- Context projection must treat all business data as untrusted input to downstream models.
-- Applications integrating Evidensiq must not concatenate raw business documents into system prompts without structural separation.
-
-Contributors and adopters should assume adversarial content in evidence sources.
+Contributors and adopters should assume adversarial content in evidence sources. Evidensiq structures and traces evidence; application-level defenses remain required.
 
 ### Untrusted Business Evidence
 
-Not all evidence is equally trustworthy. The specification supports provenance and trust metadata (e.g., `trusted`, `untrusted`, `external`, `user-provided`, `system-generated`). Applications must not treat all evidence as authoritative.
+Not all evidence is equally trustworthy. The specification supports orthogonal provenance metadata via `ProvenanceMetadata`:
+
+| Dimension | Purpose |
+|-----------|---------|
+| `originScope` | Internal vs. external origin |
+| `acquisitionMethod` | How content was acquired |
+| `trustAssessment` | Trust claim (default: `unknown`) |
+
+Applications must not treat all evidence as authoritative regardless of trust metadata.
 
 ### Provenance Spoofing
 
-Provenance metadata (source identity, observation time, trust level) may be forged or inaccurate if not validated at ingestion. Adapters and applications should:
+Provenance metadata (source identity, observation time, trust assessment) may be forged or inaccurate if not validated at ingestion. Adapters and applications should:
 
 - Validate source identity where possible
 - Not rely solely on self-reported provenance
@@ -55,6 +74,8 @@ Provenance metadata (source identity, observation time, trust level) may be forg
 ### Data vs. Instruction Boundary
 
 The semantic separation between business data and system instructions is a core security invariant. Changes that blur this boundary require explicit security review.
+
+This policy does NOT define a general-purpose prompt-injection framework. It encodes specification-level boundaries only.
 
 ### Malicious Document Content
 
@@ -82,6 +103,17 @@ Adopters must:
 - Consider encryption and data minimization in context projection
 - Never embed provider credentials, API keys, or secrets in portable context files
 
+### Controlled Extensions
+
+Extension keys use namespaced identifiers. Extensions MUST NOT:
+
+- Execute code
+- Define runtime hooks
+- Create plugin semantics
+- Modify security authority
+
+Unknown extensions are preserved at L3 but ignored for normative core processing.
+
 ### Adapter Trust Boundaries
 
 Adapters (LLM, storage, CRM, document parsers, etc.) sit **below** Evidensiq. Each adapter introduces its own trust surface:
@@ -103,9 +135,10 @@ When reference implementations are introduced:
 When proposing specification changes, consider:
 
 - Does the change weaken the DATA ≠ INSTRUCTION boundary?
-- Does it introduce implicit trust assumptions?
+- Does it introduce implicit trust or authorization assumptions?
 - Could it encourage storing secrets in portable artifacts?
 - Does it affect provenance integrity?
+- Could extensions create implicit execution or authority semantics?
 
 Flag security-relevant changes in pull requests using the security impact section of the PR template.
 
