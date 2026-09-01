@@ -9,7 +9,7 @@
       "description": "Product B Q1 2026 revenue",
       "expectation": {
         "assertionId": "asrt-product-b-revenue-q1-2026",
-        "predicate": "revenue",
+        "predicate": "quarterlyRevenue",
         "value": 1450000
       }
     },
@@ -19,7 +19,7 @@
       "description": "Product B Q2 2026 revenue",
       "expectation": {
         "assertionId": "asrt-product-b-revenue-q2-2026",
-        "predicate": "revenue",
+        "predicate": "quarterlyRevenue",
         "value": 1180000
       }
     },

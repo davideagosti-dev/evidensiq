@@ -270,7 +270,7 @@ Validates against `specification/business-context.schema.json` (Draft 2020-12). 
 | **Requirement** | All ID fields MUST be non-empty strings (`minLength: 1`). |
 | **Source** | `Id.minLength` |
 
-### EVI-L1-018 — Prohibited Constructs
+### EVI-L1-018 — Schema-Prohibited Constructs
 
 | Attribute | Value |
 |-----------|-------|
@@ -278,8 +278,8 @@ Validates against `specification/business-context.schema.json` (Draft 2020-12). 
 | **Level** | L1 |
 | **Severity** | error |
 | **Machine-testable** | yes |
-| **Requirement** | Document MUST NOT contain prohibited constructs: `facts` collection, `Fact` type, `TrustClassification`, `Conflict.values`, or `modelConfidence`. |
-| **Source** | business-context-spec.md design principles |
+| **Requirement** | Document MUST NOT contain constructs rejected by the Business Context schema contract. Examples include: root `facts` collection (closed root `additionalProperties: false`), `Conflict.values` (closed Conflict), and unknown properties on closed normative objects such as `modelConfidence` on `ConfidenceDimensions` (`additionalProperties: false`). Fact as a semantic view over validated Assertions is defined at L4 (EVI-L4-002); L1 does not structurally prohibit every use of the string `Fact` as an Entity `type` because Entity types are open. |
+| **Source** | `business-context.schema.json` closed-object pattern |
 
 ### L1 Tools
 
@@ -686,7 +686,7 @@ L4 defines reproducible policy evaluation and derived outcomes for behavior that
 | **Level** | L4 |
 | **Severity** | error |
 | **Machine-testable** | yes |
-| **Requirement** | When `Recommendation.status` ≠ `"candidate"`, `assessment` metadata MUST be present and reproducible under the recorded `policyId`. Default policy: `evidensiq.default-recommendation-v0.1`. |
+| **Requirement** | When `Recommendation.status` ≠ `"candidate"`, `assessment` metadata MUST be present (structural/persisted requirement; see EVI-L1-015). Deterministic L4 re-evaluation applies only to behavioral outcomes covered by a normatively specified v0.1 policy rule (e.g., EVI-L4-010 hard constraint violation → `rejected`). Statuses such as `supported`, `stale`, `insufficient-evidence`, and `conflicted` are NOT universally re-derivable when required policy semantics remain undefined (see Policy Gap Register). Default policy: `evidensiq.default-recommendation-v0.1`. |
 
 ### EVI-L4-010 — Hard Constraint Violation Produces Rejected
 
@@ -696,7 +696,7 @@ L4 defines reproducible policy evaluation and derived outcomes for behavior that
 | **Level** | L4 |
 | **Severity** | error |
 | **Machine-testable** | yes |
-| **Requirement** | Under the approved v0.1 convention (`Entity.properties.enforcement` = `"hard"`), hard constraint violation during recommendation assessment MUST produce `status` = `"rejected` with `constraint-compliance` → `fail`. Hard constraint violation MUST NOT be represented as `conflicted`. |
+| **Requirement** | Under the approved v0.1 convention (`Entity.properties.enforcement` = `"hard"`), hard constraint violation during recommendation assessment MUST produce `status` = `"rejected"` with `constraint-compliance` → `fail`. Hard constraint violation MUST NOT be represented as `conflicted`. |
 | **Source** | v0.1 documented convention; NOT schema-normative field |
 
 ### EVI-L4-011 — asOf Half-Open Temporal Filtering
