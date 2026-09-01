@@ -1,0 +1,523 @@
+{
+  "$schema": "../specification/business-context.schema.json",
+  "specVersion": "0.1",
+  "organizationId": "org-northstar",
+  "entities": [
+    {
+      "id": "org-northstar",
+      "type": "Organization",
+      "name": "Northstar Manufacturing",
+      "description": "B2B industrial components manufacturer"
+    },
+    {
+      "id": "product-b",
+      "type": "Product",
+      "name": "Product B",
+      "description": "Strategically important high-margin product line"
+    },
+    {
+      "id": "segment-enterprise-b2b",
+      "type": "CustomerSegment",
+      "name": "Enterprise B2B",
+      "description": "Primary B2B buyer segment for Product B"
+    },
+    {
+      "id": "channel-direct-sales",
+      "type": "Channel",
+      "name": "Direct Sales",
+      "description": "Direct-sales acquisition channel for Product B"
+    },
+    {
+      "id": "process-fulfilment",
+      "type": "Process",
+      "name": "Fulfilment",
+      "description": "Product delivery and fulfilment process"
+    },
+    {
+      "id": "metric-product-b-revenue",
+      "type": "Metric",
+      "name": "Product B Revenue",
+      "description": "Quarterly revenue indicator for Product B"
+    },
+    {
+      "id": "metric-product-b-margin",
+      "type": "Metric",
+      "name": "Product B Gross Margin",
+      "description": "Gross margin indicator for Product B"
+    },
+    {
+      "id": "metric-delivery-complaint-rate",
+      "type": "Metric",
+      "name": "Delivery Complaint Rate",
+      "description": "Delivery complaint rate for fulfilment performance"
+    },
+    {
+      "id": "goal-grow-product-b-revenue",
+      "type": "Goal",
+      "name": "Grow Product B Revenue",
+      "description": "Strategic goal to grow Product B revenue 20% year over year"
+    },
+    {
+      "id": "constraint-supplier-capacity",
+      "type": "Constraint",
+      "name": "Supplier Component Capacity",
+      "description": "Supplier component HX-440 capacity bottleneck affecting fulfilment",
+      "properties": {
+        "enforcement": "hard"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel-goal-targets-product-b",
+      "from": "goal-grow-product-b-revenue",
+      "to": "product-b",
+      "type": "targets"
+    },
+    {
+      "id": "rel-product-acquired-via-channel",
+      "from": "product-b",
+      "to": "channel-direct-sales",
+      "type": "acquiredVia"
+    },
+    {
+      "id": "rel-segment-acquired-via-channel",
+      "from": "segment-enterprise-b2b",
+      "to": "channel-direct-sales",
+      "type": "acquiredVia"
+    },
+    {
+      "id": "rel-fulfilment-produces-product-b",
+      "from": "process-fulfilment",
+      "to": "product-b",
+      "type": "produces"
+    },
+    {
+      "id": "rel-metric-revenue-measures-product-b",
+      "from": "metric-product-b-revenue",
+      "to": "product-b",
+      "type": "measures"
+    },
+    {
+      "id": "rel-metric-margin-measures-product-b",
+      "from": "metric-product-b-margin",
+      "to": "product-b",
+      "type": "measures"
+    },
+    {
+      "id": "rel-metric-complaints-measures-fulfilment",
+      "from": "metric-delivery-complaint-rate",
+      "to": "process-fulfilment",
+      "type": "measures"
+    },
+    {
+      "id": "rel-constraint-constrains-fulfilment",
+      "from": "constraint-supplier-capacity",
+      "to": "process-fulfilment",
+      "type": "constrains"
+    }
+  ],
+  "sources": [
+    {
+      "id": "source-sales-csv",
+      "type": "Source",
+      "name": "sales.csv",
+      "reference": "sales.csv",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "imported",
+        "trustAssessment": "trusted"
+      }
+    },
+    {
+      "id": "source-support-md",
+      "type": "Source",
+      "name": "support.md",
+      "reference": "support.md",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "system-generated",
+        "trustAssessment": "trusted"
+      }
+    },
+    {
+      "id": "source-operations-md",
+      "type": "Source",
+      "name": "operations.md",
+      "reference": "operations.md",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "user-provided",
+        "trustAssessment": "trusted"
+      }
+    },
+    {
+      "id": "source-strategy-md",
+      "type": "Source",
+      "name": "strategy.md",
+      "reference": "strategy.md",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "user-provided",
+        "trustAssessment": "trusted"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-sales-q1-2026",
+      "type": "Evidence",
+      "sourceId": "source-sales-csv",
+      "contentRef": "sales.csv#product-b-q1-2026",
+      "description": "Product B Q1 2026 revenue rows total $1,450,000",
+      "observedAt": "2026-04-15T00:00:00Z"
+    },
+    {
+      "id": "ev-sales-q2-2026",
+      "type": "Evidence",
+      "sourceId": "source-sales-csv",
+      "contentRef": "sales.csv#product-b-q2-2026",
+      "description": "Product B Q2 2026 revenue rows total $1,180,000",
+      "observedAt": "2026-06-28T00:00:00Z"
+    },
+    {
+      "id": "ev-support-complaints-q1-2026",
+      "type": "Evidence",
+      "sourceId": "source-support-md",
+      "contentRef": "support.md#delivery-complaints-q1-2026",
+      "description": "Q1 delivery complaints: 18 of 400 orders (4.5%)",
+      "observedAt": "2026-04-15T00:00:00Z"
+    },
+    {
+      "id": "ev-support-complaints-q2-2026",
+      "type": "Evidence",
+      "sourceId": "source-support-md",
+      "contentRef": "support.md#delivery-complaints-q2-2026",
+      "description": "Q2 delivery complaints: 42 of 512 orders (8.2%)",
+      "observedAt": "2026-06-28T00:00:00Z"
+    },
+    {
+      "id": "ev-ops-supplier-bottleneck",
+      "type": "Evidence",
+      "sourceId": "source-operations-md",
+      "contentRef": "operations.md#supplier-bottleneck-hx-440",
+      "description": "Component HX-440 lead time 15 days; capacity constrained",
+      "observedAt": "2026-06-28T00:00:00Z"
+    },
+    {
+      "id": "ev-ops-capacity-assessment",
+      "type": "Evidence",
+      "sourceId": "source-operations-md",
+      "contentRef": "operations.md#capacity-assessment-memo",
+      "description": "Operations memo: supplier capacity within normal operating range",
+      "observedAt": "2026-06-28T00:00:00Z"
+    },
+    {
+      "id": "ev-strategy-growth-goal",
+      "type": "Evidence",
+      "sourceId": "source-strategy-md",
+      "contentRef": "strategy.md#growth-goal-product-b",
+      "description": "Strategic priority: grow Product B revenue 20% year over year",
+      "observedAt": "2026-01-15T00:00:00Z"
+    },
+    {
+      "id": "ev-strategy-margin",
+      "type": "Evidence",
+      "sourceId": "source-strategy-md",
+      "contentRef": "strategy.md#product-b-margin",
+      "description": "Product B gross margin 62%; strategically important line",
+      "observedAt": "2026-01-15T00:00:00Z"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "asrt-product-b-revenue-q1-2026",
+      "type": "Assertion",
+      "subject": "product-b",
+      "predicate": "quarterlyRevenue",
+      "value": 1450000,
+      "evidenceIds": ["ev-sales-q1-2026"],
+      "observedAt": "2026-04-15T00:00:00Z",
+      "validFrom": "2026-01-01T00:00:00Z",
+      "validUntil": "2026-04-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      }
+    },
+    {
+      "id": "asrt-product-b-revenue-q2-2026",
+      "type": "Assertion",
+      "subject": "product-b",
+      "predicate": "quarterlyRevenue",
+      "value": 1180000,
+      "evidenceIds": ["ev-sales-q2-2026"],
+      "observedAt": "2026-06-28T00:00:00Z",
+      "validFrom": "2026-04-01T00:00:00Z",
+      "validUntil": "2026-07-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      }
+    },
+    {
+      "id": "asrt-delivery-complaint-rate-q1-2026",
+      "type": "Assertion",
+      "subject": "metric-delivery-complaint-rate",
+      "predicate": "complaintRatePercent",
+      "value": 4.5,
+      "evidenceIds": ["ev-support-complaints-q1-2026"],
+      "observedAt": "2026-04-15T00:00:00Z",
+      "validFrom": "2026-01-01T00:00:00Z",
+      "validUntil": "2026-04-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      }
+    },
+    {
+      "id": "asrt-delivery-complaint-rate-q2-2026",
+      "type": "Assertion",
+      "subject": "metric-delivery-complaint-rate",
+      "predicate": "complaintRatePercent",
+      "value": 8.2,
+      "evidenceIds": ["ev-support-complaints-q2-2026"],
+      "observedAt": "2026-06-28T00:00:00Z",
+      "validFrom": "2026-04-01T00:00:00Z",
+      "validUntil": "2026-07-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      }
+    },
+    {
+      "id": "asrt-product-b-margin-preliminary",
+      "type": "Assertion",
+      "subject": "product-b",
+      "predicate": "grossMarginPercent",
+      "value": 58,
+      "evidenceIds": ["ev-strategy-margin"],
+      "observedAt": "2026-01-15T00:00:00Z",
+      "validFrom": "2026-01-01T00:00:00Z",
+      "classification": "superseded",
+      "supersededBy": "asrt-product-b-margin"
+    },
+    {
+      "id": "asrt-product-b-margin",
+      "type": "Assertion",
+      "subject": "product-b",
+      "predicate": "grossMarginPercent",
+      "value": 62,
+      "evidenceIds": ["ev-strategy-margin"],
+      "observedAt": "2026-06-15T00:00:00Z",
+      "validFrom": "2026-01-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      }
+    },
+    {
+      "id": "asrt-supplier-lead-time",
+      "type": "Assertion",
+      "subject": "constraint-supplier-capacity",
+      "predicate": "leadTimeDays",
+      "value": 15,
+      "evidenceIds": ["ev-ops-supplier-bottleneck"],
+      "observedAt": "2026-06-28T00:00:00Z",
+      "validFrom": "2026-04-01T00:00:00Z",
+      "validUntil": "2026-07-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      }
+    },
+    {
+      "id": "asrt-goal-target-growth",
+      "type": "Assertion",
+      "subject": "goal-grow-product-b-revenue",
+      "predicate": "targetGrowthPercent",
+      "value": 20,
+      "evidenceIds": ["ev-strategy-growth-goal"],
+      "observedAt": "2026-01-15T00:00:00Z",
+      "validFrom": "2026-01-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      }
+    },
+    {
+      "id": "asrt-supplier-capacity-constrained",
+      "type": "Assertion",
+      "subject": "constraint-supplier-capacity",
+      "predicate": "capacityStatus",
+      "value": "constrained",
+      "evidenceIds": ["ev-ops-supplier-bottleneck"],
+      "observedAt": "2026-06-28T00:00:00Z",
+      "validFrom": "2026-04-01T00:00:00Z",
+      "validUntil": "2026-07-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      }
+    },
+    {
+      "id": "asrt-supplier-capacity-normal",
+      "type": "Assertion",
+      "subject": "constraint-supplier-capacity",
+      "predicate": "capacityStatus",
+      "value": "normal",
+      "evidenceIds": ["ev-ops-capacity-assessment"],
+      "observedAt": "2026-06-28T00:00:00Z",
+      "validFrom": "2026-04-01T00:00:00Z",
+      "validUntil": "2026-07-01T00:00:00Z",
+      "classification": "asserted"
+    }
+  ],
+  "signals": [
+    {
+      "id": "signal-product-b-sales-declining",
+      "type": "Signal",
+      "description": "Product B quarterly revenue declined from $1,450,000 to $1,180,000 across consecutive quarters",
+      "evidenceIds": ["ev-sales-q1-2026", "ev-sales-q2-2026"],
+      "observedAt": "2026-06-28T00:00:00Z",
+      "status": "active",
+      "confidence": {
+        "evidenceStrength": "moderate",
+        "inferenceConfidence": "moderate"
+      }
+    },
+    {
+      "id": "signal-delivery-complaints-increasing",
+      "type": "Signal",
+      "description": "Delivery complaint rate rose from 4.5% to 8.2% between Q1 and Q2 2026",
+      "evidenceIds": ["ev-support-complaints-q1-2026", "ev-support-complaints-q2-2026"],
+      "observedAt": "2026-06-28T00:00:00Z",
+      "status": "active",
+      "confidence": {
+        "evidenceStrength": "moderate",
+        "inferenceConfidence": "moderate"
+      }
+    },
+    {
+      "id": "signal-supplier-constraint-active",
+      "type": "Signal",
+      "description": "Supplier component HX-440 bottleneck active with 15-day lead time",
+      "evidenceIds": ["ev-ops-supplier-bottleneck"],
+      "observedAt": "2026-06-28T00:00:00Z",
+      "status": "active",
+      "confidence": {
+        "evidenceStrength": "moderate",
+        "inferenceConfidence": "moderate"
+      }
+    }
+  ],
+  "inferences": [
+    {
+      "id": "inference-acquisition-amplifies-delivery-risk",
+      "type": "Inference",
+      "description": "Increasing Product B acquisition spend before resolving supplier and fulfilment constraints is likely to amplify delivery failures and customer dissatisfaction",
+      "inferenceKind": "risk",
+      "basedOn": [
+        "signal-product-b-sales-declining",
+        "signal-delivery-complaints-increasing",
+        "signal-supplier-constraint-active",
+        "asrt-supplier-capacity-constrained",
+        "asrt-supplier-lead-time"
+      ],
+      "confidence": {
+        "evidenceStrength": "moderate",
+        "inferenceConfidence": "moderate"
+      }
+    },
+    {
+      "id": "inference-product-b-growth-opportunity-post-constraint",
+      "type": "Inference",
+      "description": "Product B remains an economically attractive growth target once operational capacity supports fulfilment",
+      "inferenceKind": "opportunity",
+      "basedOn": [
+        "asrt-product-b-margin",
+        "asrt-goal-target-growth",
+        "inference-acquisition-amplifies-delivery-risk"
+      ],
+      "confidence": {
+        "evidenceStrength": "moderate",
+        "inferenceConfidence": "moderate"
+      }
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "rec-defer-product-b-acquisition-spend",
+      "type": "Recommendation",
+      "description": "Defer material increase to Product B direct-sales acquisition spend until the supplier capacity constraint on fulfilment is materially mitigated",
+      "rationale": "Q2 revenue decline and rising delivery complaints coincide with a validated supplier bottleneck; amplifying demand risks worsening fulfilment performance",
+      "status": "supported",
+      "inferenceIds": [
+        "inference-acquisition-amplifies-delivery-risk",
+        "inference-product-b-growth-opportunity-post-constraint"
+      ],
+      "constraintIds": ["constraint-supplier-capacity"],
+      "evidenceIds": [
+        "ev-ops-supplier-bottleneck",
+        "ev-support-complaints-q2-2026",
+        "ev-sales-q2-2026"
+      ],
+      "assessment": {
+        "policyId": "evidensiq.default-recommendation-v0.1",
+        "evaluatedAt": "2026-06-30T14:00:00Z",
+        "results": [
+          { "check": "evidence-threshold", "outcome": "pass" },
+          { "check": "constraint-compliance", "outcome": "pass" },
+          { "check": "conflict-impact", "outcome": "warning" },
+          { "check": "freshness-policy", "outcome": "pass" }
+        ]
+      }
+    },
+    {
+      "id": "rec-increase-product-b-acquisition-spend",
+      "type": "Recommendation",
+      "description": "Increase Product B direct-sales acquisition spend by 25% immediately",
+      "rationale": "Product B gross margin and revenue growth target suggest immediate acquisition investment",
+      "status": "rejected",
+      "inferenceIds": ["inference-product-b-growth-opportunity-post-constraint"],
+      "constraintIds": ["constraint-supplier-capacity"],
+      "assessment": {
+        "policyId": "evidensiq.default-recommendation-v0.1",
+        "evaluatedAt": "2026-06-30T14:00:00Z",
+        "results": [
+          { "check": "evidence-threshold", "outcome": "pass" },
+          { "check": "constraint-compliance", "outcome": "fail" },
+          { "check": "conflict-impact", "outcome": "warning" },
+          { "check": "freshness-policy", "outcome": "pass" }
+        ]
+      }
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "conflict-supplier-capacity-status",
+      "assertionIds": [
+        "asrt-supplier-capacity-constrained",
+        "asrt-supplier-capacity-normal"
+      ],
+      "conflictKind": "contradiction",
+      "status": "unresolved"
+    }
+  ]
+}
