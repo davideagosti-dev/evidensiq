@@ -24,7 +24,8 @@ Describe impact:
 Confirm these invariants are preserved:
 
 - [ ] SOURCE ≠ EVIDENCE
-- [ ] EVIDENCE ≠ FACT (ASSERTION)
+- [ ] EVIDENCE ≠ ASSERTION
+- [ ] ASSERTION ≠ FACT
 - [ ] FACT ≠ INFERENCE
 - [ ] INFERENCE ≠ RECOMMENDATION
 - [ ] DATA ≠ INSTRUCTION

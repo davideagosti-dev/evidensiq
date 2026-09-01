@@ -40,8 +40,9 @@ Funding should support **project-related work and public project outcomes**. Pot
 
 ### Reference Implementations
 
-- TypeScript reference core (Phase 1)
-- .NET reference core (Phase 2)
+- Specification and reference architecture (Phase 1)
+- TypeScript reference implementation (Phase 2)
+- .NET reference implementation (Phase 3)
 - Shared test suites across implementations
 
 ### Documentation and Examples

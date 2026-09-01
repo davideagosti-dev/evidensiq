@@ -66,14 +66,18 @@ See [Architecture](docs/architecture/architecture.md) for full details.
 These design invariants are foundational:
 
 ```
-SOURCE ≠ EVIDENCE ≠ FACT ≠ INFERENCE ≠ RECOMMENDATION
+SOURCE ≠ EVIDENCE
+EVIDENCE ≠ ASSERTION
+ASSERTION ≠ FACT
+FACT ≠ INFERENCE
+INFERENCE ≠ RECOMMENDATION
 ```
 
 ```
 DATA ≠ INSTRUCTION
 ```
 
-Business documents and data are **evidence**, never privileged system instructions. The LLM must never be the source of truth.
+Business documents and data are **evidence**, never privileged system instructions. **Fact** is a semantic classification (validated assertion), not a persisted type. The LLM must never be the source of truth.
 
 See [Terminology](docs/specification/terminology.md).
 
@@ -85,12 +89,14 @@ Evidensiq defines a portable JSON artifact for structured business context:
 {
   "$schema": "https://evidensiq.dev/schemas/business-context/v0.1/business-context.schema.json",
   "specVersion": "0.1",
-  "organization": { "id": "org-northstar", "name": "Northstar Manufacturing" },
+  "organizationId": "org-northstar",
   "entities": [],
   "relations": [],
   "sources": [],
   "evidence": [],
+  "assertions": [],
   "signals": [],
+  "inferences": [],
   "recommendations": []
 }
 ```
@@ -103,23 +109,23 @@ See [Business Context Specification](docs/specification/business-context-spec.md
 
 A synthetic scenario illustrating evidence-backed reasoning:
 
-| Layer | Content | Evidence |
-|-------|---------|----------|
-| **Signal** | Product B sales declining | `sales.csv` |
-| **Correlated Signal** | Delivery complaints increasing | `support.md` |
-| **Constraint** | Supplier lead time bottleneck | `operations.md` |
-| **Recommendation** | Do NOT increase acquisition spend yet | — |
-| **Rationale** | Operational constraint risks amplifying delivery failures | — |
-| **Status** | `supported` | — |
+| Layer | Content | Linkage |
+|-------|---------|---------|
+| **Evidence** | Q3 sales data | `sales.csv` |
+| **Assertion** | Product B Q3 revenue validated | `evidenceIds` |
+| **Signal** | Product B sales declining | Evidence |
+| **Inference (risk)** | Delivery failures correlate with decline | Signals |
+| **Recommendation** | Do NOT increase acquisition spend yet | Inferences + constraints |
+| **Status** | `supported` (L4 assessment) | — |
 
 The company goal is to grow Product B revenue — but current operational constraints mean acquisition spend would amplify delivery failures rather than solve the underlying problem.
 
 ## Project Status
 
-**Early specification / pre-release.**
+**Phase 1 — Specification & Reference Architecture (in progress).**
 
-- Specification v0.1 is defined
-- JSON Schema is available
+- Business Context Specification v0.1 architecture lock (EVI-1.1)
+- JSON Schema and conformance model (L1–L4) available
 - No runtime implementation yet
 - No npm or NuGet packages published
 - Not production-ready
@@ -145,6 +151,7 @@ EVI-0.1 explicitly excludes runtime code, package publication, and CI pipelines.
 | [Architecture](docs/architecture/architecture.md) | Design boundaries and principles |
 | [Business Context Specification](docs/specification/business-context-spec.md) | Full v0.1 specification |
 | [Terminology](docs/specification/terminology.md) | Core terms and definitions |
+| [Conformance](docs/specification/conformance.md) | L1–L4 conformance model |
 | [Roadmap](docs/roadmap.md) | Planned development phases |
 | [Open Source Case](docs/open-source-case.md) | Why open infrastructure matters |
 | [Public Interest](docs/public-interest.md) | Public interest rationale |

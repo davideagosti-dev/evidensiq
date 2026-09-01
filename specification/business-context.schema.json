@@ -2,9 +2,9 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://evidensiq.dev/schemas/business-context/v0.1/business-context.schema.json",
   "title": "Evidensiq Business Context",
-  "description": "Early specification v0.1 — portable business context artifact for evidence-backed reasoning. Conservative and extensible.",
+  "description": "Evidensiq Business Context Specification v0.1 — portable business context artifact for evidence-backed reasoning.",
   "type": "object",
-  "required": ["specVersion"],
+  "required": ["specVersion", "organizationId"],
   "additionalProperties": false,
   "properties": {
     "$schema": {
@@ -16,19 +16,19 @@
       "const": "0.1",
       "description": "Evidensiq Business Context Specification version."
     },
-    "organization": {
-      "$ref": "#/$defs/OrganizationRef",
-      "description": "Primary organization this context describes."
+    "organizationId": {
+      "$ref": "#/$defs/Id",
+      "description": "ID of the primary Organization entity in this document."
     },
     "entities": {
       "type": "array",
       "items": { "$ref": "#/$defs/Entity" },
-      "description": "Business entities (products, segments, metrics, goals, etc.)."
+      "description": "Business entities (Organization, Product, Metric, Goal, etc.)."
     },
     "relations": {
       "type": "array",
       "items": { "$ref": "#/$defs/Relation" },
-      "description": "Relationships between entities."
+      "description": "Entity-to-Entity relationships."
     },
     "sources": {
       "type": "array",
@@ -39,6 +39,11 @@
       "type": "array",
       "items": { "$ref": "#/$defs/Evidence" },
       "description": "Evidence artifacts derived from sources."
+    },
+    "assertions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Assertion" },
+      "description": "Structured claims supported by evidence."
     },
     "signals": {
       "type": "array",
@@ -58,7 +63,7 @@
     "conflicts": {
       "type": "array",
       "items": { "$ref": "#/$defs/Conflict" },
-      "description": "Unresolved or acknowledged conflicting values."
+      "description": "Indexes over incompatible assertions."
     },
     "metadata": {
       "$ref": "#/$defs/Metadata",
@@ -69,52 +74,123 @@
     "Id": {
       "type": "string",
       "minLength": 1,
-      "description": "Unique identifier within this document."
+      "description": "Opaque UTF-8 identifier. Unique within the document. Case-sensitive Unicode ordinal comparison."
     },
     "DateTime": {
       "type": "string",
       "format": "date-time",
-      "description": "ISO 8601 date-time."
+      "description": "ISO 8601 date-time. Conformance fixtures normalize to UTC with Z suffix."
     },
-    "TrustClassification": {
+    "ExtensionKey": {
       "type": "string",
-      "enum": ["trusted", "untrusted", "external", "user-provided", "system-generated"],
-      "description": "Source or evidence trust level."
+      "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z][a-z0-9]*)+$",
+      "description": "Namespaced extension key using reverse-domain-style segments (e.g. com.example.field)."
+    },
+    "Extensions": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/ExtensionKey" },
+      "additionalProperties": true,
+      "description": "Controlled extension namespace. Unknown extensions MUST be preserved at L3 and ignored for normative core processing."
+    },
+    "ExternalIds": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/ExtensionKey" },
+      "additionalProperties": { "type": "string" },
+      "description": "Namespaced external identifiers. MUST NOT participate in internal reference resolution."
+    },
+    "ProvenanceMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["originScope", "acquisitionMethod", "trustAssessment"],
+      "properties": {
+        "originScope": {
+          "type": "string",
+          "enum": ["internal", "external"],
+          "description": "Whether the origin is internal or external to the organization."
+        },
+        "acquisitionMethod": {
+          "type": "string",
+          "enum": ["user-provided", "system-generated", "imported", "unknown"],
+          "description": "How the content was acquired."
+        },
+        "trustAssessment": {
+          "type": "string",
+          "enum": ["trusted", "untrusted", "unknown"],
+          "default": "unknown",
+          "description": "Trust assessment. Does NOT grant authorization."
+        }
+      },
+      "description": "Orthogonal provenance dimensions. trustAssessment ≠ authorization."
     },
     "ConfidenceDimensions": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "evidenceStrength": { "type": "string" },
-        "sourceReliability": { "type": "string" },
-        "evidenceFreshness": { "type": "string" },
-        "inferenceConfidence": { "type": "string" },
-        "modelConfidence": { "type": "string" }
+        "evidenceStrength": {
+          "type": "string",
+          "enum": ["none", "weak", "moderate", "strong"]
+        },
+        "sourceReliability": {
+          "type": "string",
+          "enum": ["low", "moderate", "high", "unknown"]
+        },
+        "inferenceConfidence": {
+          "type": "string",
+          "enum": ["low", "moderate", "high"]
+        }
       },
-      "description": "Multi-dimensional confidence. Avoid single numeric model scores."
+      "description": "Multi-dimensional confidence. evidenceFreshness is L4 policy-derived, not persisted normatively."
     },
-    "TemporalFields": {
+    "ValidationMetadata": {
       "type": "object",
       "additionalProperties": false,
+      "required": ["policyId", "evaluatedAt", "result"],
       "properties": {
-        "validFrom": { "$ref": "#/$defs/DateTime" },
-        "validUntil": { "$ref": "#/$defs/DateTime" },
-        "observedAt": { "$ref": "#/$defs/DateTime" }
-      }
+        "policyId": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier of the validation policy applied."
+        },
+        "evaluatedAt": { "$ref": "#/$defs/DateTime" },
+        "result": {
+          "type": "string",
+          "enum": ["valid", "invalid"]
+        }
+      },
+      "description": "Validation policy evaluation metadata. Required when Assertion classification is validated."
     },
-    "OrganizationRef": {
+    "AssessmentMetadata": {
       "type": "object",
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "required": ["evaluatedAt", "policyId", "results"],
       "properties": {
-        "id": { "$ref": "#/$defs/Id" },
-        "name": { "type": "string" },
-        "description": { "type": "string" }
-      }
+        "evaluatedAt": { "$ref": "#/$defs/DateTime" },
+        "policyId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["check", "outcome"],
+            "properties": {
+              "check": { "type": "string" },
+              "outcome": {
+                "type": "string",
+                "enum": ["pass", "fail", "warning"]
+              }
+            }
+          }
+        }
+      },
+      "description": "Recommendation assessment metadata. Persisted when status != candidate."
     },
     "Entity": {
       "type": "object",
       "required": ["id", "type"],
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "id": { "$ref": "#/$defs/Id" },
         "type": {
@@ -130,35 +206,61 @@
           "type": "array",
           "items": { "$ref": "#/$defs/Id" }
         },
+        "externalIds": { "$ref": "#/$defs/ExternalIds" },
         "properties": {
           "type": "object",
           "additionalProperties": true,
-          "description": "Extensible entity-specific properties."
-        }
+          "description": "Entity-specific business attributes. Not schema extensions."
+        },
+        "extensions": { "$ref": "#/$defs/Extensions" }
       }
+    },
+    "CoreRelationType": {
+      "type": "string",
+      "enum": [
+        "targets",
+        "acquiredVia",
+        "produces",
+        "measures",
+        "constrains",
+        "competesWith",
+        "partOf"
+      ],
+      "description": "Approved v0.1 core relation vocabulary (Entity → Entity only)."
     },
     "Relation": {
       "type": "object",
-      "required": ["from", "to", "type"],
-      "additionalProperties": true,
+      "required": ["id", "from", "to", "type"],
+      "additionalProperties": false,
       "properties": {
+        "id": { "$ref": "#/$defs/Id" },
         "from": { "$ref": "#/$defs/Id" },
         "to": { "$ref": "#/$defs/Id" },
         "type": {
-          "type": "string",
-          "description": "Relationship type (targets, acquiredVia, produces, measures, constrains, competesWith, supports, etc.)."
+          "oneOf": [
+            { "$ref": "#/$defs/CoreRelationType" },
+            {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9]*(?:\\.[a-z][a-z0-9]*)+$",
+              "not": { "$ref": "#/$defs/CoreRelationType" }
+            }
+          ],
+          "description": "Core relation type or namespaced extension type."
         },
-        "observedAt": { "$ref": "#/$defs/DateTime" },
+        "validFrom": { "$ref": "#/$defs/DateTime" },
+        "validUntil": { "$ref": "#/$defs/DateTime" },
         "evidenceIds": {
           "type": "array",
           "items": { "$ref": "#/$defs/Id" }
-        }
+        },
+        "externalIds": { "$ref": "#/$defs/ExternalIds" },
+        "extensions": { "$ref": "#/$defs/Extensions" }
       }
     },
     "Source": {
       "type": "object",
-      "required": ["id", "type"],
-      "additionalProperties": true,
+      "required": ["id", "type", "provenance"],
+      "additionalProperties": false,
       "properties": {
         "id": { "$ref": "#/$defs/Id" },
         "type": { "const": "Source" },
@@ -167,13 +269,15 @@
           "type": "string",
           "description": "URI or path reference to the source origin."
         },
-        "trustClassification": { "$ref": "#/$defs/TrustClassification" }
+        "provenance": { "$ref": "#/$defs/ProvenanceMetadata" },
+        "externalIds": { "$ref": "#/$defs/ExternalIds" },
+        "extensions": { "$ref": "#/$defs/Extensions" }
       }
     },
     "Evidence": {
       "type": "object",
       "required": ["id", "type", "sourceId"],
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "id": { "$ref": "#/$defs/Id" },
         "type": { "const": "Evidence" },
@@ -183,14 +287,93 @@
           "description": "Reference to evidence content (file path, URI, or inline ref)."
         },
         "observedAt": { "$ref": "#/$defs/DateTime" },
-        "trustClassification": { "$ref": "#/$defs/TrustClassification" },
-        "description": { "type": "string" }
+        "provenance": {
+          "$ref": "#/$defs/ProvenanceMetadata",
+          "description": "Optional provenance override. May inherit Source semantics."
+        },
+        "description": { "type": "string" },
+        "externalIds": { "$ref": "#/$defs/ExternalIds" },
+        "extensions": { "$ref": "#/$defs/Extensions" }
       }
+    },
+    "Assertion": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "subject",
+        "predicate",
+        "value",
+        "evidenceIds",
+        "observedAt",
+        "classification"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/Id" },
+        "type": { "const": "Assertion" },
+        "subject": {
+          "$ref": "#/$defs/Id",
+          "description": "Entity ID this assertion is about."
+        },
+        "predicate": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Property or attribute being asserted."
+        },
+        "value": {
+          "description": "Asserted value."
+        },
+        "evidenceIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" },
+          "minItems": 1,
+          "description": "Evidence supporting this assertion."
+        },
+        "observedAt": {
+          "$ref": "#/$defs/DateTime",
+          "description": "Record time — when assertion entered or was observed."
+        },
+        "classification": {
+          "type": "string",
+          "enum": ["asserted", "validated", "superseded", "retracted"]
+        },
+        "validFrom": { "$ref": "#/$defs/DateTime" },
+        "validUntil": { "$ref": "#/$defs/DateTime" },
+        "provenance": {
+          "$ref": "#/$defs/ProvenanceMetadata",
+          "description": "Optional provenance override."
+        },
+        "confidence": { "$ref": "#/$defs/ConfidenceDimensions" },
+        "validation": { "$ref": "#/$defs/ValidationMetadata" },
+        "supersededBy": {
+          "$ref": "#/$defs/Id",
+          "description": "Replacement Assertion ID. Required when classification is superseded."
+        },
+        "externalIds": { "$ref": "#/$defs/ExternalIds" },
+        "extensions": { "$ref": "#/$defs/Extensions" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "classification": { "const": "validated" } },
+            "required": ["classification"]
+          },
+          "then": { "required": ["validation"] }
+        },
+        {
+          "if": {
+            "properties": { "classification": { "const": "superseded" } },
+            "required": ["classification"]
+          },
+          "then": { "required": ["supersededBy"] }
+        }
+      ]
     },
     "Signal": {
       "type": "object",
       "required": ["id", "type"],
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "id": { "$ref": "#/$defs/Id" },
         "type": { "const": "Signal" },
@@ -204,29 +387,39 @@
           "type": "string",
           "enum": ["active", "resolved", "superseded"]
         },
-        "confidence": { "$ref": "#/$defs/ConfidenceDimensions" }
+        "confidence": { "$ref": "#/$defs/ConfidenceDimensions" },
+        "externalIds": { "$ref": "#/$defs/ExternalIds" },
+        "extensions": { "$ref": "#/$defs/Extensions" }
       }
     },
     "Inference": {
       "type": "object",
       "required": ["id", "type"],
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "id": { "$ref": "#/$defs/Id" },
         "type": { "const": "Inference" },
         "description": { "type": "string" },
+        "inferenceKind": {
+          "type": "string",
+          "enum": ["analytical", "opportunity", "risk"],
+          "default": "analytical",
+          "description": "Kind of inference. Opportunity and Risk are expressed via inferenceKind, not separate collections."
+        },
         "basedOn": {
           "type": "array",
           "items": { "$ref": "#/$defs/Id" },
-          "description": "IDs of signals, facts, or other inferences."
+          "description": "IDs of signals, validated assertions, or other inferences."
         },
-        "confidence": { "$ref": "#/$defs/ConfidenceDimensions" }
+        "confidence": { "$ref": "#/$defs/ConfidenceDimensions" },
+        "externalIds": { "$ref": "#/$defs/ExternalIds" },
+        "extensions": { "$ref": "#/$defs/Extensions" }
       }
     },
     "Recommendation": {
       "type": "object",
       "required": ["id", "type", "status"],
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "id": { "$ref": "#/$defs/Id" },
         "type": { "const": "Recommendation" },
@@ -234,7 +427,15 @@
         "rationale": { "type": "string" },
         "status": {
           "type": "string",
-          "enum": ["candidate", "supported", "conflicted", "insufficient-evidence", "stale", "rejected"]
+          "enum": [
+            "candidate",
+            "supported",
+            "insufficient-evidence",
+            "conflicted",
+            "stale",
+            "rejected"
+          ],
+          "description": "Derived, reproducible assessment status. NOT workflow state."
         },
         "evidenceIds": {
           "type": "array",
@@ -248,46 +449,174 @@
           "type": "array",
           "items": { "$ref": "#/$defs/Id" }
         },
-        "confidence": { "$ref": "#/$defs/ConfidenceDimensions" }
-      }
+        "confidence": { "$ref": "#/$defs/ConfidenceDimensions" },
+        "assessment": { "$ref": "#/$defs/AssessmentMetadata" },
+        "externalIds": { "$ref": "#/$defs/ExternalIds" },
+        "extensions": { "$ref": "#/$defs/Extensions" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": { "not": { "const": "candidate" } }
+            },
+            "required": ["status"]
+          },
+          "then": { "required": ["assessment"] }
+        }
+      ]
     },
     "Conflict": {
       "type": "object",
-      "required": ["id", "status"],
-      "additionalProperties": true,
+      "required": ["id", "assertionIds", "conflictKind", "status"],
+      "additionalProperties": false,
       "properties": {
         "id": { "$ref": "#/$defs/Id" },
-        "subject": { "$ref": "#/$defs/Id" },
-        "predicate": { "type": "string" },
-        "values": {
+        "assertionIds": {
           "type": "array",
-          "items": {
-            "type": "object",
-            "additionalProperties": true,
-            "properties": {
-              "value": {},
-              "evidenceIds": {
-                "type": "array",
-                "items": { "$ref": "#/$defs/Id" }
-              },
-              "observedAt": { "$ref": "#/$defs/DateTime" }
-            }
-          }
+          "items": { "$ref": "#/$defs/Id" },
+          "minItems": 2,
+          "description": "Assertions involved in this conflict."
+        },
+        "conflictKind": {
+          "type": "string",
+          "enum": ["contradiction", "uncertainty"]
         },
         "status": {
           "type": "string",
           "enum": ["unresolved", "acknowledged", "resolved"]
-        }
+        },
+        "resolution": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "method": { "type": "string" },
+            "resolvedAt": { "$ref": "#/$defs/DateTime" },
+            "note": { "type": "string" },
+            "preferredAssertionId": { "$ref": "#/$defs/Id" }
+          }
+        },
+        "externalIds": { "$ref": "#/$defs/ExternalIds" },
+        "extensions": { "$ref": "#/$defs/Extensions" }
       }
     },
     "Metadata": {
       "type": "object",
-      "additionalProperties": true,
+      "additionalProperties": false,
       "properties": {
         "createdAt": { "$ref": "#/$defs/DateTime" },
         "updatedAt": { "$ref": "#/$defs/DateTime" },
-        "generator": { "type": "string" }
+        "generator": { "type": "string" },
+        "extensions": { "$ref": "#/$defs/Extensions" }
       }
+    },
+    "BusinessContextProjectionRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "objective": {
+          "type": "string",
+          "description": "Reasoning or decision objective guiding projection."
+        },
+        "domains": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Business domains to include."
+        },
+        "entityIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Id" },
+          "description": "Specific entity IDs to include."
+        },
+        "relationTraversal": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "maxDepth": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            }
+          }
+        },
+        "asOf": {
+          "$ref": "#/$defs/DateTime",
+          "description": "Temporal point for valid-time filtering."
+        },
+        "includeConflicts": {
+          "type": "boolean",
+          "description": "Whether to include unresolved conflicts."
+        },
+        "evidencePolicy": {
+          "type": "string",
+          "description": "Policy identifier for evidence inclusion."
+        },
+        "sizeLimit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "maxItems": { "type": "integer", "minimum": 1 },
+            "maxCharacters": { "type": "integer", "minimum": 1 },
+            "maxBytes": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "ordering": {
+          "type": "string",
+          "description": "Deterministic ordering policy identifier."
+        },
+        "extensions": { "$ref": "#/$defs/Extensions" }
+      },
+      "description": "Provider-neutral projection request contract. NOT a root persisted property."
+    },
+    "BusinessContextProjectionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "projectedAt": { "$ref": "#/$defs/DateTime" },
+        "asOf": { "$ref": "#/$defs/DateTime" },
+        "entities": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Entity" }
+        },
+        "relations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Relation" }
+        },
+        "assertions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Assertion" }
+        },
+        "signals": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Signal" }
+        },
+        "inferences": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Inference" }
+        },
+        "recommendations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Recommendation" }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Conflict" }
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Evidence" }
+        },
+        "truncated": {
+          "type": "boolean",
+          "description": "Whether projection was truncated due to size limits."
+        },
+        "truncationReason": {
+          "type": "string",
+          "description": "Reason for truncation when truncated is true."
+        },
+        "extensions": { "$ref": "#/$defs/Extensions" }
+      },
+      "description": "Provider-neutral projection result contract. NOT a root persisted property."
     }
   }
 }

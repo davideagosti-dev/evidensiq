@@ -1,18 +1,20 @@
 # Evidensiq Architecture
 
-This document describes the architectural boundaries and design principles of Evidensiq. It reflects the early specification (v0.1) and is subject to evolution.
+This document describes the architectural boundaries and design principles of Evidensiq. It reflects the v0.1 architecture-lock model (EVI-1.1).
 
 ## Working Thesis
 
 **Business context should be infrastructure, not prompt text.**
 
-Applications and AI agents need structured, traceable business context — not ad-hoc concatenation of documents into prompts. Evidensiq aims to provide the semantic contract and portable representation for that context.
+Applications and AI agents need structured, traceable business context — not ad-hoc concatenation of documents into prompts. Evidensiq provides the semantic contract and portable representation for that context.
 
 ## Positioning
 
 Evidensiq is **open infrastructure for evidence-backed business context and reasoning**.
 
-It is a provider-neutral, embeddable Business Context SDK and open specification that transforms heterogeneous business evidence into structured, temporal, traceable business context and enables AI systems to produce evidence-backed reasoning and recommendations **without owning the agent runtime**.
+It is a provider-neutral, embeddable Business Context SDK contract that transforms heterogeneous business evidence into a structured, temporal, traceable business model and enables AI systems to produce evidence-backed recommendations **without owning the agent runtime**.
+
+Primary consumer: **Developer**.
 
 ## Core Boundary
 
@@ -26,12 +28,18 @@ It is a provider-neutral, embeddable Business Context SDK and open specification
 ┌─────────────────────────────────────┐
 │  EVIDENSIQ                          │
 │                                     │
+│  Business Context Specification     │
 │  Business Model                     │
 │  Evidence / Provenance              │
+│  Temporal Validity                  │
+│  Conflict Representation            │
+│  Context Query                      │
+│  Context Projection                 │
 │  Signals                            │
 │  Inference                          │
 │  Recommendations                    │
 │  Validation                         │
+│  Evaluation                         │
 └─────────────────┬───────────────────┘
                   │
                   ▼
@@ -44,30 +52,37 @@ It is a provider-neutral, embeddable Business Context SDK and open specification
 
 - **Agent runtimes remain ABOVE Evidensiq.** Evidensiq does not orchestrate agents, manage conversations, or replace application logic.
 - **Adapters remain BELOW Evidensiq.** Evidensiq does not own storage, vector search, CRM APIs, or LLM transport.
-- **Evidensiq owns the semantic/context contract.** The specification defines what business context means, how evidence flows to recommendations, and how conflicts and provenance are represented.
+- **Evidensiq owns the semantic/context contract.**
 
-## What Evidensiq Is
+## What Evidensiq Owns
 
-- A **provider-neutral** business context specification
-- A **portable format** (`business-context.json`) for structured context
-- A **semantic model** for evidence, facts, inference, and recommendations
-- **Infrastructure** for traceable, temporal, conflict-aware business reasoning
+- Business Context Specification
+- Business Model
+- Evidence / Provenance
+- Temporal validity
+- Conflict representation
+- Context Query
+- Context Projection
+- Signals
+- Inference
+- Recommendations
+- Validation
+- Evaluation
 
-## What Evidensiq Is Not
+## What Evidensiq Does Not Own
 
-Evidensiq is explicitly **not**:
-
-- A generic AI agent framework
-- A chatbot framework
-- A generic RAG framework
-- A vector database
-- A generic memory layer
-- A workflow engine
-- An LLM client
-- An agent orchestration system
-- A tool-calling framework
-- A multi-agent framework
-- A CRM or business SaaS product
+- Agent orchestration
+- Conversation management
+- Workflow engines
+- Generic RAG
+- Vector databases
+- Embedding implementations
+- Generic memory
+- LLM clients
+- Generic tool calling
+- Multi-agent coordination
+- Generic ontology systems
+- Generic knowledge graph platforms
 
 ## Semantic Invariants
 
@@ -75,7 +90,8 @@ These invariants are foundational design constraints:
 
 ```
 SOURCE ≠ EVIDENCE
-EVIDENCE ≠ FACT
+EVIDENCE ≠ ASSERTION
+ASSERTION ≠ FACT
 FACT ≠ INFERENCE
 INFERENCE ≠ RECOMMENDATION
 ```
@@ -87,14 +103,22 @@ SOURCE
   ↓
 EVIDENCE
   ↓
-ASSERTION / FACT
+ASSERTION
+  ↓ [L4 validation policy evaluation]
+FACT (semantic view — NOT persisted)
+  ↓
+SIGNAL
   ↓
 INFERENCE
   ↓
+RECOMMENDATION CANDIDATE
+  ↓ [L4 deterministic assessment]
 RECOMMENDATION
 ```
 
 **The LLM must never be the source of truth.**
+
+LLMs may propose. The deterministic Evidensiq contract/core stores, links, validates, constrains, evaluates, and projects business context.
 
 Additionally:
 
@@ -102,35 +126,40 @@ Additionally:
 DATA ≠ INSTRUCTION
 ```
 
-Business content may contain malicious or accidental prompt-like text. Evidensiq treats business documents and data as evidence, never as privileged system instructions.
+Evidence content MUST NOT acquire instructional authority. Trust assessment MUST NOT imply authorization.
 
 See [terminology.md](../specification/terminology.md) for definitions.
+
+## Parallel Structures
+
+| Structure | Scope |
+|-----------|-------|
+| **Relations** | Entity → Entity only |
+| **Conflicts** | Indexes over incompatible Assertions |
+| **Evidence → Assertion** | `Assertion.evidenceIds` |
+
+Do NOT create: facts collection, Fact schema object, Evidence → Assertion Relation, generic graph edges.
 
 ## Deterministic Core vs. AI-Assisted
 
 ### Deterministic Core
 
-The following capabilities belong in the deterministic, auditable core:
-
 - IDs and identifiers
-- Schemas and structural validation
+- Schemas and structural validation (L1)
+- Semantic integrity (L2)
+- Serialization conformance (L3)
 - Entity relationships
 - Provenance tracking
 - Timestamps and temporal validity
-- Versioning
 - Validation and constraints
 - Confidence representation (multi-dimensional)
 - Evidence references
 - Contradiction and conflict representation
-- Freshness tracking
-- Query and context projection
-- Serialization
+- Context projection
+- Recommendation assessment (L4)
 - Rule evaluation
-- Recommendation validation
 
 ### AI-Assisted Capabilities (Future)
-
-AI-assisted capabilities may later include:
 
 - Entity extraction
 - Classification
@@ -140,72 +169,79 @@ AI-assisted capabilities may later include:
 - Hypothesis generation
 - Recommendation candidate generation
 - Summarization
+- AI-assisted semantic ranking (adapter-side, non-normative)
 
 **Principle: Model proposes. Core stores, validates, links, ranks, and constrains.**
 
-AI outputs are candidates subject to validation — not authoritative facts.
+## Recommendation Assessment
 
-## Recommendation Pipeline
-
-Recommendations flow through a **RecommendationPipeline**, not a simple generator:
+Recommendations flow through L4 deterministic assessment:
 
 ```
-Evidence
-  ↓
-Signals
-  ↓
-Inference
-  ↓
-Candidate Recommendations
-  ↓
-Constraint Validation
-  ↓
-Evidence Validation
-  ↓
-Ranking
-  ↓
-Recommendations
+Evidence → Assertions → Signals → Inference → Candidate Recommendations
+  → L4 Assessment → Recommendations
 ```
 
-Possible recommendation statuses:
+Recommendation status is derived, reproducible, and cached for serialization — NOT workflow state.
 
 | Status | Meaning |
 |--------|---------|
-| `candidate` | Proposed, not yet validated |
-| `supported` | Backed by sufficient evidence and constraints |
-| `conflicted` | Conflicting evidence or constraints |
-| `insufficient-evidence` | Cannot be adequately supported |
-| `stale` | Supporting evidence is outdated |
-| `rejected` | Failed validation |
+| `candidate` | Assessment incomplete |
+| `supported` | Required checks pass |
+| `insufficient-evidence` | Evidence threshold fails |
+| `conflicted` | Unresolved contradiction affects supporting assertion |
+| `stale` | Freshness policy fails |
+| `rejected` | Hard constraint violation |
+
+Hard constraint violation MUST NOT be represented as `conflicted`.
+
+Default recommendation assessment policy: `evidensiq.default-recommendation-v0.1`
+
+Constraint enforcement: `hard` (→ rejected) or `advisory` (→ warning only).
 
 ## Context Projection
 
-Applications should not inject the entire business model into every model request. Evidensiq defines a conceptual projection API:
+Provider-neutral contract definitions:
 
-```javascript
-context.project({
-  objective: "increase customer retention",
-  domains: ["sales", "support"],
-  tokenBudget: 6000
-});
-```
+- `BusinessContextProjectionRequest`
+- `BusinessContextProjectionResult`
 
-A **BusinessContextProjection** may contain:
+These are contract definitions — NOT root persisted properties.
 
-- Relevant entities
-- Metrics and goals
-- Active constraints
-- Supporting evidence
-- Known conflicts
-- Provenance references
+Request supports: `objective`, `domains`, `entityIds`, `relationTraversal` (maxDepth 0–3), `asOf`, `includeConflicts`, `evidencePolicy`, `sizeLimit`, `ordering`, `extensions`.
 
-This is conceptual in v0.1; runtime implementation is planned for future phases.
+NO `tokenBudget` in normative core. Provider-specific token budgeting belongs to adapters/runtimes.
+
+Do NOT turn projection into RAG/vector search.
+
+## Controlled Extensions
+
+Normative domain objects are closed (`additionalProperties: false`) with optional `extensions` for namespaced keys.
+
+Unknown extensions: preserve at L3, ignore for normative core processing.
+
+Extensions MUST NOT execute code, define runtime hooks, or modify security authority.
 
 ## Portable Format
 
 The primary portable artifact is `business-context.json`, validated against `specification/business-context.schema.json`.
 
+Root requires `organizationId` resolving to an Organization Entity.
+
 See [business-context-spec.md](../specification/business-context-spec.md) for the full specification.
+
+## Conformance Model
+
+Four levels — see [conformance.md](../specification/conformance.md):
+
+| Level | Scope |
+|-------|-------|
+| L1 Structural | JSON Schema validation |
+| L2 Semantic | References, integrity, temporal rules |
+| L3 Serialization | Round-trip portability |
+| L4 Behavioral | Policy evaluation, assessment derivation |
+
+Do NOT place policy-derived behavior into L3.
 
 ## Evaluation Principles
 
@@ -218,15 +254,15 @@ Future evaluation should measure:
 - Stale evidence rate
 - Recommendation stability
 
-**Counterfactual principle:** If important supporting evidence is removed, a recommendation should change, disappear, or reduce confidence. If it does not, the reasoning system may not actually be using business context.
+**Counterfactual principle:** If important supporting evidence is removed, a recommendation should change, disappear, or reduce confidence.
 
 ## Reference Scenario
 
-See the [README](../../README.md) for the Northstar Manufacturing example demonstrating signals, evidence, constraints, and recommendations in practice.
+See [business-context-spec.md](../specification/business-context-spec.md) for the Northstar Manufacturing example demonstrating the complete semantic chain, historical change, contradiction, and explicit supersession.
 
 ## Related Documents
 
 - [Business Context Specification](../specification/business-context-spec.md)
 - [Terminology](../specification/terminology.md)
+- [Conformance](../specification/conformance.md)
 - [Roadmap](../roadmap.md)
-- [Open Source Case](../open-source-case.md)
