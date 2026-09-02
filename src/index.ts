@@ -1,5 +1,6 @@
 /**
- * @evidensiq/core public API — portable model + L1/L2 validation.
+ * @evidensiq/core public API — portable model, L1/L2 validation,
+ * and temporal / Fact / conflict semantic primitives (EVI-2.3).
  */
 
 export {
@@ -60,6 +61,15 @@ export type {
 export type { JsonParseFailure, JsonParseResult, JsonParseSuccess } from "./parse.js";
 
 export { isJsonValue, jsonEquals, parseJson, serializeJson } from "./parse.js";
+
+export type { ContradictionPreconditionResult, ValidityBounds } from "./semantics/index.js";
+export {
+  evaluateContradictionPreconditions,
+  isAssertionActiveAt,
+  isFactQualified,
+  selectCurrentFactAssertions,
+  validityIntervalsOverlap,
+} from "./semantics/index.js";
 
 export type {
   BusinessContextValidationFailure,
