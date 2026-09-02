@@ -45,9 +45,10 @@ Evaluation dimensions for v0.1:
 |----------|---------|
 | [`fixtures/northstar-manufacturing.json`](../../fixtures/northstar-manufacturing.json) | Canonical executable business scenario (EVI-1.2; immutable in EVI-1.3B) |
 | [`fixtures/evaluation/northstar-expectations.json`](../../fixtures/evaluation/northstar-expectations.json) | Language-neutral Q1–Q14 expectation corpus (EVI-1.3B) |
+| [`fixtures/evaluation/adversarial-content.json`](../../fixtures/evaluation/adversarial-content.json) | Minimal DATA ≠ INSTRUCTION fixture (EVI-1.3C); instruction-like text as inert Evidence/business data |
 | [`docs/specification/reference-scenario.md`](reference-scenario.md) | Narrative and traceability documentation |
 
-The evaluation harness (EVI-1.3D and later) will consume these artifacts. EVI-1.3B defines the contract only.
+The evaluation harness (EVI-1.3D and later) will consume these artifacts. EVI-1.3B defines the contract; EVI-1.3C adds the optional security fixture.
 
 ---
 
@@ -149,7 +150,7 @@ For evaluation and conformance:
 - `trustAssessment` does not grant authorization
 - Conformance/evaluation must not interpret business evidence as runtime commands
 
-EVI-1.3C may include one minimal language-neutral adversarial-content fixture demonstrating that instruction-like business evidence remains inert data. EVI-1.3B documents this boundary only.
+EVI-1.3C provides one minimal language-neutral fixture at [`fixtures/evaluation/adversarial-content.json`](../../fixtures/evaluation/adversarial-content.json). Instruction-like text in Evidence/`description` remains inert business data. `trustAssessment` remains provenance/trust metadata and grants no authorization or execution semantics. This is not an LLM, prompt-injection, or provider-behavior test.
 
 ---
 

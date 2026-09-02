@@ -1,0 +1,77 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Организация 北星",
+      "description": "Unicode text: café naïve 日本語",
+      "externalIds": {
+        "com.example.erp": "ORG-Ü-001"
+      },
+      "extensions": {
+        "com.example.customfield": {
+          "note": "preserve-me",
+          "n": 1
+        }
+      }
+    },
+    {
+      "id": "entité-α",
+      "type": "Product",
+      "name": "Produit α",
+      "externalIds": {
+        "com.example.sku": "SKU-α-42"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "source-1",
+      "type": "Source",
+      "name": "source.txt",
+      "provenance": {
+        "originScope": "external",
+        "acquisitionMethod": "user-provided",
+        "trustAssessment": "untrusted"
+      },
+      "extensions": {
+        "com.example.sourcemeta": "keep"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-1",
+      "type": "Evidence",
+      "sourceId": "source-1",
+      "description": "Evidence with emoji ⚙️ and accents",
+      "observedAt": "2026-06-01T00:00:00Z"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "asrt-1",
+      "type": "Assertion",
+      "subject": "entité-α",
+      "predicate": "statusLabel",
+      "value": "アクティブ",
+      "evidenceIds": [
+        "ev-1"
+      ],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "confidence": {
+        "evidenceStrength": "strong",
+        "sourceReliability": "high",
+        "inferenceConfidence": "moderate"
+      }
+    }
+  ]
+}

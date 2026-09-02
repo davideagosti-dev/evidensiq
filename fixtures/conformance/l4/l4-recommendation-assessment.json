@@ -1,0 +1,65 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    }
+  ],
+  "sources": [
+    {
+      "id": "source-1",
+      "type": "Source",
+      "name": "source.txt",
+      "reference": "source.txt",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "imported",
+        "trustAssessment": "trusted"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-1",
+      "type": "Evidence",
+      "sourceId": "source-1",
+      "contentRef": "source-1#fragment",
+      "description": "Evidence one",
+      "observedAt": "2026-06-01T00:00:00Z"
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "rec-candidate",
+      "type": "Recommendation",
+      "description": "Candidate without assessment",
+      "status": "candidate"
+    },
+    {
+      "id": "rec-supported",
+      "type": "Recommendation",
+      "description": "Supported with assessment",
+      "status": "supported",
+      "evidenceIds": [
+        "ev-1"
+      ],
+      "assessment": {
+        "policyId": "evidensiq.default-recommendation-v0.1",
+        "evaluatedAt": "2026-06-30T14:00:00Z",
+        "results": [
+          {
+            "check": "evidence-threshold",
+            "outcome": "pass"
+          },
+          {
+            "check": "constraint-compliance",
+            "outcome": "pass"
+          }
+        ]
+      }
+    }
+  ]
+}

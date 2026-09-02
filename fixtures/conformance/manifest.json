@@ -1,4 +1,539 @@
 {
   "manifestVersion": "0.1",
-  "entries": []
+  "entries": [
+    {
+      "id": "l1-valid-minimal",
+      "fixture": "fixtures/conformance/l1/l1-valid-minimal.json",
+      "targetLevel": "L1",
+      "expectedValid": true,
+      "notes": "Minimal structurally valid Business Context document."
+    },
+    {
+      "id": "l1-missing-specVersion",
+      "fixture": "fixtures/conformance/l1/l1-missing-specVersion.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-001",
+          "level": "L1",
+          "severity": "error",
+          "path": "/"
+        }
+      ]
+    },
+    {
+      "id": "l1-wrong-specVersion",
+      "fixture": "fixtures/conformance/l1/l1-wrong-specVersion.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-002",
+          "level": "L1",
+          "severity": "error",
+          "path": "/specVersion"
+        }
+      ]
+    },
+    {
+      "id": "l1-unknown-root-facts",
+      "fixture": "fixtures/conformance/l1/l1-unknown-root-facts.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-018",
+          "level": "L1",
+          "severity": "error",
+          "path": "/facts"
+        },
+        {
+          "ruleId": "EVI-L1-003",
+          "level": "L1",
+          "severity": "error",
+          "path": "/facts"
+        }
+      ],
+      "notes": "Root facts collection is schema-prohibited (closed root)."
+    },
+    {
+      "id": "l1-source-missing-provenance",
+      "fixture": "fixtures/conformance/l1/l1-source-missing-provenance.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-005",
+          "level": "L1",
+          "severity": "error",
+          "path": "/sources/0"
+        }
+      ]
+    },
+    {
+      "id": "l1-evidence-missing-sourceId",
+      "fixture": "fixtures/conformance/l1/l1-evidence-missing-sourceId.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-006",
+          "level": "L1",
+          "severity": "error",
+          "path": "/evidence/0"
+        }
+      ]
+    },
+    {
+      "id": "l1-assertion-empty-evidenceIds",
+      "fixture": "fixtures/conformance/l1/l1-assertion-empty-evidenceIds.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-008",
+          "level": "L1",
+          "severity": "error",
+          "path": "/assertions/0/evidenceIds"
+        }
+      ]
+    },
+    {
+      "id": "l1-validated-missing-validation",
+      "fixture": "fixtures/conformance/l1/l1-validated-missing-validation.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-009",
+          "level": "L1",
+          "severity": "error",
+          "path": "/assertions/0"
+        }
+      ]
+    },
+    {
+      "id": "l1-superseded-missing-supersededBy",
+      "fixture": "fixtures/conformance/l1/l1-superseded-missing-supersededBy.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-010",
+          "level": "L1",
+          "severity": "error",
+          "path": "/assertions/0"
+        }
+      ]
+    },
+    {
+      "id": "l1-invalid-relation-type",
+      "fixture": "fixtures/conformance/l1/l1-invalid-relation-type.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-012",
+          "level": "L1",
+          "severity": "error",
+          "path": "/relations/0/type"
+        }
+      ]
+    },
+    {
+      "id": "l1-recommendation-no-assessment",
+      "fixture": "fixtures/conformance/l1/l1-recommendation-no-assessment.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-015",
+          "level": "L1",
+          "severity": "error",
+          "path": "/recommendations/0"
+        }
+      ]
+    },
+    {
+      "id": "l1-invalid-datetime",
+      "fixture": "fixtures/conformance/l1/l1-invalid-datetime.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-016",
+          "level": "L1",
+          "severity": "error",
+          "path": "/metadata/createdAt"
+        }
+      ]
+    },
+    {
+      "id": "l1-empty-id",
+      "fixture": "fixtures/conformance/l1/l1-empty-id.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-017",
+          "level": "L1",
+          "severity": "error",
+          "path": "/entities/0/id"
+        }
+      ]
+    },
+    {
+      "id": "l1-closed-object-unknown-property",
+      "fixture": "fixtures/conformance/l1/l1-closed-object-unknown-property.json",
+      "targetLevel": "L1",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L1-003",
+          "level": "L1",
+          "severity": "error",
+          "path": "/assertions/0/confidence/modelConfidence"
+        },
+        {
+          "ruleId": "EVI-L1-018",
+          "level": "L1",
+          "severity": "error",
+          "path": "/assertions/0/confidence/modelConfidence"
+        }
+      ],
+      "notes": "modelConfidence is prohibited on ConfidenceDimensions."
+    },
+    {
+      "id": "l2-duplicate-id",
+      "fixture": "fixtures/conformance/l2/l2-duplicate-id.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-001",
+          "level": "L2",
+          "severity": "error",
+          "path": "/entities/1/id"
+        }
+      ]
+    },
+    {
+      "id": "l2-case-sensitive-ids",
+      "fixture": "fixtures/conformance/l2/l2-case-sensitive-ids.json",
+      "targetLevel": "L2",
+      "expectedValid": true,
+      "notes": "customer-a and Customer-A are distinct under case-sensitive Unicode ordinal comparison."
+    },
+    {
+      "id": "l2-organizationId-non-org",
+      "fixture": "fixtures/conformance/l2/l2-organizationId-non-org.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-003",
+          "level": "L2",
+          "severity": "error",
+          "path": "/organizationId"
+        }
+      ]
+    },
+    {
+      "id": "l2-relation-endpoint-outside-entity",
+      "fixture": "fixtures/conformance/l2/l2-relation-endpoint-outside-entity.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-004",
+          "level": "L2",
+          "severity": "error",
+          "path": "/relations/0/to"
+        }
+      ]
+    },
+    {
+      "id": "l2-evidence-sourceId-dangling",
+      "fixture": "fixtures/conformance/l2/l2-evidence-sourceId-dangling.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-005",
+          "level": "L2",
+          "severity": "error",
+          "path": "/evidence/0/sourceId"
+        }
+      ]
+    },
+    {
+      "id": "l2-assertion-subject-dangling",
+      "fixture": "fixtures/conformance/l2/l2-assertion-subject-dangling.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-006",
+          "level": "L2",
+          "severity": "error",
+          "path": "/assertions/0/subject"
+        }
+      ]
+    },
+    {
+      "id": "l2-assertion-evidenceIds-dangling",
+      "fixture": "fixtures/conformance/l2/l2-assertion-evidenceIds-dangling.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-007",
+          "level": "L2",
+          "severity": "error",
+          "path": "/assertions/0/evidenceIds/0"
+        }
+      ]
+    },
+    {
+      "id": "l2-supersededBy-dangling",
+      "fixture": "fixtures/conformance/l2/l2-supersededBy-dangling.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-008",
+          "level": "L2",
+          "severity": "error",
+          "path": "/assertions/0/supersededBy"
+        }
+      ]
+    },
+    {
+      "id": "l2-supersession-chain",
+      "fixture": "fixtures/conformance/l2/l2-supersession-chain.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-009",
+          "level": "L2",
+          "severity": "error",
+          "path": "/assertions/0/supersededBy"
+        }
+      ],
+      "notes": "asrt-a.supersededBy points to asrt-b which is itself superseded."
+    },
+    {
+      "id": "l2-conflict-assertion-dangling",
+      "fixture": "fixtures/conformance/l2/l2-conflict-assertion-dangling.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-010",
+          "level": "L2",
+          "severity": "error",
+          "path": "/conflicts/0/assertionIds/1"
+        }
+      ]
+    },
+    {
+      "id": "l2-conflict-repeated-assertion",
+      "fixture": "fixtures/conformance/l2/l2-conflict-repeated-assertion.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-011",
+          "level": "L2",
+          "severity": "error",
+          "path": "/conflicts/0/assertionIds"
+        }
+      ]
+    },
+    {
+      "id": "l2-inverted-temporal-interval",
+      "fixture": "fixtures/conformance/l2/l2-inverted-temporal-interval.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-012",
+          "level": "L2",
+          "severity": "error",
+          "path": "/assertions/0"
+        }
+      ]
+    },
+    {
+      "id": "l2-half-open-adjacent",
+      "fixture": "fixtures/conformance/l2/l2-half-open-adjacent.json",
+      "targetLevel": "L2",
+      "expectedValid": true,
+      "notes": "Adjacent half-open intervals meeting at 2026-04-01T00:00:00Z do not overlap."
+    },
+    {
+      "id": "l2-recommendation-wrong-category",
+      "fixture": "fixtures/conformance/l2/l2-recommendation-wrong-category.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-014",
+          "level": "L2",
+          "severity": "error",
+          "path": "/recommendations/0/evidenceIds/0"
+        },
+        {
+          "ruleId": "EVI-L2-014",
+          "level": "L2",
+          "severity": "error",
+          "path": "/recommendations/0/constraintIds/0"
+        }
+      ],
+      "notes": "evidenceIds points to Product; constraintIds points to Evidence."
+    },
+    {
+      "id": "l2-inference-basedOn-invalid",
+      "fixture": "fixtures/conformance/l2/l2-inference-basedOn-invalid.json",
+      "targetLevel": "L2",
+      "expectedValid": false,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-016",
+          "level": "L2",
+          "severity": "error",
+          "path": "/inferences/0/basedOn/0"
+        },
+        {
+          "ruleId": "EVI-L2-016",
+          "level": "L2",
+          "severity": "error",
+          "path": "/inferences/0/basedOn/1"
+        }
+      ]
+    },
+    {
+      "id": "l2-contradiction-subject-predicate-mismatch",
+      "fixture": "fixtures/conformance/l2/l2-contradiction-subject-predicate-mismatch.json",
+      "targetLevel": "L2",
+      "expectedValid": true,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-018",
+          "level": "L2",
+          "severity": "warning",
+          "path": "/conflicts/0"
+        }
+      ],
+      "notes": "Warning only; L2 still passes."
+    },
+    {
+      "id": "l2-relation-endpoint-type-mismatch",
+      "fixture": "fixtures/conformance/l2/l2-relation-endpoint-type-mismatch.json",
+      "targetLevel": "L2",
+      "expectedValid": true,
+      "expectedDiagnostics": [
+        {
+          "ruleId": "EVI-L2-019",
+          "level": "L2",
+          "severity": "warning",
+          "path": "/relations/0"
+        }
+      ],
+      "notes": "Product→targets→Metric mismatches expected endpoint pattern; warning only."
+    },
+    {
+      "id": "l3-absent-optional-fields",
+      "fixture": "fixtures/conformance/l3/l3-absent-optional-fields.json",
+      "targetLevel": "L3",
+      "expectedValid": true,
+      "notes": "Optional fields absent (not null). Round-trip MUST preserve absence."
+    },
+    {
+      "id": "l3-utc-datetime",
+      "fixture": "fixtures/conformance/l3/l3-utc-datetime.json",
+      "targetLevel": "L3",
+      "expectedValid": true,
+      "notes": "Canonical UTC DateTime with Z suffix. Round-trip preserves temporal instant."
+    },
+    {
+      "id": "l3-datetime-offset-equivalent",
+      "fixture": "fixtures/conformance/l3/l3-datetime-offset-equivalent.json",
+      "targetLevel": "L3",
+      "expectedValid": true,
+      "notes": "Explicit +01:00 offsets are schema-valid. Portable serializers MUST preserve temporal instant semantics (equivalent to 2026-06-01T00:00:00Z / 2026-06-30T12:00:00Z); byte equality is NOT required."
+    },
+    {
+      "id": "l3-ieee754-numerics",
+      "fixture": "fixtures/conformance/l3/l3-ieee754-numerics.json",
+      "targetLevel": "L3",
+      "expectedValid": true,
+      "notes": "IEEE 754 values 4.5, 8.2, 1450000 MUST round-trip without loss."
+    },
+    {
+      "id": "l3-array-and-key-order",
+      "fixture": "fixtures/conformance/l3/l3-array-and-key-order.json",
+      "targetLevel": "L3",
+      "expectedValid": true,
+      "notes": "Array element order (evidenceIds, entities, value array) MUST be preserved. Object key order is non-semantic."
+    },
+    {
+      "id": "l3-extensions-unicode-enums",
+      "fixture": "fixtures/conformance/l3/l3-extensions-unicode-enums.json",
+      "targetLevel": "L3",
+      "expectedValid": true,
+      "notes": "Unknown namespaced extensions and externalIds MUST be preserved. Unicode IDs/text MUST not be normalized away. Closed enums (originScope, acquisitionMethod, trustAssessment, classification, confidence enums, validation.result) MUST round-trip unchanged."
+    },
+    {
+      "id": "l4-fact-qualification",
+      "fixture": "fixtures/conformance/l4/l4-fact-qualification.json",
+      "targetLevel": "L4",
+      "expectedValid": true,
+      "notes": "EVI-L4-001: asrt-fact qualifies as Fact (validated + result=valid + policyId). asrt-not-fact does not. EVI-L4-002: no facts collection and no persisted Fact type; Fact is a semantic view only."
+    },
+    {
+      "id": "l4-superseded-and-retracted",
+      "fixture": "fixtures/conformance/l4/l4-superseded-and-retracted.json",
+      "targetLevel": "L4",
+      "expectedValid": true,
+      "notes": "EVI-L4-003: asrt-preliminary excluded from current truth; asrt-current is current. EVI-L4-004: asrt-retracted MUST NOT qualify as a Fact."
+    },
+    {
+      "id": "l4-historical-change",
+      "fixture": "fixtures/conformance/l4/l4-historical-change.json",
+      "targetLevel": "L4",
+      "expectedValid": true,
+      "notes": "EVI-L4-005: same subject/predicate with non-overlapping half-open intervals is historical change; no Conflict inferred. EVI-L4-006: later asrt-q2 does NOT automatically supersede asrt-q1; both remain validated without supersession."
+    },
+    {
+      "id": "l4-contradiction-and-resolution",
+      "fixture": "fixtures/conformance/l4/l4-contradiction-and-resolution.json",
+      "targetLevel": "L4",
+      "expectedValid": true,
+      "notes": "EVI-L4-007: same subject, same predicate, overlapping valid intervals, incompatible values → contradiction. EVI-L4-008: after resolution metadata, both Assertions and both Evidence objects remain in the document."
+    },
+    {
+      "id": "l4-recommendation-assessment",
+      "fixture": "fixtures/conformance/l4/l4-recommendation-assessment.json",
+      "targetLevel": "L4",
+      "expectedValid": true,
+      "notes": "EVI-L4-009: non-candidate rec-supported has assessment metadata present. candidate may omit assessment. Supported/stale/etc. are NOT universally re-derivable."
+    },
+    {
+      "id": "l4-hard-constraint-rejected",
+      "fixture": "fixtures/conformance/l4/l4-hard-constraint-rejected.json",
+      "targetLevel": "L4",
+      "expectedValid": true,
+      "notes": "EVI-L4-010: hard enforcement constraint violation → status=rejected with constraint-compliance=fail. MUST NOT be represented as conflicted."
+    },
+    {
+      "id": "l4-asOf-and-includeConflicts",
+      "fixture": "fixtures/conformance/l4/l4-asOf-and-includeConflicts.json",
+      "targetLevel": "L4",
+      "expectedValid": true,
+      "notes": "EVI-L4-011: asOf=2026-06-30T00:00:00Z → active: asrt-q2, asrt-constrained, asrt-normal; inactive: asrt-q1 (validUntil exclusive). EVI-L4-012: includeConflicts=true → conflict-1 remains visible in projection."
+    }
+  ]
 }

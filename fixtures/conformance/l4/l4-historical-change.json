@@ -1,0 +1,88 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    },
+    {
+      "id": "product-1",
+      "type": "Product",
+      "name": "Product One"
+    }
+  ],
+  "sources": [
+    {
+      "id": "source-1",
+      "type": "Source",
+      "name": "source.txt",
+      "reference": "source.txt",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "imported",
+        "trustAssessment": "trusted"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-1",
+      "type": "Evidence",
+      "sourceId": "source-1",
+      "contentRef": "source-1#fragment",
+      "description": "Evidence one",
+      "observedAt": "2026-06-01T00:00:00Z"
+    },
+    {
+      "id": "ev-2",
+      "type": "Evidence",
+      "sourceId": "source-1",
+      "contentRef": "source-1#fragment",
+      "description": "Evidence one",
+      "observedAt": "2026-06-01T00:00:00Z"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "asrt-q1",
+      "type": "Assertion",
+      "subject": "product-1",
+      "predicate": "quarterlyRevenue",
+      "value": 1450000,
+      "evidenceIds": [
+        "ev-1"
+      ],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "validFrom": "2026-01-01T00:00:00Z",
+      "validUntil": "2026-04-01T00:00:00Z"
+    },
+    {
+      "id": "asrt-q2",
+      "type": "Assertion",
+      "subject": "product-1",
+      "predicate": "quarterlyRevenue",
+      "value": 1180000,
+      "evidenceIds": [
+        "ev-2"
+      ],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "validFrom": "2026-04-01T00:00:00Z",
+      "validUntil": "2026-07-01T00:00:00Z"
+    }
+  ],
+  "conflicts": []
+}
