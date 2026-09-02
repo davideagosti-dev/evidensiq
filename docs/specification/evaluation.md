@@ -52,6 +52,28 @@ The evaluation harness (EVI-1.3D and later) will consume these artifacts. EVI-1.
 
 ---
 
+## L4 Conformance Expectation Contract
+
+L4 conformance fixtures are indexed by [`fixtures/conformance/manifest.json`](../../fixtures/conformance/manifest.json). Behavioral expected outputs for those fixtures live in the companion oracle [`fixtures/conformance/l4-expectations.json`](../../fixtures/conformance/l4-expectations.json), validated by [`fixtures/conformance/l4-expectations.schema.json`](../../fixtures/conformance/l4-expectations.schema.json).
+
+| Aspect | Rule |
+|--------|------|
+| Scope | Focused L4 conformance behavioral oracle over the L4 fixture corpus |
+| Nature | **Test metadata** — not Business Context data and not an extension of `business-context.json` |
+| Manifest notes | Informative only; **MUST NOT** be parsed as normative behavioral expectations |
+| Consumers | Future language-specific runners (e.g., TypeScript, .NET) consume the same expectation corpus |
+
+This companion contract is distinct from Northstar evaluation expectations:
+
+| Corpus | Role |
+|--------|------|
+| [`fixtures/evaluation/northstar-expectations.json`](../../fixtures/evaluation/northstar-expectations.json) | Canonical **business scenario** evaluation oracle (Q1–Q14) |
+| [`fixtures/conformance/l4-expectations.json`](../../fixtures/conformance/l4-expectations.json) | Focused **L4 conformance** behavioral oracle |
+
+They may share declarative principles but serve different scopes. Do not merge them.
+
+---
+
 ## Northstar Expectation Contract
 
 Expectations are encoded as declarative records with:
