@@ -1,6 +1,7 @@
 /**
  * @evidensiq/core public API — portable model, L1/L2 validation,
- * and temporal / Fact / conflict semantic primitives (EVI-2.3).
+ * temporal / Fact / conflict semantics (EVI-2.3), and projection /
+ * bounded recommendation assessment (EVI-2.4).
  */
 
 export {
@@ -62,11 +63,29 @@ export type { JsonParseFailure, JsonParseResult, JsonParseSuccess } from "./pars
 
 export { isJsonValue, jsonEquals, parseJson, serializeJson } from "./parse.js";
 
-export type { ContradictionPreconditionResult, ValidityBounds } from "./semantics/index.js";
+export type {
+  BoundedAssessmentCheck,
+  BoundedAssessmentWarning,
+  ConstraintEvaluation,
+  ContradictionPreconditionResult,
+  NotEvaluableAssessmentCheck,
+  ProjectionOptions,
+  RecommendationAssessmentFound,
+  RecommendationAssessmentMissing,
+  RecommendationAssessmentOptions,
+  RecommendationAssessmentResult,
+  RecommendationSupportGraphFound,
+  RecommendationSupportGraphMissing,
+  RecommendationSupportGraphResult,
+  ValidityBounds,
+} from "./semantics/index.js";
 export {
+  assessRecommendation,
+  buildRecommendationSupportGraph,
   evaluateContradictionPreconditions,
   isAssertionActiveAt,
   isFactQualified,
+  projectBusinessContext,
   selectCurrentFactAssertions,
   validityIntervalsOverlap,
 } from "./semantics/index.js";
