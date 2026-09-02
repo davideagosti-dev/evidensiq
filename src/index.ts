@@ -1,8 +1,35 @@
 /**
  * @evidensiq/core public API — portable model, L1/L2 validation,
- * temporal / Fact / conflict semantics (EVI-2.3), and projection /
- * bounded recommendation assessment (EVI-2.4).
+ * temporal / Fact / conflict semantics (EVI-2.3), projection /
+ * bounded recommendation assessment (EVI-2.4), and portable
+ * conformance runner (EVI-2.5).
  */
+
+export type {
+  ConformanceCaseInput,
+  ConformanceCaseLevel,
+  ConformanceCaseResult,
+  ConformanceErrorIdentity,
+  ConformanceExpectation,
+  ConformanceStatus,
+  ConformanceSuiteCounts,
+  ConformanceSuiteOptions,
+  ConformanceSuiteResult,
+  ConformanceSummary,
+  ContradictionExpectation,
+  CurrentTruthExpectation,
+  DiagnosticIdentity,
+  ExpectedSemanticError,
+  FactQualificationExpectation,
+  HistoricalChangeExpectation,
+  L4CategoryExpectation,
+  RecommendationAssessmentExpectation,
+  RecommendationPolicyExpectation,
+  RoundTripExpectation,
+  TemporalProjectionExpectation,
+  ValidationExpectation,
+} from "./conformance/index.js";
+export { runConformanceCase, runConformanceSuite } from "./conformance/index.js";
 
 export {
   CORE_RELATION_TYPES,

@@ -1,9 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  expectDiagnosticMultiset,
-  loadManifest,
-  runManifestEntry,
-} from "./helpers/conformance-harness.js";
+import { loadManifest, runManifestEntry } from "./helpers/conformance-harness.js";
 
 describe("L1/L2 conformance fixture harness", () => {
   const manifest = loadManifest();
@@ -17,12 +13,11 @@ describe("L1/L2 conformance fixture harness", () => {
   for (const entry of entries) {
     it(`${entry.id} (targetLevel=${entry.targetLevel})`, () => {
       const result = runManifestEntry(entry);
-      expect(result.valid).toBe(entry.expectedValid);
-      if (entry.expectedDiagnostics !== undefined) {
-        expectDiagnosticMultiset(result.diagnostics, entry.expectedDiagnostics);
-      } else if (entry.expectedValid) {
-        const errors = result.diagnostics.filter((d) => d.severity === "error");
-        expect(errors).toEqual([]);
+      expect(result.status).toBe("pass");
+      if (entry.expectedValid) {
+        expect(result.actual).toMatchObject({ valid: true });
+      } else {
+        expect(result.actual).toMatchObject({ valid: false });
       }
     });
   }
