@@ -1,5 +1,5 @@
 /**
- * @evidensiq/core public API — EVI-2.1 portable model foundation.
+ * @evidensiq/core public API — portable model + L1/L2 validation.
  */
 
 export {
@@ -60,3 +60,18 @@ export type {
 export type { JsonParseFailure, JsonParseResult, JsonParseSuccess } from "./parse.js";
 
 export { isJsonValue, jsonEquals, parseJson, serializeJson } from "./parse.js";
+
+export type {
+  BusinessContextValidationFailure,
+  BusinessContextValidationResult,
+  BusinessContextValidationSuccess,
+  ConformanceLevel,
+  Diagnostic,
+  DiagnosticSeverity,
+  L1ValidationFailure,
+  L1ValidationResult,
+  L1ValidationSuccess,
+  L2ValidationResult,
+} from "./validate.js";
+
+export { validateBusinessContext, validateL1, validateL2 } from "./validate.js";

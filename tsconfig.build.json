@@ -4,6 +4,7 @@
     "noEmit": false,
     "rootDir": "src",
     "outDir": "dist",
+    "resolveJsonModule": true,
     "types": []
   },
   "include": ["src/**/*"]
