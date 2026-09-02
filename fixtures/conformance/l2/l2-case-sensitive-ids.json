@@ -1,0 +1,21 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    },
+    {
+      "id": "customer-a",
+      "type": "CustomerSegment",
+      "name": "customer-a"
+    },
+    {
+      "id": "Customer-A",
+      "type": "CustomerSegment",
+      "name": "Customer-A"
+    }
+  ]
+}

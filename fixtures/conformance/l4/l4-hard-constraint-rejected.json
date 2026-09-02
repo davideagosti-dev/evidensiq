@@ -1,0 +1,102 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    },
+    {
+      "id": "product-1",
+      "type": "Product",
+      "name": "Product One"
+    },
+    {
+      "id": "constraint-capacity",
+      "type": "Constraint",
+      "name": "Supplier Capacity",
+      "properties": {
+        "enforcement": "hard"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "source-1",
+      "type": "Source",
+      "name": "source.txt",
+      "reference": "source.txt",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "imported",
+        "trustAssessment": "trusted"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-1",
+      "type": "Evidence",
+      "sourceId": "source-1",
+      "contentRef": "source-1#fragment",
+      "description": "Evidence one",
+      "observedAt": "2026-06-01T00:00:00Z"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "asrt-capacity",
+      "type": "Assertion",
+      "subject": "constraint-capacity",
+      "predicate": "capacityStatus",
+      "value": "constrained",
+      "evidenceIds": [
+        "ev-1"
+      ],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      }
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "rec-increase",
+      "type": "Recommendation",
+      "description": "Increase acquisition spend immediately",
+      "status": "rejected",
+      "constraintIds": [
+        "constraint-capacity"
+      ],
+      "evidenceIds": [
+        "ev-1"
+      ],
+      "assessment": {
+        "policyId": "evidensiq.default-recommendation-v0.1",
+        "evaluatedAt": "2026-06-30T14:00:00Z",
+        "results": [
+          {
+            "check": "evidence-threshold",
+            "outcome": "pass"
+          },
+          {
+            "check": "constraint-compliance",
+            "outcome": "fail"
+          },
+          {
+            "check": "conflict-impact",
+            "outcome": "pass"
+          },
+          {
+            "check": "freshness-policy",
+            "outcome": "pass"
+          }
+        ]
+      }
+    }
+  ]
+}

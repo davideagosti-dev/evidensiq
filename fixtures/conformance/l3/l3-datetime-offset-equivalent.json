@@ -1,0 +1,53 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    }
+  ],
+  "sources": [
+    {
+      "id": "source-1",
+      "type": "Source",
+      "name": "source.txt",
+      "reference": "source.txt",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "imported",
+        "trustAssessment": "trusted"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-1",
+      "type": "Evidence",
+      "sourceId": "source-1",
+      "contentRef": "source.txt#fragment",
+      "description": "Offset datetime evidence",
+      "observedAt": "2026-06-01T01:00:00+01:00"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "asrt-1",
+      "type": "Assertion",
+      "subject": "org-1",
+      "predicate": "value",
+      "value": 1,
+      "evidenceIds": [
+        "ev-1"
+      ],
+      "observedAt": "2026-06-01T01:00:00+01:00",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T13:00:00+01:00",
+        "result": "valid"
+      }
+    }
+  ]
+}

@@ -1,0 +1,405 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://evidensiq.dev/schemas/conformance/v0.1/l4-expectations.schema.json",
+  "title": "Evidensiq L4 Expectation Contract",
+  "description": "Language-neutral L4 behavioral expectation oracle for conformance fixtures. Test metadata only; not part of the Business Context data model.",
+  "type": "object",
+  "required": ["expectationVersion", "expectations"],
+  "additionalProperties": false,
+  "properties": {
+    "expectationVersion": {
+      "type": "string",
+      "const": "0.1",
+      "description": "L4 expectation corpus contract version."
+    },
+    "expectations": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Primary L4 fixture expectation records. Treat ID collections as sets unless the specification makes order significant.",
+      "items": { "$ref": "#/$defs/ExpectationRecord" }
+    }
+  },
+  "$defs": {
+    "NonEmptyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "IdSet": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/NonEmptyId" },
+      "uniqueItems": true
+    },
+    "RuleId": {
+      "type": "string",
+      "pattern": "^EVI-L4-\\d{3}$",
+      "description": "Stable L4 conformance rule identifier."
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "AssessmentCheckName": {
+      "type": "string",
+      "enum": [
+        "evidence-threshold",
+        "constraint-compliance",
+        "conflict-impact",
+        "freshness-policy"
+      ]
+    },
+    "AssessmentCheckResult": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "RecommendationStatus": {
+      "type": "string",
+      "enum": [
+        "candidate",
+        "supported",
+        "rejected",
+        "stale",
+        "insufficient-evidence",
+        "conflicted"
+      ]
+    },
+    "ExpectationCategory": {
+      "type": "string",
+      "enum": [
+        "fact-qualification",
+        "current-truth",
+        "historical-change",
+        "contradiction",
+        "recommendation-assessment",
+        "recommendation-policy",
+        "temporal-projection"
+      ]
+    },
+    "FactQualificationExpectation": {
+      "type": "object",
+      "required": [
+        "factAssertionIds",
+        "nonFactAssertionIds",
+        "persistedFactObjectsExpected"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "factAssertionIds": {
+          "$ref": "#/$defs/IdSet",
+          "description": "Assertion IDs that qualify as Facts under EVI-L4-001."
+        },
+        "nonFactAssertionIds": {
+          "$ref": "#/$defs/IdSet",
+          "description": "Assertion IDs that MUST NOT qualify as Facts."
+        },
+        "persistedFactObjectsExpected": {
+          "type": "boolean",
+          "const": false,
+          "description": "EVI-L4-002: no persisted Fact collection or Fact type is expected."
+        }
+      }
+    },
+    "CurrentTruthExpectation": {
+      "type": "object",
+      "required": [
+        "includedInCurrentTruth",
+        "excludedFromCurrentTruth",
+        "nonFactAssertionIds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "includedInCurrentTruth": {
+          "$ref": "#/$defs/IdSet",
+          "description": "Assertion IDs included in current truth."
+        },
+        "excludedFromCurrentTruth": {
+          "$ref": "#/$defs/IdSet",
+          "description": "Assertion IDs excluded from current truth (e.g., superseded)."
+        },
+        "nonFactAssertionIds": {
+          "$ref": "#/$defs/IdSet",
+          "description": "Assertion IDs that MUST NOT qualify as Facts (e.g., retracted)."
+        }
+      }
+    },
+    "HistoricalChangeExpectation": {
+      "type": "object",
+      "required": [
+        "assertionIds",
+        "historicalChange",
+        "conflictExpected",
+        "inferredSupersessionExpected"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "assertionIds": {
+          "$ref": "#/$defs/IdSet",
+          "minItems": 2,
+          "description": "Assertion pair representing historical change, not contradiction."
+        },
+        "historicalChange": {
+          "type": "boolean",
+          "const": true
+        },
+        "conflictExpected": {
+          "type": "boolean",
+          "const": false
+        },
+        "inferredSupersessionExpected": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "ContradictionExpectation": {
+      "type": "object",
+      "required": [
+        "assertionIds",
+        "contradictionExpected",
+        "preservedAssertionIds",
+        "preservedEvidenceIds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "assertionIds": {
+          "$ref": "#/$defs/IdSet",
+          "minItems": 2,
+          "description": "Assertion pair that forms a contradiction."
+        },
+        "contradictionExpected": {
+          "type": "boolean",
+          "const": true
+        },
+        "conflictId": {
+          "$ref": "#/$defs/NonEmptyId",
+          "description": "Conflict object ID when the fixture persists a Conflict."
+        },
+        "preservedAssertionIds": {
+          "$ref": "#/$defs/IdSet",
+          "description": "Assertion IDs that MUST remain present after represented conflict resolution."
+        },
+        "preservedEvidenceIds": {
+          "$ref": "#/$defs/IdSet",
+          "description": "Evidence IDs that MUST remain present after represented conflict resolution."
+        }
+      }
+    },
+    "RecommendationAssessmentExpectation": {
+      "type": "object",
+      "required": [
+        "assessmentRequiredRecommendationIds",
+        "assessmentExpected"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "assessmentRequiredRecommendationIds": {
+          "$ref": "#/$defs/IdSet",
+          "minItems": 1,
+          "description": "Non-candidate Recommendation IDs that require assessment metadata."
+        },
+        "assessmentExpected": {
+          "type": "boolean",
+          "const": true
+        },
+        "assessmentOptionalRecommendationIds": {
+          "$ref": "#/$defs/IdSet",
+          "description": "Candidate Recommendation IDs allowed to omit assessment."
+        }
+      }
+    },
+    "RecommendationPolicyExpectation": {
+      "type": "object",
+      "required": [
+        "recommendationId",
+        "expectedStatus",
+        "expectedAssessmentCheck",
+        "conflictedExpected"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "recommendationId": { "$ref": "#/$defs/NonEmptyId" },
+        "expectedStatus": {
+          "$ref": "#/$defs/RecommendationStatus",
+          "const": "rejected"
+        },
+        "expectedAssessmentCheck": {
+          "type": "object",
+          "required": ["name", "result"],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "$ref": "#/$defs/AssessmentCheckName",
+              "const": "constraint-compliance"
+            },
+            "result": {
+              "$ref": "#/$defs/AssessmentCheckResult",
+              "const": "fail"
+            }
+          }
+        },
+        "conflictedExpected": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "TemporalProjectionExpectation": {
+      "type": "object",
+      "required": ["projectionRequest", "expected"],
+      "additionalProperties": false,
+      "properties": {
+        "projectionRequest": {
+          "type": "object",
+          "required": ["asOf", "includeConflicts"],
+          "additionalProperties": false,
+          "properties": {
+            "asOf": { "$ref": "#/$defs/DateTime" },
+            "includeConflicts": { "type": "boolean" }
+          }
+        },
+        "expected": {
+          "type": "object",
+          "required": [
+            "activeAssertionIds",
+            "inactiveAssertionIds",
+            "visibleConflictIds"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "activeAssertionIds": { "$ref": "#/$defs/IdSet" },
+            "inactiveAssertionIds": { "$ref": "#/$defs/IdSet" },
+            "visibleConflictIds": { "$ref": "#/$defs/IdSet" }
+          }
+        }
+      }
+    },
+    "ExpectationRecord": {
+      "type": "object",
+      "required": [
+        "id",
+        "fixtureId",
+        "fixture",
+        "ruleIds",
+        "category",
+        "expectation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/NonEmptyId",
+          "description": "Stable expectation record identifier."
+        },
+        "fixtureId": {
+          "$ref": "#/$defs/NonEmptyId",
+          "description": "Manifest entry ID for the primary L4 fixture."
+        },
+        "fixture": {
+          "$ref": "#/$defs/NonEmptyId",
+          "description": "Repository-relative path to the primary L4 fixture."
+        },
+        "ruleIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/RuleId" },
+          "description": "Normative L4 Rule IDs bound to this expectation."
+        },
+        "category": { "$ref": "#/$defs/ExpectationCategory" },
+        "expectation": {
+          "type": "object",
+          "description": "Declarative expected outcome for the category."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional informative notes. Not normative behavioral oracle data."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "category": { "const": "fact-qualification" } },
+            "required": ["category"]
+          },
+          "then": {
+            "properties": {
+              "expectation": { "$ref": "#/$defs/FactQualificationExpectation" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "category": { "const": "current-truth" } },
+            "required": ["category"]
+          },
+          "then": {
+            "properties": {
+              "expectation": { "$ref": "#/$defs/CurrentTruthExpectation" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "category": { "const": "historical-change" } },
+            "required": ["category"]
+          },
+          "then": {
+            "properties": {
+              "expectation": { "$ref": "#/$defs/HistoricalChangeExpectation" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "category": { "const": "contradiction" } },
+            "required": ["category"]
+          },
+          "then": {
+            "properties": {
+              "expectation": { "$ref": "#/$defs/ContradictionExpectation" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "category": { "const": "recommendation-assessment" }
+            },
+            "required": ["category"]
+          },
+          "then": {
+            "properties": {
+              "expectation": {
+                "$ref": "#/$defs/RecommendationAssessmentExpectation"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "category": { "const": "recommendation-policy" } },
+            "required": ["category"]
+          },
+          "then": {
+            "properties": {
+              "expectation": {
+                "$ref": "#/$defs/RecommendationPolicyExpectation"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "category": { "const": "temporal-projection" } },
+            "required": ["category"]
+          },
+          "then": {
+            "properties": {
+              "expectation": {
+                "$ref": "#/$defs/TemporalProjectionExpectation"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
