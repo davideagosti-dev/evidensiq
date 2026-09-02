@@ -1,0 +1,106 @@
+{
+  "expectationVersion": "0.1",
+  "expectations": [
+    {
+      "id": "l4-exp-fact-qualification",
+      "fixtureId": "l4-fact-qualification",
+      "fixture": "fixtures/conformance/l4/l4-fact-qualification.json",
+      "ruleIds": ["EVI-L4-001", "EVI-L4-002"],
+      "category": "fact-qualification",
+      "expectation": {
+        "factAssertionIds": ["asrt-fact"],
+        "nonFactAssertionIds": ["asrt-not-fact"],
+        "persistedFactObjectsExpected": false
+      }
+    },
+    {
+      "id": "l4-exp-superseded-and-retracted",
+      "fixtureId": "l4-superseded-and-retracted",
+      "fixture": "fixtures/conformance/l4/l4-superseded-and-retracted.json",
+      "ruleIds": ["EVI-L4-003", "EVI-L4-004"],
+      "category": "current-truth",
+      "expectation": {
+        "includedInCurrentTruth": ["asrt-current"],
+        "excludedFromCurrentTruth": ["asrt-preliminary"],
+        "nonFactAssertionIds": ["asrt-retracted"]
+      }
+    },
+    {
+      "id": "l4-exp-historical-change",
+      "fixtureId": "l4-historical-change",
+      "fixture": "fixtures/conformance/l4/l4-historical-change.json",
+      "ruleIds": ["EVI-L4-005", "EVI-L4-006"],
+      "category": "historical-change",
+      "expectation": {
+        "assertionIds": ["asrt-q1", "asrt-q2"],
+        "historicalChange": true,
+        "conflictExpected": false,
+        "inferredSupersessionExpected": false
+      }
+    },
+    {
+      "id": "l4-exp-contradiction-and-resolution",
+      "fixtureId": "l4-contradiction-and-resolution",
+      "fixture": "fixtures/conformance/l4/l4-contradiction-and-resolution.json",
+      "ruleIds": ["EVI-L4-007", "EVI-L4-008"],
+      "category": "contradiction",
+      "expectation": {
+        "assertionIds": ["asrt-constrained", "asrt-normal"],
+        "contradictionExpected": true,
+        "conflictId": "conflict-1",
+        "preservedAssertionIds": ["asrt-constrained", "asrt-normal"],
+        "preservedEvidenceIds": ["ev-1", "ev-2"]
+      }
+    },
+    {
+      "id": "l4-exp-recommendation-assessment",
+      "fixtureId": "l4-recommendation-assessment",
+      "fixture": "fixtures/conformance/l4/l4-recommendation-assessment.json",
+      "ruleIds": ["EVI-L4-009"],
+      "category": "recommendation-assessment",
+      "expectation": {
+        "assessmentRequiredRecommendationIds": ["rec-supported"],
+        "assessmentExpected": true,
+        "assessmentOptionalRecommendationIds": ["rec-candidate"]
+      }
+    },
+    {
+      "id": "l4-exp-hard-constraint-rejected",
+      "fixtureId": "l4-hard-constraint-rejected",
+      "fixture": "fixtures/conformance/l4/l4-hard-constraint-rejected.json",
+      "ruleIds": ["EVI-L4-010"],
+      "category": "recommendation-policy",
+      "expectation": {
+        "recommendationId": "rec-increase",
+        "expectedStatus": "rejected",
+        "expectedAssessmentCheck": {
+          "name": "constraint-compliance",
+          "result": "fail"
+        },
+        "conflictedExpected": false
+      }
+    },
+    {
+      "id": "l4-exp-asOf-and-includeConflicts",
+      "fixtureId": "l4-asOf-and-includeConflicts",
+      "fixture": "fixtures/conformance/l4/l4-asOf-and-includeConflicts.json",
+      "ruleIds": ["EVI-L4-011", "EVI-L4-012"],
+      "category": "temporal-projection",
+      "expectation": {
+        "projectionRequest": {
+          "asOf": "2026-06-30T00:00:00Z",
+          "includeConflicts": true
+        },
+        "expected": {
+          "activeAssertionIds": [
+            "asrt-q2",
+            "asrt-constrained",
+            "asrt-normal"
+          ],
+          "inactiveAssertionIds": ["asrt-q1"],
+          "visibleConflictIds": ["conflict-1"]
+        }
+      }
+    }
+  ]
+}

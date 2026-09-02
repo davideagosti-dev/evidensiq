@@ -1,0 +1,11 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    }
+  ]
+}

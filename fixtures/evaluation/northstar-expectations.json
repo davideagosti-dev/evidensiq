@@ -1,0 +1,236 @@
+{
+  "expectationVersion": "0.1",
+  "scenario": "northstar-manufacturing",
+  "fixture": "fixtures/northstar-manufacturing.json",
+  "expectations": [
+    {
+      "id": "Q1",
+      "category": "assertion-value",
+      "description": "Product B Q1 2026 revenue",
+      "expectation": {
+        "assertionId": "asrt-product-b-revenue-q1-2026",
+        "predicate": "quarterlyRevenue",
+        "value": 1450000
+      }
+    },
+    {
+      "id": "Q2",
+      "category": "assertion-value",
+      "description": "Product B Q2 2026 revenue",
+      "expectation": {
+        "assertionId": "asrt-product-b-revenue-q2-2026",
+        "predicate": "quarterlyRevenue",
+        "value": 1180000
+      }
+    },
+    {
+      "id": "Q3",
+      "category": "derived-metric",
+      "description": "Product B revenue decline from Q1 to Q2 is derivable by canonical arithmetic",
+      "expectation": {
+        "derivation": {
+          "formula": "(q2Revenue - q1Revenue) / q1Revenue",
+          "inputs": {
+            "q1Revenue": {
+              "assertionId": "asrt-product-b-revenue-q1-2026",
+              "field": "value"
+            },
+            "q2Revenue": {
+              "assertionId": "asrt-product-b-revenue-q2-2026",
+              "field": "value"
+            }
+          },
+          "expectedValue": -0.18620689655172414
+        },
+        "notes": "No rounding policy is normative. Do not treat -18.6% as canonical machine output."
+      }
+    },
+    {
+      "id": "Q4",
+      "category": "assertion-value",
+      "description": "Delivery complaint rate increased from Q1 to Q2",
+      "expectation": {
+        "q1": {
+          "assertionId": "asrt-delivery-complaint-rate-q1-2026",
+          "value": 4.5
+        },
+        "q2": {
+          "assertionId": "asrt-delivery-complaint-rate-q2-2026",
+          "value": 8.2
+        }
+      }
+    },
+    {
+      "id": "Q5",
+      "category": "constraint",
+      "description": "Supplier capacity constraint is active with hard enforcement under v0.1 convention",
+      "expectation": {
+        "entityId": "constraint-supplier-capacity",
+        "type": "Constraint",
+        "properties": {
+          "enforcement": "hard"
+        },
+        "signalId": "signal-supplier-constraint-active",
+        "status": "active"
+      },
+      "level": "L4",
+      "ruleId": "EVI-L4-010"
+    },
+    {
+      "id": "Q6",
+      "category": "conflict",
+      "description": "Supplier capacity contradiction remains unresolved",
+      "expectation": {
+        "conflictId": "conflict-supplier-capacity-status",
+        "conflictKind": "contradiction",
+        "status": "unresolved",
+        "assertionIds": [
+          "asrt-supplier-capacity-constrained",
+          "asrt-supplier-capacity-normal"
+        ]
+      },
+      "level": "L4",
+      "ruleId": "EVI-L4-007"
+    },
+    {
+      "id": "Q7",
+      "category": "fact-qualification",
+      "description": "Current corrected Product B gross margin is 62%; preliminary 58 is superseded",
+      "expectation": {
+        "currentFact": {
+          "assertionId": "asrt-product-b-margin",
+          "value": 62,
+          "classification": "validated"
+        },
+        "superseded": {
+          "assertionId": "asrt-product-b-margin-preliminary",
+          "value": 58,
+          "classification": "superseded",
+          "supersededBy": "asrt-product-b-margin"
+        }
+      },
+      "level": "L4",
+      "ruleId": "EVI-L4-003"
+    },
+    {
+      "id": "Q8",
+      "category": "recommendation",
+      "description": "Defer acquisition recommendation is supported",
+      "expectation": {
+        "recommendationId": "rec-defer-product-b-acquisition-spend",
+        "status": "supported"
+      },
+      "level": "L4",
+      "ruleId": "EVI-L4-009"
+    },
+    {
+      "id": "Q9",
+      "category": "recommendation",
+      "description": "Increase acquisition recommendation is rejected",
+      "expectation": {
+        "recommendationId": "rec-increase-product-b-acquisition-spend",
+        "status": "rejected"
+      },
+      "level": "L4",
+      "ruleId": "EVI-L4-010"
+    },
+    {
+      "id": "Q10",
+      "category": "recommendation-assessment",
+      "description": "Increase acquisition rejection reason is hard constraint violation",
+      "expectation": {
+        "recommendationId": "rec-increase-product-b-acquisition-spend",
+        "assessment": {
+          "policyId": "evidensiq.default-recommendation-v0.1",
+          "failedCheck": "constraint-compliance",
+          "outcome": "fail"
+        },
+        "constraintId": "constraint-supplier-capacity",
+        "rejectionCause": "hard constraint violation"
+      },
+      "level": "L4",
+      "ruleId": "EVI-L4-010"
+    },
+    {
+      "id": "Q11",
+      "category": "temporal-filter",
+      "description": "At asOf 2026-06-30, Q2 assertions are active and Q1 revenue assertion is inactive",
+      "expectation": {
+        "asOf": "2026-06-30T00:00:00Z",
+        "activeAssertionIds": [
+          "asrt-product-b-revenue-q2-2026",
+          "asrt-delivery-complaint-rate-q2-2026",
+          "asrt-product-b-margin",
+          "asrt-supplier-lead-time",
+          "asrt-supplier-capacity-constrained",
+          "asrt-supplier-capacity-normal"
+        ],
+        "inactiveAssertionIds": [
+          "asrt-product-b-revenue-q1-2026",
+          "asrt-delivery-complaint-rate-q1-2026"
+        ]
+      },
+      "level": "L4",
+      "ruleId": "EVI-L4-011"
+    },
+    {
+      "id": "Q12",
+      "category": "supersession",
+      "description": "Superseded preliminary margin excluded from current truth",
+      "expectation": {
+        "excludedFromCurrentTruth": ["asrt-product-b-margin-preliminary"],
+        "includedInCurrentTruth": ["asrt-product-b-margin"]
+      },
+      "level": "L4",
+      "ruleId": "EVI-L4-003"
+    },
+    {
+      "id": "Q13",
+      "category": "projection",
+      "description": "Conflict remains visible when includeConflicts is true",
+      "expectation": {
+        "projectionRequest": {
+          "asOf": "2026-06-30T00:00:00Z",
+          "includeConflicts": true
+        },
+        "conflictId": "conflict-supplier-capacity-status",
+        "visible": true
+      },
+      "level": "L4",
+      "ruleId": "EVI-L4-012"
+    },
+    {
+      "id": "Q14",
+      "category": "traceability",
+      "description": "Recommendation traceability reaches evidence and source",
+      "expectation": {
+        "recommendationId": "rec-defer-product-b-acquisition-spend",
+        "traceabilityChain": {
+          "inferenceIds": [
+            "inference-acquisition-amplifies-delivery-risk",
+            "inference-product-b-growth-opportunity-post-constraint"
+          ],
+          "signalIds": [
+            "signal-product-b-sales-declining",
+            "signal-delivery-complaints-increasing",
+            "signal-supplier-constraint-active"
+          ],
+          "evidenceIds": [
+            "ev-sales-q1-2026",
+            "ev-sales-q2-2026",
+            "ev-support-complaints-q1-2026",
+            "ev-support-complaints-q2-2026",
+            "ev-ops-supplier-bottleneck",
+            "ev-strategy-margin"
+          ],
+          "sourceIds": [
+            "source-sales-csv",
+            "source-support-md",
+            "source-operations-md",
+            "source-strategy-md"
+          ]
+        }
+      }
+    }
+  ]
+}

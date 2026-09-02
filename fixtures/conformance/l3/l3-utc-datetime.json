@@ -1,0 +1,59 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    }
+  ],
+  "sources": [
+    {
+      "id": "source-1",
+      "type": "Source",
+      "name": "source.txt",
+      "reference": "source.txt",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "imported",
+        "trustAssessment": "trusted"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-1",
+      "type": "Evidence",
+      "sourceId": "source-1",
+      "contentRef": "source-1#fragment",
+      "description": "Evidence one",
+      "observedAt": "2026-06-01T00:00:00Z"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "asrt-1",
+      "type": "Assertion",
+      "subject": "product-1",
+      "predicate": "value",
+      "value": 1,
+      "evidenceIds": [
+        "ev-1"
+      ],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "validFrom": "2026-01-01T00:00:00Z",
+      "validUntil": "2026-04-01T00:00:00Z"
+    }
+  ],
+  "metadata": {
+    "createdAt": "2026-06-30T12:00:00Z",
+    "updatedAt": "2026-06-30T14:30:00Z"
+  }
+}

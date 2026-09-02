@@ -1,0 +1,29 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    },
+    {
+      "id": "product-1",
+      "type": "Product",
+      "name": "Product One"
+    },
+    {
+      "id": "metric-1",
+      "type": "Metric",
+      "name": "Metric One"
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel-1",
+      "from": "product-1",
+      "to": "metric-1",
+      "type": "targets"
+    }
+  ]
+}

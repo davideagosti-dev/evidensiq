@@ -1,0 +1,102 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    },
+    {
+      "id": "constraint-1",
+      "type": "Constraint",
+      "name": "Capacity",
+      "properties": {
+        "enforcement": "hard"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "source-1",
+      "type": "Source",
+      "name": "source.txt",
+      "reference": "source.txt",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "imported",
+        "trustAssessment": "trusted"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "ev-1",
+      "type": "Evidence",
+      "sourceId": "source-1",
+      "contentRef": "source-1#fragment",
+      "description": "Evidence one",
+      "observedAt": "2026-06-01T00:00:00Z"
+    },
+    {
+      "id": "ev-2",
+      "type": "Evidence",
+      "sourceId": "source-1",
+      "contentRef": "source-1#fragment",
+      "description": "Evidence one",
+      "observedAt": "2026-06-01T00:00:00Z"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "asrt-constrained",
+      "type": "Assertion",
+      "subject": "constraint-1",
+      "predicate": "capacityStatus",
+      "value": "constrained",
+      "evidenceIds": [
+        "ev-1"
+      ],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "validFrom": "2026-04-01T00:00:00Z",
+      "validUntil": "2026-07-01T00:00:00Z"
+    },
+    {
+      "id": "asrt-normal",
+      "type": "Assertion",
+      "subject": "constraint-1",
+      "predicate": "capacityStatus",
+      "value": "normal",
+      "evidenceIds": [
+        "ev-2"
+      ],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "asserted",
+      "validFrom": "2026-04-01T00:00:00Z",
+      "validUntil": "2026-07-01T00:00:00Z"
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "conflict-1",
+      "assertionIds": [
+        "asrt-constrained",
+        "asrt-normal"
+      ],
+      "conflictKind": "contradiction",
+      "status": "acknowledged",
+      "resolution": {
+        "method": "manual-review",
+        "resolvedAt": "2026-06-30T15:00:00Z",
+        "note": "Prefer constrained reading pending ops confirmation",
+        "preferredAssertionId": "asrt-constrained"
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    }
+  ]
+}
