@@ -16,7 +16,13 @@
     "skipLibCheck": true,
     "noEmit": true,
     "rootDir": ".",
+    "resolveJsonModule": true,
     "types": ["node"]
   },
-  "include": ["src/**/*", "test/**/*", "vitest.config.ts"]
+  "include": [
+    "src/**/*",
+    "test/**/*",
+    "vitest.config.ts",
+    "specification/business-context.schema.json"
+  ]
 }
