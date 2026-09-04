@@ -415,11 +415,55 @@ Supports: `objective`, `domains`, `entityIds`, `relationTraversal` (maxDepth 0�
 
 NO `tokenBudget` in normative core. Provider-specific token budgeting belongs to adapters/runtimes.
 
+The following request fields are **accepted but currently reserved / non-operative** in the v0.1 reference contract:
+
+| Field | Current behavior |
+|-------|------------------|
+| `objective` | Accepted; MUST NOT drive natural-language interpretation or LLM filtering |
+| `domains` | Accepted; MUST NOT invent ontology or ranking semantics |
+| `evidencePolicy` | Accepted; no normative policy IDs or evidence-sufficiency thresholds (SPF-01 deferred) |
+| `ordering` | Accepted; normative projected collection order remains original document order |
+| `sizeLimit` | Accepted as a no-op; MUST NOT truncate or emit `truncated` / `truncationReason` until a separate deterministic truncation policy is approved |
+
 ### BusinessContextProjectionResult
 
-Supports: `projectedAt`, `asOf`, filtered context subsets, `truncated`, `truncationReason`, `extensions`.
+Supports: `projectedAt`, `asOf`, filtered context subsets (`entities`, `relations`, `assertions`, `signals`, `inferences`, `recommendations`, `conflicts`, `evidence`, `sources`), `truncated`, `truncationReason`, `extensions`.
+
+#### Evidence → Source closure
+
+Projection is **provenance-complete**, not document-complete:
+
+- For every Evidence object included in a projection result, every Source referenced by that Evidence's `sourceId` and present in `document.sources` MUST appear exactly once in `ProjectionResult.sources`.
+- Projected Sources MUST preserve original `document.sources` order (no ID sort; no Evidence-encounter order).
+- Sources not referenced by included Evidence MUST be excluded.
+- When no Source qualifies, `sources` MUST be omitted (do not emit `sources: []`).
+- Projection assumes L1+L2-valid input. Unresolved Source references MUST NOT fabricate Sources or placeholders.
+
+Empty collection convention matches existing projection behavior: empty projected collections are omitted rather than emitted as empty arrays.
+
+#### Fact boundary
+
+Projection continues to include Assertions according to existing projection rules. Projection is **not** Fact-only. There is no `factsOnly` / `factQualifiedOnly` request flag and no persisted Fact result collection. Fact remains a semantic view of a validated Assertion.
+
+Temporal semantics (`asOf`, half-open `[validFrom, validUntil)`) are unchanged. No implicit clock.
 
 AI-assisted semantic ranking is non-normative and adapter-side. Do NOT turn projection into RAG/vector search.
+
+### Context Query (composition)
+
+Context Query is a **conceptual** composition of Evidensiq's existing deterministic primitives — not a separate query language or `queryBusinessContext()` API. Consumers may compose, as needed:
+
+- `projectBusinessContext` (structured subset + Evidence/Source closure)
+- explicit `asOf` / `isAssertionActiveAt` (temporal selection)
+- `isFactQualified` / `selectCurrentFactAssertions` (Fact view)
+- `includeConflicts` (explicit conflict visibility)
+- `assessRecommendation` / `buildRecommendationSupportGraph` (recommendation assessment)
+
+Not every primitive is required for every consumption path. Context Query MUST NOT imply SQL, semantic search, embeddings, or natural-language querying.
+
+### Fact consumption (composition)
+
+Consumers obtain a Fact-qualified reasoning view by composing projection with Fact/temporal helpers (for example `projectBusinessContext` + `isFactQualified` + `isAssertionActiveAt`, or `selectCurrentFactAssertions` with an explicit `asOf`). Fact consumption MUST NOT mutate projection semantics and MUST NOT introduce an implicit clock.
 
 ## Controlled Extensions
 

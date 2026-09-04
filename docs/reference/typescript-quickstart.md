@@ -9,9 +9,9 @@ This guide is **non-normative**. Normative rules live in the [Business Context S
 - Node.js **>= 22**
 - npm
 
-## Repository setup (package not yet published)
+## Repository setup
 
-`@evidensiq/core@0.0.0` is the **repository / pre-release** package version. **npm publication has not yet occurred.**
+`@evidensiq/core@0.1.0` is the **current public stable baseline**. Phase 3 (Portable Context Consumption) is under development on top of this baseline.
 
 ```bash
 git clone https://github.com/davideagosti-dev/evidensiq.git
@@ -25,17 +25,21 @@ Import from repository sources while developing against this checkout:
 import {
   parseJson,
   validateBusinessContext,
+  projectBusinessContext,
   selectCurrentFactAssertions,
+  isFactQualified,
 } from "../src/index.js";
 ```
 
-**Future** published import form (not available yet):
+Published import form:
 
 ```ts
-// FUTURE — not yet published on npm
-import { parseJson, validateBusinessContext } from "@evidensiq/core";
+import {
+  parseJson,
+  validateBusinessContext,
+  projectBusinessContext,
+} from "@evidensiq/core";
 ```
-
 ## Journey
 
 **discover → setup → import → parse/load → validate → deterministic semantics → diagnostics/results**
@@ -139,9 +143,23 @@ const currentFacts = selectCurrentFactAssertions(document, asOf);
 // Fact is a semantic view — not a persisted wire type
 ```
 
-### 5. Optional next steps
+### 5. Projection with Source closure
 
-- **Projection:** `projectBusinessContext` — see [API Overview](api-overview.md)
+```ts
+import { projectBusinessContext } from "../src/index.js";
+
+const projection = projectBusinessContext(document, {
+  entityIds: ["entity-1"],
+  asOf: "2026-06-30T00:00:00Z",
+});
+// projection.evidence — Evidence closed from projected objects
+// projection.sources — Sources referenced by that Evidence (document order)
+```
+
+Context Query is composition of existing primitives (`projectBusinessContext`, explicit `asOf`, Fact helpers, conflict inclusion, recommendation assessment) — not a separate query language. Fact-qualified views compose projection with `isFactQualified` / `selectCurrentFactAssertions`; projection itself is not Fact-only.
+
+### 6. Optional next steps
+
 - **Recommendation assessment:** `assessRecommendation` (bounded; absence of a hard violation does not imply `supported`)
 - **Conformance:** [Conformance Runner](conformance-runner.md)
 - **Northstar demo:** [Northstar Evaluation](northstar-evaluation.md) — run `npm run demo:northstar`

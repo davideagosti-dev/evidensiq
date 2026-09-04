@@ -4,7 +4,7 @@ Concise, task-oriented map of the existing `@evidensiq/core` public surface.
 
 This is **not** generated API documentation. It does **not** add exports.
 
-**Package:** `@evidensiq/core@0.0.0` (repository / pre-release; npm publication not yet performed).
+**Package:** `@evidensiq/core@0.1.0` (current public stable baseline; Phase 3 Portable Context Consumption under development).
 
 Normative rules: [Business Context Specification](../specification/business-context-spec.md), [Conformance](../specification/conformance.md).
 
@@ -96,11 +96,16 @@ Normative rules: [Business Context Specification](../specification/business-cont
 
 ## projection
 
-**Purpose:** Deterministic context projection for a request.
+**Purpose:** Deterministic context projection for a request, including Evidence → Source provenance closure.
 
-**Key exports:** `projectBusinessContext`; types `ProjectionOptions`, projection request/result model types.
+**Key exports:** `projectBusinessContext`; types `ProjectionOptions`, projection request/result model types (`BusinessContextProjectionResult.sources` when Evidence qualifies).
 
-**Caveat:** Reference projection behavior must not be confused with universal domain ranking, normative truncation precedence, or ordering policy where Phase 1 left gaps.
+**Caveats:**
+
+- Reference projection behavior must not be confused with universal domain ranking, normative truncation precedence, or ordering policy where Phase 1 left gaps.
+- Reserved request fields (`objective`, `domains`, `evidencePolicy`, `ordering`, `sizeLimit`) remain non-operative.
+- Context Query and Fact consumption are documented compositions of existing primitives — not a query DSL or Fact-only projection mode.
+- Current public stable baseline remains `@evidensiq/core@0.1.0` while Phase 3 (Portable Context Consumption) develops.
 
 **Spec:** Context projection contract in the Business Context Spec; policy gaps in [Evaluation](../specification/evaluation.md).
 

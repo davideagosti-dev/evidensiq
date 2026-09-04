@@ -61,7 +61,7 @@ Primary consumer: **Developer**.
 - Evidence / Provenance
 - Temporal validity
 - Conflict representation
-- Context Query
+- Context Query (conceptual composition of deterministic primitives; not a separate query language in the TypeScript reference)
 - Context Projection
 - Signals
 - Inference
@@ -140,6 +140,20 @@ See [terminology.md](../specification/terminology.md) for definitions.
 
 Do NOT create: facts collection, Fact schema object, Evidence → Assertion Relation, generic graph edges.
 
+## Context Query boundary
+
+Evidensiq owns Context Query conceptually. The current TypeScript reference expresses it through deterministic composition rather than a separate query DSL:
+
+```
+Consumer
+   ↓
+Projection / explicit temporal selection / Fact qualification / conflict inclusion
+   ↓
+Structured Evidensiq context
+```
+
+Composition may use `projectBusinessContext`, explicit `asOf`, `isFactQualified`, `selectCurrentFactAssertions`, `includeConflicts`, `assessRecommendation`, and `buildRecommendationSupportGraph` as needed. This MUST NOT imply SQL, semantic search, embeddings, or natural-language querying.
+
 ## Deterministic Core vs. AI-Assisted
 
 ### Deterministic Core
@@ -210,9 +224,13 @@ These are contract definitions — NOT root persisted properties.
 
 Request supports: `objective`, `domains`, `entityIds`, `relationTraversal` (maxDepth 0–3), `asOf`, `includeConflicts`, `evidencePolicy`, `sizeLimit`, `ordering`, `extensions`.
 
+`objective`, `domains`, `evidencePolicy`, `ordering`, and `sizeLimit` are accepted but currently reserved / non-operative (no natural-language filtering, ranking, policy thresholds, alternate ordering, or truncation).
+
+When Evidence is included, referenced Sources present in `document.sources` are closed into `ProjectionResult.sources` in original document order (provenance-complete, not document-complete). Empty `sources` is omitted.
+
 NO `tokenBudget` in normative core. Provider-specific token budgeting belongs to adapters/runtimes.
 
-Do NOT turn projection into RAG/vector search.
+Do NOT turn projection into RAG/vector search. Projection is not Fact-only; Fact consumption remains a consumer-side composition of existing primitives.
 
 ## Controlled Extensions
 
