@@ -124,10 +124,7 @@ describe("conflict — evaluateContradictionPreconditions", () => {
     ];
     // Common ∩ = [2026-05-01, 2026-06-01)
     const conflict = contradictionConflict("c1", ["asrt-1", "asrt-2", "asrt-3"]);
-    const result = evaluateContradictionPreconditions(
-      minimalDocument(assertions),
-      conflict,
-    );
+    const result = evaluateContradictionPreconditions(minimalDocument(assertions), conflict);
     expect(result.temporalPreconditionMet).toBe(true);
     expect(result.contradictionPreconditionsMetExceptValue).toBe(true);
   });
@@ -152,10 +149,7 @@ describe("conflict — evaluateContradictionPreconditions", () => {
     ];
     // Pairwise asrt-1∩asrt-2 nonempty, but common ∩ of all three empty
     const conflict = contradictionConflict("c1", ["asrt-1", "asrt-2", "asrt-3"]);
-    const result = evaluateContradictionPreconditions(
-      minimalDocument(assertions),
-      conflict,
-    );
+    const result = evaluateContradictionPreconditions(minimalDocument(assertions), conflict);
     expect(result.subjectPredicateAligned).toBe(true);
     expect(result.temporalPreconditionMet).toBe(false);
     expect(result.contradictionPreconditionsMetExceptValue).toBe(false);
@@ -206,10 +200,7 @@ describe("conflict — evaluateContradictionPreconditions", () => {
       resolution: { preferredAssertionId: "asrt-b", method: "manual" },
     };
     const doc = minimalDocument([a, b], [conflict]);
-    expect(selectCurrentFactAssertions(doc, ASOF).map((x) => x.id)).toEqual([
-      "asrt-a",
-      "asrt-b",
-    ]);
+    expect(selectCurrentFactAssertions(doc, ASOF).map((x) => x.id)).toEqual(["asrt-a", "asrt-b"]);
   });
 
   it("36. value incompatibility is NOT evaluated", () => {
@@ -284,10 +275,7 @@ describe("conflict — evaluateContradictionPreconditions", () => {
       externalIds: { "com.example": "asrt-missing" },
     };
     const conflict = contradictionConflict("c1", ["asrt-missing", "asrt-other"]);
-    const result = evaluateContradictionPreconditions(
-      minimalDocument([withExternal]),
-      conflict,
-    );
+    const result = evaluateContradictionPreconditions(minimalDocument([withExternal]), conflict);
     expect(result.subjectPredicateAligned).toBe(false);
     expect(result.temporalPreconditionMet).toBe(false);
     expect(result.contradictionPreconditionsMetExceptValue).toBe(false);

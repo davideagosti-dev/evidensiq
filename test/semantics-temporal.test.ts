@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  isAssertionActiveAt,
-  validityIntervalsOverlap,
-} from "../src/semantics/temporal.js";
+import { isAssertionActiveAt, validityIntervalsOverlap } from "../src/semantics/temporal.js";
 import { baseAssertion } from "./helpers/semantics-fixtures.js";
 
 const T0 = "2026-04-01T00:00:00Z";
@@ -140,17 +137,13 @@ describe("temporal — validityIntervalsOverlap", () => {
   });
 
   it("validFrom-only vs validUntil-only overlap when ranges intersect", () => {
-    expect(
-      validityIntervalsOverlap({ validFrom: T0 }, { validUntil: T1 }),
-    ).toBe(true);
-    expect(
-      validityIntervalsOverlap({ validFrom: T1 }, { validUntil: T0 }),
-    ).toBe(false);
+    expect(validityIntervalsOverlap({ validFrom: T0 }, { validUntil: T1 })).toBe(true);
+    expect(validityIntervalsOverlap({ validFrom: T1 }, { validUntil: T0 })).toBe(false);
   });
 
   it("invalid bound throws RangeError", () => {
-    expect(() =>
-      validityIntervalsOverlap({ validFrom: "nope" }, { validFrom: T0 }),
-    ).toThrow(RangeError);
+    expect(() => validityIntervalsOverlap({ validFrom: "nope" }, { validFrom: T0 })).toThrow(
+      RangeError,
+    );
   });
 });

@@ -488,10 +488,7 @@ describe("Northstar evaluation (EVI-2.6B)", () => {
     expect(pkg.devDependencies?.tsx).toBeDefined();
     expect(pkg.dependencies?.tsx).toBeUndefined();
 
-    const exampleSource = readFileSync(
-      join(repoRoot, "examples/northstar-evaluation.ts"),
-      "utf8",
-    );
+    const exampleSource = readFileSync(join(repoRoot, "examples/northstar-evaluation.ts"), "utf8");
     expect(exampleSource).toMatch(/npm run demo:northstar/);
     expect(exampleSource).toMatch(
       /from ["']\.\.\/test\/helpers\/northstar-evaluation-harness\.js["']/,

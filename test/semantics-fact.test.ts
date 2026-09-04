@@ -1,8 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  isFactQualified,
-  selectCurrentFactAssertions,
-} from "../src/semantics/fact.js";
+import { isFactQualified, selectCurrentFactAssertions } from "../src/semantics/fact.js";
 import {
   baseAssertion,
   classifiedAssertion,
@@ -30,11 +27,9 @@ describe("fact — isFactQualified", () => {
   });
 
   it("19. superseded → not Fact", () => {
-    expect(
-      isFactQualified(
-        classifiedAssertion("a1", "superseded", { supersededBy: "a2" }),
-      ),
-    ).toBe(false);
+    expect(isFactQualified(classifiedAssertion("a1", "superseded", { supersededBy: "a2" }))).toBe(
+      false,
+    );
   });
 
   it("20. retracted → not Fact", () => {
@@ -42,9 +37,7 @@ describe("fact — isFactQualified", () => {
   });
 
   it("25. arbitrary recorded policyId qualifies; not default-only", () => {
-    expect(
-      isFactQualified(validatedFact("a1", {}, "org.example.custom-fact-policy")),
-    ).toBe(true);
+    expect(isFactQualified(validatedFact("a1", {}, "org.example.custom-fact-policy"))).toBe(true);
   });
 
   it("validated without validation metadata → not Fact", () => {
