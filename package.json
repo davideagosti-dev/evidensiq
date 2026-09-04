@@ -1,6 +1,6 @@
 {
   "name": "@evidensiq/core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Evidensiq TypeScript reference implementation for portable Business Context — model, validation, semantics, and conformance",
   "keywords": [
     "evidensiq",
@@ -39,6 +39,9 @@
     "url": "https://github.com/davideagosti-dev/evidensiq/issues"
   },
   "homepage": "https://github.com/davideagosti-dev/evidensiq#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
