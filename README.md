@@ -30,13 +30,14 @@ Evidensiq is **not**:
 | Item | Status |
 |------|--------|
 | **Phase 1** — Specification & reference architecture | **Closed** |
-| **Phase 2** — TypeScript reference implementation | Implemented through EVI-2.6; **EVI-2.7 public-reference readiness in progress** |
+| **Phase 2** — TypeScript reference implementation | **Closed** (EVI-2.1–EVI-2.7 complete for approved Phase 2 scope) |
+| **Phase 3** — .NET reference implementation | **Not started** |
 | **Package** | `@evidensiq/core@0.0.0` (repository / pre-release version) |
 | **npm publication** | **Not yet performed** |
 | **Node** | `>=22` |
 | **Production / stability SLA** | **None claimed** |
 
-This repository provides a **TypeScript reference implementation** of the frozen Phase 1 scope. It is not an agent framework, LLM runtime, RAG system, or workflow engine. Package version `0.0.0` is the repository pre-release version; npm publication has not occurred.
+This repository provides a **TypeScript reference implementation** of the frozen Phase 1 scope, complete for the approved Phase 2 scope. It is not an agent framework, LLM runtime, RAG system, or workflow engine. Package version `0.0.0` is the repository pre-release version; npm publication has not occurred.
 
 See [Roadmap](docs/roadmap.md).
 
