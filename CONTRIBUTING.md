@@ -107,6 +107,12 @@ Adapters belong below Evidensiq; agent runtimes belong above it.
 - Distinguish **normative** specification from **reference** TypeScript behavior
 - Ensure internal links resolve correctly
 
+## npm releases (maintainers)
+
+Future `@evidensiq/core` publications use GitHub Actions Trusted Publishing (OIDC) — not long-lived npm tokens and not routine local `npm publish`.
+
+See [npm Trusted Publishing & Provenance](docs/release/npm-trusted-publishing.md). The publish workflow filename `publish-npm.yml` is part of the npm trust relationship; renaming it requires updating the Trusted Publisher configuration.
+
 ## Security issues
 
 **Do not report security vulnerabilities through public GitHub issues.**
