@@ -22,6 +22,7 @@
   "include": [
     "src/**/*",
     "test/**/*",
+    "examples/**/*",
     "vitest.config.ts",
     "specification/business-context.schema.json"
   ]
