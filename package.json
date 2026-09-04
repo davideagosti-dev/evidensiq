@@ -35,8 +35,8 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
-    "lint": "biome check --linter-enabled=true --formatter-enabled=false --assist-enabled=false src test package.json tsconfig.json tsconfig.build.json vitest.config.ts biome.json",
-    "format:check": "biome format src test package.json tsconfig.json tsconfig.build.json vitest.config.ts biome.json",
+    "lint": "biome check --linter-enabled=true --formatter-enabled=false --assist-enabled=false src test examples package.json tsconfig.json tsconfig.build.json vitest.config.ts biome.json",
+    "format:check": "biome format src test examples package.json tsconfig.json tsconfig.build.json vitest.config.ts biome.json",
     "pack:check": "npm pack --dry-run"
   },
   "dependencies": {
