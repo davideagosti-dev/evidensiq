@@ -4,7 +4,10 @@
  * Reuses the same test/reference harness. Not public package API.
  *
  * Run (from repo root, after `npm ci`):
- *   npx --yes tsx examples/northstar-evaluation.ts
+ *   npm run demo:northstar
+ *
+ * Uses repository-declared/pinned `tsx` (devDependency). Do not use
+ * `npx --yes tsx ...` — that can fetch undeclared tooling at runtime.
  */
 
 import {

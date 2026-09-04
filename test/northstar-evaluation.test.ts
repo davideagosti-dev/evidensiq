@@ -474,4 +474,42 @@ describe("Northstar evaluation (EVI-2.6B)", () => {
     expect(result.status).toBe("fail");
     expect(result.reason).toBe("traceability containment failure");
   });
+
+  it("Z. reference demo reproducibility — no opportunistic npx --yes tsx", () => {
+    const pkg = JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8")) as {
+      scripts?: Record<string, string>;
+      dependencies?: Record<string, string>;
+      devDependencies?: Record<string, string>;
+    };
+    const demoScript = pkg.scripts?.["demo:northstar"];
+    expect(demoScript).toBe("tsx examples/northstar-evaluation.ts");
+    expect(demoScript).not.toMatch(/npx\s+--yes/);
+    expect(demoScript).not.toMatch(/npx\s/);
+    expect(pkg.devDependencies?.tsx).toBeDefined();
+    expect(pkg.dependencies?.tsx).toBeUndefined();
+
+    const exampleSource = readFileSync(
+      join(repoRoot, "examples/northstar-evaluation.ts"),
+      "utf8",
+    );
+    expect(exampleSource).toMatch(/npm run demo:northstar/);
+    expect(exampleSource).toMatch(
+      /from ["']\.\.\/test\/helpers\/northstar-evaluation-harness\.js["']/,
+    );
+    // Instructional path must not recommend opportunistic registry fetch.
+    expect(exampleSource).not.toMatch(/^\s*\*\s+npx --yes tsx/m);
+
+    const docSource = readFileSync(
+      join(repoRoot, "docs/reference/northstar-evaluation.md"),
+      "utf8",
+    );
+    expect(docSource).toMatch(/npm run demo:northstar/);
+    // Canonical command block must not prescribe npx --yes tsx.
+    expect(docSource).not.toMatch(/```[\s\S]*?npx --yes tsx[\s\S]*?```/);
+
+    const indexSource = readFileSync(join(repoRoot, "src/index.ts"), "utf8");
+    expect(indexSource).not.toMatch(/northstar-evaluation-harness/);
+    expect(indexSource).not.toMatch(/evaluateNorthstarSuite/);
+    expect(indexSource).not.toMatch(/evaluateNorthstarQuestion/);
+  });
 });

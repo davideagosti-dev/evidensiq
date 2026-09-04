@@ -31,11 +31,16 @@ npm ci
 npm test -- test/northstar-evaluation.test.ts
 ```
 
-Developer demonstration (same harness logic):
+`npm ci` may contact the package registry to install the lockfile-declared dependency set. After that install completes, the Northstar reference demonstration must not opportunistically download undeclared tooling.
+
+Developer demonstration (same harness logic; repository-owned script using pinned `tsx`):
 
 ```bash
-npx --yes tsx examples/northstar-evaluation.ts
+npm ci
+npm run demo:northstar
 ```
+
+Do **not** use `npx --yes tsx ...` (or equivalent registry-fetch-at-execution commands).
 
 Expected structured outcome: **14 PASS / 0 FAIL / 0 SKIP**.
 
@@ -69,7 +74,7 @@ Q1–Q14 are **not** merged into the L1–L4 conformance architecture.
 - **Q3 formula string** — declarative metadata only. Trusted harness arithmetic computes `(q2 - q1) / q1`. Never `eval` / parse / interpret the formula.
 - **Q8** — verifies persisted `supported` only; does not universally derive `supported` via `assessRecommendation`.
 - **Q14** — containment oracle (`expected ⊆ actual`); Sources resolved via `Evidence.sourceId → Source.id`.
-- **No network / LLM** required.
+- **No network / LLM** required after declared dependencies are installed (`npm ci`).
 
 ## Traceability path
 
