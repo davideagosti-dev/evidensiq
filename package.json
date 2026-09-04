@@ -49,7 +49,8 @@
     "lint": "biome check --linter-enabled=true --formatter-enabled=false --assist-enabled=false src test examples package.json tsconfig.json tsconfig.build.json vitest.config.ts biome.json",
     "format:check": "biome format src test examples package.json tsconfig.json tsconfig.build.json vitest.config.ts biome.json",
     "pack:check": "npm pack --dry-run",
-    "demo:northstar": "tsx examples/northstar-evaluation.ts"
+    "demo:northstar": "tsx examples/northstar-evaluation.ts",
+    "release:channel:self-test": "node scripts/release-channel.mjs self-test"
   },
   "dependencies": {
     "ajv": "^8.20.0",
