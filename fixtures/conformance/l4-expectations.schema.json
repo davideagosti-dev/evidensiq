@@ -71,7 +71,8 @@
         "contradiction",
         "recommendation-assessment",
         "recommendation-policy",
-        "temporal-projection"
+        "temporal-projection",
+        "projection-source-closure"
       ]
     },
     "FactQualificationExpectation": {
@@ -272,6 +273,63 @@
         }
       }
     },
+    "ProjectionSourceClosureCase": {
+      "type": "object",
+      "required": [
+        "caseId",
+        "projectionRequest",
+        "expectedEvidenceIds",
+        "expectedSourceIds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "caseId": {
+          "$ref": "#/$defs/NonEmptyId",
+          "description": "Stable sub-case identifier within EVI-L4-013."
+        },
+        "projectionRequest": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "entityIds": { "$ref": "#/$defs/IdSet" },
+            "relationTraversal": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "maxDepth": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 3
+                }
+              }
+            }
+          }
+        },
+        "expectedEvidenceIds": {
+          "$ref": "#/$defs/IdSet",
+          "description": "Evidence IDs expected in the projection result (set semantics)."
+        },
+        "expectedSourceIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/NonEmptyId" },
+          "uniqueItems": true,
+          "description": "Source IDs expected in document.sources order. Empty means sources MUST be omitted."
+        }
+      }
+    },
+    "ProjectionSourceClosureExpectation": {
+      "type": "object",
+      "required": ["cases"],
+      "additionalProperties": false,
+      "properties": {
+        "cases": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ProjectionSourceClosureCase" },
+          "description": "Ordered sub-cases for EVI-L4-013 Projection Source Closure."
+        }
+      }
+    },
     "ExpectationRecord": {
       "type": "object",
       "required": [
@@ -395,6 +453,21 @@
             "properties": {
               "expectation": {
                 "$ref": "#/$defs/TemporalProjectionExpectation"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "category": { "const": "projection-source-closure" }
+            },
+            "required": ["category"]
+          },
+          "then": {
+            "properties": {
+              "expectation": {
+                "$ref": "#/$defs/ProjectionSourceClosureExpectation"
               }
             }
           }

@@ -287,6 +287,14 @@ export function projectBusinessContext(
   );
   const projectedEvidence = evidence.filter((e) => includedEvidenceIds.has(e.id));
 
+  // Evidence → Source closure (EVI-3.1 / EVI-L4-013): provenance-complete, not document-complete.
+  const referencedSourceIds = new Set<Id>();
+  for (const item of projectedEvidence) {
+    referencedSourceIds.add(item.sourceId);
+  }
+  const documentSources = document.sources ?? [];
+  const projectedSources = documentSources.filter((source) => referencedSourceIds.has(source.id));
+
   let projectedConflicts: readonly Conflict[] | undefined;
   if (request.includeConflicts === true) {
     projectedConflicts = conflicts.filter(
@@ -309,6 +317,7 @@ export function projectBusinessContext(
       ? { conflicts: projectedConflicts }
       : {}),
     ...(projectedEvidence.length > 0 ? { evidence: projectedEvidence } : {}),
+    ...(projectedSources.length > 0 ? { sources: projectedSources } : {}),
     ...(request.extensions !== undefined ? { extensions: request.extensions } : {}),
   };
 

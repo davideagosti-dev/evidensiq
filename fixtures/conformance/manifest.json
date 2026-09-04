@@ -534,6 +534,13 @@
       "targetLevel": "L4",
       "expectedValid": true,
       "notes": "EVI-L4-011: asOf=2026-06-30T00:00:00Z → active: asrt-q2, asrt-constrained, asrt-normal; inactive: asrt-q1 (validUntil exclusive). EVI-L4-012: includeConflicts=true → conflict-1 remains visible in projection."
+    },
+    {
+      "id": "l4-projection-source-closure",
+      "fixture": "fixtures/conformance/l4/l4-projection-source-closure.json",
+      "targetLevel": "L4",
+      "expectedValid": true,
+      "notes": "EVI-L4-013: projected Evidence closes referenced Sources in document.sources order; orphans excluded; sources omitted when no Evidence qualifies."
     }
   ]
 }

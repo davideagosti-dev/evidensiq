@@ -646,3 +646,222 @@ describe("projectBusinessContext — identity / noop fields / clock", () => {
     expect(a).toEqual(b);
   });
 });
+
+describe("projectBusinessContext — Evidence → Source closure (EVI-3.1)", () => {
+  it("P-53 one Evidence → one Source", () => {
+    const doc = contextDocument({
+      entities: [entity(ORG_ID, "Organization"), entity(SUBJECT_ID)],
+      sources: [
+        {
+          id: "S1",
+          type: "Source",
+          provenance: {
+            originScope: "internal",
+            acquisitionMethod: "imported",
+            trustAssessment: "trusted",
+          },
+        },
+      ],
+      evidence: [evidence("E1", "S1")],
+      assertions: [validatedFact("a1", { subject: SUBJECT_ID, evidenceIds: ["E1"] })],
+    });
+    const result = projectBusinessContext(doc, { entityIds: [SUBJECT_ID] });
+    expect((result.evidence ?? []).map((e) => e.id)).toEqual(["E1"]);
+    expect((result.sources ?? []).map((s) => s.id)).toEqual(["S1"]);
+  });
+
+  it("P-54 multiple Evidence → same Source → one Source", () => {
+    const doc = contextDocument({
+      entities: [entity(ORG_ID, "Organization"), entity(SUBJECT_ID)],
+      sources: [
+        {
+          id: "S1",
+          type: "Source",
+          provenance: {
+            originScope: "internal",
+            acquisitionMethod: "imported",
+            trustAssessment: "trusted",
+          },
+        },
+      ],
+      evidence: [evidence("E1", "S1"), evidence("E2", "S1")],
+      assertions: [
+        validatedFact("a1", { subject: SUBJECT_ID, evidenceIds: ["E1"] }),
+        validatedFact("a2", {
+          subject: SUBJECT_ID,
+          predicate: "tier",
+          evidenceIds: ["E2"],
+        }),
+      ],
+    });
+    const result = projectBusinessContext(doc, { entityIds: [SUBJECT_ID] });
+    expect((result.evidence ?? []).map((e) => e.id).sort()).toEqual(["E1", "E2"]);
+    expect((result.sources ?? []).map((s) => s.id)).toEqual(["S1"]);
+  });
+
+  it("P-55 multiple Evidence → multiple Sources in document order", () => {
+    const doc = contextDocument({
+      entities: [entity(ORG_ID, "Organization"), entity(SUBJECT_ID)],
+      sources: [
+        {
+          id: "S2",
+          type: "Source",
+          provenance: {
+            originScope: "internal",
+            acquisitionMethod: "imported",
+            trustAssessment: "trusted",
+          },
+        },
+        {
+          id: "S1",
+          type: "Source",
+          provenance: {
+            originScope: "internal",
+            acquisitionMethod: "imported",
+            trustAssessment: "trusted",
+          },
+        },
+        {
+          id: "S3",
+          type: "Source",
+          provenance: {
+            originScope: "internal",
+            acquisitionMethod: "imported",
+            trustAssessment: "trusted",
+          },
+        },
+      ],
+      evidence: [evidence("E1", "S1"), evidence("E3", "S2"), evidence("E4", "S3")],
+      assertions: [
+        validatedFact("a1", { subject: SUBJECT_ID, evidenceIds: ["E1"] }),
+        validatedFact("a2", {
+          subject: SUBJECT_ID,
+          predicate: "region",
+          evidenceIds: ["E3"],
+        }),
+      ],
+    });
+    const result = projectBusinessContext(doc, { entityIds: [SUBJECT_ID] });
+    expect((result.evidence ?? []).map((e) => e.id).sort()).toEqual(["E1", "E3"]);
+    // Document order S2, S1, S3 — only S2 and S1 qualify; order preserved.
+    expect((result.sources ?? []).map((s) => s.id)).toEqual(["S2", "S1"]);
+  });
+
+  it("P-56 orphan Source excluded", () => {
+    const doc = contextDocument({
+      entities: [
+        entity(ORG_ID, "Organization"),
+        entity(SUBJECT_ID),
+        entity("orphan-product"),
+      ],
+      sources: [
+        {
+          id: "S1",
+          type: "Source",
+          provenance: {
+            originScope: "internal",
+            acquisitionMethod: "imported",
+            trustAssessment: "trusted",
+          },
+        },
+        {
+          id: "S3",
+          type: "Source",
+          provenance: {
+            originScope: "internal",
+            acquisitionMethod: "imported",
+            trustAssessment: "trusted",
+          },
+        },
+      ],
+      evidence: [evidence("E1", "S1"), evidence("E4", "S3")],
+      assertions: [
+        validatedFact("a1", { subject: SUBJECT_ID, evidenceIds: ["E1"] }),
+        validatedFact("a-orphan", {
+          subject: "orphan-product",
+          evidenceIds: ["E4"],
+        }),
+      ],
+    });
+    const result = projectBusinessContext(doc, { entityIds: [SUBJECT_ID] });
+    expect((result.sources ?? []).map((s) => s.id)).toEqual(["S1"]);
+    expect((result.sources ?? []).map((s) => s.id)).not.toContain("S3");
+  });
+
+  it("P-57 no Evidence → sources omitted", () => {
+    const doc = contextDocument({
+      entities: [entity(ORG_ID, "Organization"), entity(SUBJECT_ID)],
+      sources: [
+        {
+          id: "S1",
+          type: "Source",
+          provenance: {
+            originScope: "internal",
+            acquisitionMethod: "imported",
+            trustAssessment: "trusted",
+          },
+        },
+      ],
+      evidence: [evidence("E1", "S1")],
+      assertions: [],
+    });
+    const result = projectBusinessContext(doc, { entityIds: [SUBJECT_ID] });
+    expect(result.evidence).toBeUndefined();
+    expect(result.sources).toBeUndefined();
+  });
+
+  it("P-58 Evidence via recommendation path closes Sources", () => {
+    const doc = contextDocument({
+      entities: [entity(ORG_ID, "Organization"), entity(SUBJECT_ID)],
+      sources: [
+        {
+          id: SOURCE_ID,
+          type: "Source",
+          provenance: {
+            originScope: "internal",
+            acquisitionMethod: "imported",
+            trustAssessment: "trusted",
+          },
+        },
+        {
+          id: "S-rec",
+          type: "Source",
+          provenance: {
+            originScope: "internal",
+            acquisitionMethod: "imported",
+            trustAssessment: "trusted",
+          },
+        },
+      ],
+      evidence: [evidence("E-seed", SOURCE_ID), evidence("E-rec", "S-rec")],
+      assertions: [validatedFact("a1", { subject: SUBJECT_ID, evidenceIds: ["E-seed"] })],
+      recommendations: [
+        recommendation("rec-1", {
+          status: "candidate",
+          // Shares seed evidence to enter the projection, then closes additional Evidence/Source.
+          evidenceIds: ["E-seed", "E-rec"],
+        }),
+      ],
+    });
+    const result = projectBusinessContext(doc, { entityIds: [SUBJECT_ID] });
+    expect((result.evidence ?? []).map((e) => e.id).sort()).toEqual(["E-rec", "E-seed"]);
+    expect((result.recommendations ?? []).map((r) => r.id)).toContain("rec-1");
+    expect((result.sources ?? []).map((s) => s.id)).toEqual([SOURCE_ID, "S-rec"]);
+  });
+
+  it("P-59 existing projection collections remain stable with Source closure", () => {
+    const doc = contextDocument({
+      entities: [entity(ORG_ID, "Organization"), entity(SUBJECT_ID)],
+      evidence: [evidence(EVIDENCE_ID, SOURCE_ID)],
+      assertions: [validatedFact("a1", { subject: SUBJECT_ID, evidenceIds: [EVIDENCE_ID] })],
+      signals: [signal("sig-1", [EVIDENCE_ID])],
+    });
+    const result = projectBusinessContext(doc, { entityIds: [SUBJECT_ID] });
+    expect((result.entities ?? []).map((e) => e.id)).toEqual([SUBJECT_ID]);
+    expect((result.assertions ?? []).map((a) => a.id)).toEqual(["a1"]);
+    expect((result.evidence ?? []).map((e) => e.id)).toEqual([EVIDENCE_ID]);
+    expect((result.signals ?? []).map((s) => s.id)).toEqual(["sig-1"]);
+    expect((result.sources ?? []).map((s) => s.id)).toEqual([SOURCE_ID]);
+    expect(result.truncated).toBeUndefined();
+  });
+});

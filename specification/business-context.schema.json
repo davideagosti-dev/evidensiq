@@ -606,6 +606,11 @@
           "type": "array",
           "items": { "$ref": "#/$defs/Evidence" }
         },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Source" },
+          "description": "Sources referenced by included Evidence, in original document.sources order. Omitted when empty."
+        },
         "truncated": {
           "type": "boolean",
           "description": "Whether projection was truncated due to size limits."

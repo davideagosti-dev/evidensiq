@@ -293,6 +293,8 @@ export interface BusinessContextProjectionResult {
   readonly recommendations?: readonly Recommendation[];
   readonly conflicts?: readonly Conflict[];
   readonly evidence?: readonly Evidence[];
+  /** Sources referenced by included Evidence (document order). Omitted when empty. */
+  readonly sources?: readonly Source[];
   readonly truncated?: boolean;
   readonly truncationReason?: string;
   readonly extensions?: Extensions;

@@ -19,6 +19,7 @@ import type {
   FactQualificationExpectation,
   HistoricalChangeExpectation,
   L4CategoryExpectation,
+  ProjectionSourceClosureExpectation,
   RecommendationAssessmentExpectation,
   RecommendationPolicyExpectation,
   TemporalProjectionExpectation,
@@ -373,6 +374,18 @@ function runRecommendationPolicy(
   };
 }
 
+function sameIdOrder(actual: readonly string[], expected: readonly string[]): boolean {
+  if (actual.length !== expected.length) {
+    return false;
+  }
+  for (let i = 0; i < actual.length; i += 1) {
+    if (actual[i] !== expected[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 function runTemporalProjection(
   document: unknown,
   expectation: TemporalProjectionExpectation,
@@ -424,6 +437,60 @@ function runTemporalProjection(
   };
 }
 
+function runProjectionSourceClosure(
+  document: unknown,
+  expectation: ProjectionSourceClosureExpectation,
+): L4OperationResult {
+  const doc = asDocument(document);
+  const expectedCases: Record<string, unknown>[] = [];
+  const actualCases: Record<string, unknown>[] = [];
+  let pass = true;
+
+  for (const caseSpec of expectation.cases) {
+    const projection = projectBusinessContext(doc, {
+      ...(caseSpec.projectionRequest.entityIds !== undefined
+        ? { entityIds: caseSpec.projectionRequest.entityIds }
+        : {}),
+      ...(caseSpec.projectionRequest.relationTraversal !== undefined
+        ? { relationTraversal: caseSpec.projectionRequest.relationTraversal }
+        : {}),
+    });
+
+    const actualEvidenceIds = (projection.evidence ?? []).map((e) => e.id);
+    const sourcesPresent = projection.sources !== undefined;
+    const actualSourceIds = (projection.sources ?? []).map((s) => s.id);
+    const expectSourcesOmitted = caseSpec.expectedSourceIds.length === 0;
+
+    const evidenceOk = sameIdSet(actualEvidenceIds, caseSpec.expectedEvidenceIds);
+    const sourcesOk = expectSourcesOmitted
+      ? !sourcesPresent
+      : sourcesPresent && sameIdOrder(actualSourceIds, caseSpec.expectedSourceIds);
+
+    if (!evidenceOk || !sourcesOk) {
+      pass = false;
+    }
+
+    expectedCases.push({
+      caseId: caseSpec.caseId,
+      expectedEvidenceIds: sortedCopy(caseSpec.expectedEvidenceIds),
+      expectedSourceIds: [...caseSpec.expectedSourceIds],
+      sourcesOmitted: expectSourcesOmitted,
+    });
+    actualCases.push({
+      caseId: caseSpec.caseId,
+      evidenceIds: sortedCopy(actualEvidenceIds),
+      sourceIds: [...actualSourceIds],
+      sourcesOmitted: !sourcesPresent,
+    });
+  }
+
+  return {
+    pass,
+    expected: { cases: expectedCases },
+    actual: { cases: actualCases },
+  };
+}
+
 const L4_HANDLERS = {
   "fact-qualification": runFactQualification,
   "current-truth": runCurrentTruth,
@@ -432,6 +499,7 @@ const L4_HANDLERS = {
   "recommendation-assessment": runRecommendationAssessment,
   "recommendation-policy": runRecommendationPolicy,
   "temporal-projection": runTemporalProjection,
+  "projection-source-closure": runProjectionSourceClosure,
 } as const;
 
 export type L4CategoryKind = keyof typeof L4_HANDLERS;
@@ -468,6 +536,8 @@ export function executeL4Category(
       return runRecommendationPolicy(document, expectation);
     case "temporal-projection":
       return runTemporalProjection(document, expectation);
+    case "projection-source-closure":
+      return runProjectionSourceClosure(document, expectation);
     default: {
       const _exhaustive: never = kind;
       throw new TypeError(`Unknown L4 category: ${String(_exhaustive)}`);
