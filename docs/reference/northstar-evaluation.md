@@ -89,3 +89,10 @@ Recommendation → Inferences → Signals / validated Assertions → Evidence �
 | `examples/northstar-evaluation.ts` | Developer-facing structured demo |
 
 Human prose in the example is explanatory only. Correctness derives from structured results.
+
+## Related
+
+- [TypeScript Quickstart](typescript-quickstart.md)
+- [API Overview](api-overview.md)
+- [Conformance Runner](conformance-runner.md)
+- Normative evaluation model: [evaluation.md](../specification/evaluation.md)
