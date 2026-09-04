@@ -26,7 +26,7 @@ This policy covers:
 
 - The Evidensiq specification and JSON Schema
 - Documentation that defines security-relevant boundaries
-- Future reference implementations and adapters (when they exist)
+- The TypeScript reference implementation (`@evidensiq/core`) and future adapters
 
 ## Core Security Invariants
 
@@ -122,13 +122,12 @@ Adapters (LLM, storage, CRM, document parsers, etc.) sit **below** Evidensiq. Ea
 - Do not grant adapters authority to override semantic invariants
 - Treat adapter failures as evidence quality issues, not silent truth
 
-### Future Secret Handling
-
-When reference implementations are introduced:
+### Secret Handling
 
 - Secrets must never be stored in `business-context.json` or specification artifacts
 - Configuration for credentials belongs in application/environment scope, not portable context
-- Reference implementations should document secure defaults
+- The TypeScript reference does not provide sandboxing, browser hardening, or a production security SLA
+- Formal security certification is not claimed
 
 ## Specification Security
 
@@ -147,8 +146,9 @@ Flag security-relevant changes in pull requests using the security impact sectio
 | Version | Supported |
 |---------|-----------|
 | 0.1 (specification) | Early specification; security practices evolving |
+| `@evidensiq/core@0.0.0` (repository / pre-release) | Reference implementation; no production security SLA |
 
-As reference implementations are released, this table will be updated with version-specific support information.
+npm publication has not yet occurred. This table does not imply certified or production-supported releases.
 
 ## Disclosure Policy
 

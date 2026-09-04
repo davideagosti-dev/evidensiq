@@ -8,7 +8,7 @@ This document defines the Evidensiq **evaluation** model for Business Context Sp
 |--------|-------------|------------|
 | Purpose | Verify implementation correctness against normative rules | Measure evidence-backed reasoning quality over canonical scenarios |
 | Scope | L1–L4 structural, semantic, serialization, and deterministic behavioral rules | Scenario-specific expected outcomes and traceability |
-| Artifacts | Rule registry, diagnostic contract, conformance manifest | Northstar expectation corpus, future evaluation harness |
+| Artifacts | Rule registry, diagnostic contract, conformance manifest | Northstar expectation corpus; Phase 2 TypeScript reference evaluation harness (repository tooling) |
 | Failure mode | Rule violation (error/warning diagnostic) | Assertion mismatch against documented expectations |
 
 **Conformance** answers: *Does the implementation correctly validate, serialize, and evaluate deterministic policy behavior defined in v0.1?*
@@ -48,7 +48,7 @@ Evaluation dimensions for v0.1:
 | [`fixtures/evaluation/adversarial-content.json`](../../fixtures/evaluation/adversarial-content.json) | Minimal DATA ≠ INSTRUCTION fixture (EVI-1.3C); instruction-like text as inert Evidence/business data |
 | [`docs/specification/reference-scenario.md`](reference-scenario.md) | Narrative and traceability documentation |
 
-The evaluation harness (EVI-1.3D and later) will consume these artifacts. EVI-1.3B defines the contract; EVI-1.3C adds the optional security fixture.
+EVI-1.3B defines the contract; EVI-1.3C adds the optional security fixture. The Phase 2 TypeScript reference evaluation harness consumes these artifacts (repository tooling; not public package API). Additional language runners may consume the same corpus.
 
 ---
 
@@ -61,7 +61,7 @@ L4 conformance fixtures are indexed by [`fixtures/conformance/manifest.json`](..
 | Scope | Focused L4 conformance behavioral oracle over the L4 fixture corpus |
 | Nature | **Test metadata** — not Business Context data and not an extension of `business-context.json` |
 | Manifest notes | Informative only; **MUST NOT** be parsed as normative behavioral expectations |
-| Consumers | Future language-specific runners (e.g., TypeScript, .NET) consume the same expectation corpus |
+| Consumers | The TypeScript reference runner and future language-specific runners (e.g., .NET) consume the same expectation corpus |
 
 This companion contract is distinct from Northstar evaluation expectations:
 
@@ -192,7 +192,7 @@ EVI-1.3C provides one minimal language-neutral fixture at [`fixtures/evaluation/
 |------|-------|
 | EVI-1.3B (this step) | Conformance contract, evaluation contract, manifest schema, Northstar expectations |
 | EVI-1.3C | Conformance fixture corpus, optional security fixture |
-| EVI-1.3D | Evaluation harness, cross-language round-trip |
+| EVI-1.3D | Evaluation harness contract / cross-language round-trip intent; TypeScript reference harness delivered in Phase 2 (non-normative tooling) |
 
 ---
 

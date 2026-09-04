@@ -6,64 +6,47 @@
 
 ---
 
-## The Problem
-
-Organizations accumulate business knowledge across CRMs, spreadsheets, documents, support systems, and operational tools. When AI systems need this context, developers typically concatenate documents into prompts, build ad-hoc RAG pipelines, or lock knowledge into vendor-specific memory systems.
-
-This approach is fragile, untraceable, and non-portable. Provenance is lost. Conflicts are hidden. Recommendations cannot be linked back to evidence.
-
 ## What Evidensiq Is
 
-Evidensiq is a **provider-neutral, embeddable Business Context SDK and open specification** that aims to:
+Evidensiq is a **provider-neutral Business Context specification and TypeScript reference implementation** (`@evidensiq/core`) that:
 
-- Transform heterogeneous business evidence into structured, temporal, traceable business context
-- Enable AI systems to produce evidence-backed reasoning and recommendations
-- Do this **without owning the agent runtime**
+- Transforms heterogeneous business evidence into structured, temporal, traceable business context
+- Enables AI systems to produce evidence-backed reasoning and recommendations
+- Does this **without owning the agent runtime**
 
-Evidensiq defines the semantic contract for business context — not the agent, not the LLM, not the storage layer.
+Evidensiq owns the semantic contract for business context — not the agent, not the LLM, not the storage layer.
 
 ## What Evidensiq Is Not
 
 Evidensiq is **not**:
 
-- A generic AI agent framework, chatbot framework, or multi-agent system
-- A generic RAG framework or vector database
-- A generic memory layer, workflow engine, or LLM client
+- An agent framework, LLM runtime, RAG system, or workflow engine
+- A generic memory layer, vector database, or embeddings stack
 - An agent orchestration or tool-calling framework
 - A CRM or business SaaS product
 
-## Core Architecture
+## Current Status
 
-```
-┌─────────────────────────────────────┐
-│  Existing Agent / Application       │
-│  Runtime                            │
-└─────────────────┬───────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────┐
-│  EVIDENSIQ                          │
-│                                     │
-│  Business Model · Evidence          │
-│  Signals · Inference                │
-│  Recommendations · Validation       │
-└─────────────────┬───────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────┐
-│  Adapters                           │
-│  LLM · Storage · Vector · Documents │
-│  CRM · etc.                         │
-└─────────────────────────────────────┘
-```
+| Item | Status |
+|------|--------|
+| **Phase 1** — Specification & reference architecture | **Closed** |
+| **Phase 2** — TypeScript reference implementation | Implemented through EVI-2.6; **EVI-2.7 public-reference readiness in progress** |
+| **Package** | `@evidensiq/core@0.0.0` (repository / pre-release version) |
+| **npm publication** | **Not yet performed** |
+| **Node** | `>=22` |
+| **Production / stability SLA** | **None claimed** |
 
-**Agent runtimes remain above Evidensiq. Adapters remain below. Evidensiq owns the semantic/context contract.**
+This repository provides a **TypeScript reference implementation** of the frozen Phase 1 scope. It is not an agent framework, LLM runtime, RAG system, or workflow engine. Package version `0.0.0` is the repository pre-release version; npm publication has not occurred.
 
-See [Architecture](docs/architecture/architecture.md) for full details.
+See [Roadmap](docs/roadmap.md).
+
+## Core Thesis
+
+Organizations accumulate business knowledge across CRMs, spreadsheets, documents, and operational tools. Concatenating documents into prompts or locking knowledge into vendor-specific memory systems loses provenance, hides conflicts, and breaks portability.
+
+Evidensiq defines a portable semantic contract so evidence-backed reasoning can be validated, traced, and shared without owning the agent stack.
 
 ## Semantic Invariants
-
-These design invariants are foundational:
 
 ```
 SOURCE ≠ EVIDENCE
@@ -77,19 +60,91 @@ INFERENCE ≠ RECOMMENDATION
 DATA ≠ INSTRUCTION
 ```
 
-Business documents and data are **evidence**, never privileged system instructions. **Fact** is a semantic classification (validated assertion), not a persisted type. The LLM must never be the source of truth.
+Business documents and data are **evidence**, never privileged system instructions. **Fact** is a semantic classification (validated assertion), not a persisted wire type.
 
 See [Terminology](docs/specification/terminology.md).
 
-## Portable Format: business-context.json
+## Normative vs Reference
 
-Evidensiq defines a portable JSON artifact for structured business context:
+| Kind | What |
+|------|------|
+| **Normative** | Phase 1 specification, JSON Schema, conformance rules where defined normatively |
+| **Reference** | `@evidensiq/core` TypeScript behavior implementing the frozen scope; some deterministic algorithms where Phase 1 leaves room (e.g. N-way contradiction temporal common-intersection is **reference implementation behavior**, not a newly normative Phase 1 rule) |
+| **Non-normative** | Northstar scenario outcomes, human-readable conclusions, quickstart examples |
+
+## Scope / Non-Scope
+
+**Evidensiq owns:** Business Context Specification; model; evidence/provenance; temporal validity; conflict representation; projection; signals/inference representation; recommendation validation/assessment; conformance/evaluation.
+
+**Evidensiq does not own:** agent orchestration; conversation management; workflow engines; generic RAG; vector DBs; embeddings; generic memory; LLM clients; generic tool calling; multi-agent coordination.
+
+## Quickstart (developers)
+
+While the package remains unpublished, clone and use the repository:
+
+```bash
+git clone https://github.com/davideagosti-dev/evidensiq.git
+cd evidensiq
+npm ci
+```
+
+Minimal path through the public API:
+
+**discover → setup → import → parse → validate → deterministic semantics → diagnostics/results**
+
+See the full walkthrough: [TypeScript Quickstart](docs/reference/typescript-quickstart.md).
+
+Verify the reference:
+
+```bash
+npm test                 # unit + conformance + Northstar regression
+npm run build
+npm run demo:northstar   # Northstar Q1–Q14 (expect 14 PASS / 0 FAIL / 0 SKIP)
+```
+
+Optional local checks: `npm run lint`, `npm run typecheck`, `npm run pack:check`, `npm run format:check`.
+
+Copy/paste minimal example (repository context): [`examples/minimal-validate.ts`](examples/minimal-validate.ts).
+
+## Documentation
+
+### Normative specification
+
+| Document | Description |
+|----------|-------------|
+| [Business Context Specification](docs/specification/business-context-spec.md) | Normative v0.1 specification |
+| [Terminology](docs/specification/terminology.md) | Core terms and invariants |
+| [Conformance](docs/specification/conformance.md) | L1–L4 conformance model |
+| [Evaluation](docs/specification/evaluation.md) | Evaluation model (normative Phase 1 text) |
+| [Architecture](docs/architecture/architecture.md) | Design boundaries |
+
+### TypeScript reference
+
+| Document | Description |
+|----------|-------------|
+| [TypeScript Quickstart](docs/reference/typescript-quickstart.md) | Install → parse → validate → semantics |
+| [API Overview](docs/reference/api-overview.md) | Task-oriented map of the public surface |
+| [Conformance Runner](docs/reference/conformance-runner.md) | `runConformanceCase` / `runConformanceSuite` |
+| [Northstar Evaluation](docs/reference/northstar-evaluation.md) | Q1–Q14 reference demonstration |
+
+### Project
+
+| Document | Description |
+|----------|-------------|
+| [Roadmap](docs/roadmap.md) | Phase status |
+| [Contributing](CONTRIBUTING.md) | Contributor workflow |
+| [Security](SECURITY.md) | Disclosure and `DATA ≠ INSTRUCTION` |
+| [Governance](GOVERNANCE.md) | Project governance |
+| [Funding](docs/funding.md) | Funding status (no application in this sprint) |
+
+## Portable Format
+
+Validated against [`specification/business-context.schema.json`](specification/business-context.schema.json).
 
 ```json
 {
-  "$schema": "https://evidensiq.dev/schemas/business-context/v0.1/business-context.schema.json",
   "specVersion": "0.1",
-  "organizationId": "org-northstar",
+  "organizationId": "org-example",
   "entities": [],
   "relations": [],
   "sources": [],
@@ -101,77 +156,6 @@ Evidensiq defines a portable JSON artifact for structured business context:
 }
 ```
 
-Validated against [`specification/business-context.schema.json`](specification/business-context.schema.json).
-
-See [Business Context Specification](docs/specification/business-context-spec.md).
-
-## Example: Northstar Manufacturing
-
-A synthetic scenario illustrating evidence-backed reasoning:
-
-| Layer | Content | Linkage |
-|-------|---------|---------|
-| **Evidence** | Q3 sales data | `sales.csv` |
-| **Assertion** | Product B Q3 revenue validated | `evidenceIds` |
-| **Signal** | Product B sales declining | Evidence |
-| **Inference (risk)** | Delivery failures correlate with decline | Signals |
-| **Recommendation** | Do NOT increase acquisition spend yet | Inferences + constraints |
-| **Status** | `supported` (L4 assessment) | — |
-
-The company goal is to grow Product B revenue — but current operational constraints mean acquisition spend would amplify delivery failures rather than solve the underlying problem.
-
-## Project Status
-
-**Phase 1 — Specification & Reference Architecture (in progress).**
-
-- Business Context Specification v0.1 architecture lock (EVI-1.1)
-- JSON Schema and conformance model (L1–L4) available
-- No runtime implementation yet
-- No npm or NuGet packages published
-- Not production-ready
-
-See [Roadmap](docs/roadmap.md) for planned phases.
-
-## Scope
-
-EVI-0.1 includes:
-
-- Open-source repository foundation (Apache 2.0)
-- Architecture and specification documentation
-- Business Context Specification v0.1
-- JSON Schema for portable context artifacts
-- Governance, contributing, and security policies
-
-EVI-0.1 explicitly excludes runtime code, package publication, and CI pipelines.
-
-## Documentation
-
-| Document | Description |
-|----------|-------------|
-| [Architecture](docs/architecture/architecture.md) | Design boundaries and principles |
-| [Business Context Specification](docs/specification/business-context-spec.md) | Full v0.1 specification |
-| [Terminology](docs/specification/terminology.md) | Core terms and definitions |
-| [Conformance](docs/specification/conformance.md) | L1–L4 conformance model |
-| [Roadmap](docs/roadmap.md) | Planned development phases |
-| [Open Source Case](docs/open-source-case.md) | Why open infrastructure matters |
-| [Public Interest](docs/public-interest.md) | Public interest rationale |
-| [Funding](docs/funding.md) | Funding status and principles |
-| [Contributing](CONTRIBUTING.md) | How to contribute |
-| [Security](SECURITY.md) | Security policy and disclosure |
-| [Governance](GOVERNANCE.md) | Project governance |
-
-## Contributing
-
-Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing specification changes. Semantic invariants and provider neutrality must be preserved.
-
-## Security
-
-Report security vulnerabilities responsibly — **not** through public issues. See [SECURITY.md](SECURITY.md).
-
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
-
----
-
-*We are building open interoperability infrastructure for trustworthy business reasoning by AI systems.*

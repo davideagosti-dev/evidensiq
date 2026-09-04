@@ -1,7 +1,15 @@
 {
   "name": "@evidensiq/core",
   "version": "0.0.0",
-  "description": "Evidensiq portable Business Context TypeScript model and foundation",
+  "description": "Evidensiq TypeScript reference implementation for portable Business Context — model, validation, semantics, and conformance",
+  "keywords": [
+    "evidensiq",
+    "business-context",
+    "evidence",
+    "provenance",
+    "conformance",
+    "typescript"
+  ],
   "license": "Apache-2.0",
   "type": "module",
   "sideEffects": false,

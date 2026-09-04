@@ -15,75 +15,61 @@ Deliverables:
 - [x] Terminology and semantic invariants
 - [x] Open source and public interest documentation
 
-Phase 0 established the initial semantic contract. No runtime code is included.
+Phase 0 established the initial semantic contract.
 
 ---
 
 ## Phase 1 — Specification & Reference Architecture
 
-**Status: In progress**
+**Status: Closed**
 
-Goals:
+Goals completed:
 
 - Lock the business context architecture
-- Reference business scenario
+- Reference business scenario (Northstar)
 - Conformance and evaluation model
 - Phase 1 architecture gate
 
-### Deliverables
-
-| Item | Description | Status |
-|------|-------------|--------|
-| **EVI-1.1** | Specification Review & Architecture Lock | In progress |
-| **EVI-1.2** | Reference Business Scenario | Planned |
-| **EVI-1.3** | Conformance & Evaluation Model | Planned |
-| **EVI-1.4** | Phase 1 Architecture Gate | Planned |
-
-EVI-1.1 delivers:
-
-- Assertion/Fact model correction
-- Temporal and conflict semantics
-- Provenance/trust model
-- Confidence model
-- Recommendation assessment
-- Context projection contract
-- Conformance model (L1–L4)
-- Serialization and versioning rules
-- Roadmap alignment
-
-No runtime code in Phase 1.
+Phase 1 normative semantics are **frozen**. Runtime code was not in Phase 1 scope; the TypeScript reference follows in Phase 2.
 
 ---
 
 ## Phase 2 — TypeScript Reference Implementation
 
-**Status: Planned**
+**Status: TypeScript reference implementation implemented through EVI-2.6; EVI-2.7 public-reference readiness currently being completed.**
 
-Goals:
+Phase 2 is **not** marked formally closed until Product Owner closure.
 
-- Reference implementation of the deterministic core in TypeScript
+Goals (implemented through EVI-2.6):
+
+- Reference implementation of the deterministic core in TypeScript (`@evidensiq/core`)
 - Schema validation for `business-context.json`
 - L1–L4 conformance support
 - Entity, relationship, and provenance management
 - Temporal validity and conflict representation
-- Confidence model implementation
+- Confidence model implementation (within frozen scope)
 - Context projection API
 - Recommendation assessment pipeline
 - Serialization and deserialization
+- Northstar evaluation harness (repository tooling; not public package API)
 
-Non-goals:
+EVI-2.7 focuses on public developer discoverability and reproducibility (documentation, quickstart, CI) **without** npm publish, version bump, or API expansion.
+
+Non-goals (unchanged):
 
 - LLM integration
 - Agent orchestration
 - Vector search
 
+Package remains `@evidensiq/core@0.0.0` until a separately authorized release action.
+
 ---
 
 ## Phase 3 — .NET Reference Implementation
 
-**Status: Planned**
+**Status: Not started**
 
-Goals:
+Goals (intent only; not started):
 
 - Reference implementation of the deterministic core in .NET
 - Parity with TypeScript reference core capabilities
@@ -91,6 +77,8 @@ Goals:
 - NuGet package publication (when ready)
 
 Rationale: Enterprise adoption requires first-class .NET support alongside TypeScript.
+
+After successful EVI-2.7 formal closure, Product Owner intends to run **EVI-FUND-0.1 — Open Source Europe Application Readiness Gate** before Phase 3. That gate is not part of this implementation sprint.
 
 ---
 
@@ -132,6 +120,7 @@ Goals:
 3. **Deterministic core first** — AI-assisted capabilities are candidates subject to validation
 4. **Portable format** — `business-context.json` remains the interoperability bridge
 5. **Open development** — all phases proceed through public issues, PRs, and documented decisions
+6. **DATA ≠ INSTRUCTION** — business content never acquires instructional authority
 
 ## How to Influence the Roadmap
 
@@ -146,4 +135,5 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
 - [Architecture](architecture/architecture.md)
 - [Business Context Specification](specification/business-context-spec.md)
 - [Conformance](specification/conformance.md)
+- [TypeScript Quickstart](reference/typescript-quickstart.md)
 - [Funding](funding.md)
