@@ -36,11 +36,11 @@ Phase 1 normative semantics are **frozen**. Runtime code was not in Phase 1 scop
 
 ## Phase 2 — TypeScript Reference Implementation
 
-**Status: TypeScript reference implementation implemented through EVI-2.6; EVI-2.7 public-reference readiness currently being completed.**
+**Status: Closed**
 
-Phase 2 is **not** marked formally closed until Product Owner closure.
+All Phase 2 items (EVI-2.1 through EVI-2.7) are complete for the approved Phase 2 scope.
 
-Goals (implemented through EVI-2.6):
+Goals completed:
 
 - Reference implementation of the deterministic core in TypeScript (`@evidensiq/core`)
 - Schema validation for `business-context.json`
@@ -52,8 +52,7 @@ Goals (implemented through EVI-2.6):
 - Recommendation assessment pipeline
 - Serialization and deserialization
 - Northstar evaluation harness (repository tooling; not public package API)
-
-EVI-2.7 focuses on public developer discoverability and reproducibility (documentation, quickstart, CI) **without** npm publish, version bump, or API expansion.
+- Public developer discoverability and reproducibility (documentation, quickstart, CI) via EVI-2.7 — **without** npm publish, version bump, or API expansion
 
 Non-goals (unchanged):
 
@@ -78,7 +77,7 @@ Goals (intent only; not started):
 
 Rationale: Enterprise adoption requires first-class .NET support alongside TypeScript.
 
-After successful EVI-2.7 formal closure, Product Owner intends to run **EVI-FUND-0.1 — Open Source Europe Application Readiness Gate** before Phase 3. That gate is not part of this implementation sprint.
+An application-readiness review for Open Source Europe fiscal hosting has been completed for the Phase 2 baseline. Application submission and hosting acceptance are separate steps and are not claimed here. Phase 3 remains not started.
 
 ---
 

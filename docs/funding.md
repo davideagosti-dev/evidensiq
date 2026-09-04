@@ -6,13 +6,16 @@ This document describes the current funding status of Evidensiq and how future f
 
 | Item | Status |
 |------|--------|
-| Project phase | Early specification (v0.1) |
+| Phase 1 — Specification & reference architecture | Closed |
+| Phase 2 — TypeScript reference implementation | Closed (complete for approved Phase 2 scope) |
+| Phase 3 — .NET reference implementation | Not started |
 | License | Apache 2.0 |
 | Funding | None claimed |
 | Fiscal host affiliation | None claimed |
-| Package releases | None (pre-release) |
+| Open Source Europe application | Not yet submitted |
+| Package | `@evidensiq/core@0.0.0` (pre-release; npm publication not yet performed) |
 
-Evidensiq is an open-source project in its foundation phase. No funding is currently claimed or implied unless explicitly stated in repository records.
+Evidensiq has completed an application-readiness review for Open Source Europe. No application has been submitted yet, no fiscal hosting acceptance is claimed, and no funding has been awarded. No funding is currently claimed or implied unless explicitly stated in repository records.
 
 ## Why Funding May Be Needed
 
@@ -95,9 +98,9 @@ Any future funding arrangement should adhere to:
 
 ## Fiscal Hosting
 
-Evidensiq may seek a fiscal host (such as [Open Source Europe](https://opensource.eu/) or similar organizations) to receive donations and manage funds on behalf of the project.
+Evidensiq may seek a fiscal host such as [Open Source Europe](https://opensourceeurope.org/) to receive donations and manage funds on behalf of the project. The current Open Source Europe application path is published at [opencollective.com/europe/apply](https://opencollective.com/europe/apply).
 
-**No affiliation or acceptance by any fiscal host is claimed at this time.**
+**No affiliation or acceptance by any fiscal host is claimed at this time. An Open Source Europe application has not yet been submitted.**
 
 If a fiscal host relationship is established, details will be documented in this file and in the repository.
 
