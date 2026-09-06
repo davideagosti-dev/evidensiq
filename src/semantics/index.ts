@@ -9,6 +9,16 @@ export { isFactQualified, selectCurrentFactAssertions } from "./fact.js";
 export type { ProjectionOptions } from "./projection.js";
 export { projectBusinessContext } from "./projection.js";
 export type {
+  ProjectionTraceSurface,
+  RecommendationPersistedAssessmentTrace,
+  RecommendationRuntimeAssessmentTrace,
+  RecommendationTraceFound,
+  RecommendationTraceMissing,
+  RecommendationTraceSurface,
+  RecommendationTraceSupport,
+} from "./trace.js";
+export { buildProjectionTrace, buildRecommendationTrace } from "./trace.js";
+export type {
   BoundedAssessmentCheck,
   BoundedAssessmentWarning,
   ConstraintEvaluation,
