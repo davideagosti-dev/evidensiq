@@ -50,6 +50,7 @@
     "format:check": "biome format src test examples package.json tsconfig.json tsconfig.build.json vitest.config.ts biome.json",
     "pack:check": "npm pack --dry-run",
     "demo:northstar": "tsx examples/northstar-evaluation.ts",
+    "demo:custom-runtime": "tsx examples/custom-runtime-consumption.ts",
     "release:channel:self-test": "node scripts/release-channel.mjs self-test"
   },
   "dependencies": {
