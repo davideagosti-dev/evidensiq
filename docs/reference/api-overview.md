@@ -98,7 +98,7 @@ Normative rules: [Business Context Specification](../specification/business-cont
 
 **Purpose:** Deterministic context projection for a request, including Evidence → Source provenance closure.
 
-**Key exports:** `projectBusinessContext`; types `ProjectionOptions`, projection request/result model types (`BusinessContextProjectionResult.sources` when Evidence qualifies).
+**Key exports:** `projectBusinessContext`, `buildProjectionTrace`; types `ProjectionOptions`, `ProjectionTraceSurface`, projection request/result model types (`BusinessContextProjectionResult.sources` when Evidence qualifies).
 
 **Caveats:**
 
@@ -115,12 +115,13 @@ Normative rules: [Business Context Specification](../specification/business-cont
 
 **Purpose:** Bounded recommendation assessment and support-graph construction.
 
-**Key exports:** `assessRecommendation`, `buildRecommendationSupportGraph`; related assessment option/result types.
+**Key exports:** `assessRecommendation`, `buildRecommendationSupportGraph`, `buildRecommendationTrace`; related assessment/trace option/result types.
 
 **Caveats:**
 
 - Assessment is **bounded**.
 - Absence of a hard violation does **not** imply `supported`.
+- Structured trace surfaces expose existing support/provenance/status relationships only; they are not chain-of-thought or hidden reasoning.
 - Scenario constraint inputs used by Northstar (Q9/Q10) are test/reference metadata, not Business Context wire data.
 
 **Spec:** Recommendation assessment in the Business Context Spec / Evaluation model.

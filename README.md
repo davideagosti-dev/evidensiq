@@ -124,7 +124,7 @@ console.log(currentFacts.map((a) => a.id));
 Additional public capabilities (same root entrypoint):
 
 - **Validation:** `validateBusinessContext`, `validateL1`, `validateL2`
-- **Projection / recommendation assessment:** `projectBusinessContext`, `assessRecommendation`, `buildRecommendationSupportGraph`
+- **Projection / traces / recommendation assessment:** `projectBusinessContext`, `buildProjectionTrace`, `buildRecommendationTrace`, `assessRecommendation`, `buildRecommendationSupportGraph`
 - **Conformance runner:** `runConformanceCase`, `runConformanceSuite`
 
 Full walkthrough: [TypeScript Quickstart](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/typescript-quickstart.md). API map: [API Overview](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/api-overview.md).
@@ -210,6 +210,8 @@ Repository documentation (not all paths are included in the npm package tarball)
 | [API Overview](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/api-overview.md) | Task-oriented map of the public surface |
 | [Conformance Runner](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/conformance-runner.md) | `runConformanceCase` / `runConformanceSuite` |
 | [Northstar Evaluation](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/northstar-evaluation.md) | Q1–Q14 reference demonstration |
+| [Consumer Security Contract](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/consumer-security-contract.md) | `DATA != INSTRUCTION` consumer/runtime boundary |
+| [Custom Runtime Consumption](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/custom-runtime-consumption.md) | Executable provider-neutral runtime handoff example |
 
 ### Project
 
@@ -232,6 +234,7 @@ npm ci
 npm test
 npm run build
 npm run demo:northstar   # Northstar Q1–Q14 (expect 14 PASS / 0 FAIL / 0 SKIP)
+npm run demo:custom-runtime
 ```
 
 ## License
