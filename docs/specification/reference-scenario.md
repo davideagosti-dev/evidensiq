@@ -185,8 +185,9 @@ Conceptual `BusinessContextProjectionRequest` (contract definition in schema `$d
 
 **Schema notes on optional fields:**
 
-- `evidencePolicy` is a free-form string in the schema with no normative policy IDs defined in v0.1 conformance. Any value (e.g. a future `evidensiq.default-evidence-v0.1`) would be adapter-defined semantics. This scenario documents inclusion expectations without asserting a standard policy ID.
-- `ordering` is similarly a free-form string with undefined normative semantics in v0.1. Omitted here pending EVI-1.3 policy definitions.
+- `evidencePolicy` is a free-form string in the schema with no normative policy IDs defined in v0.1 conformance (SPF-01 deferred). The field is reserved / non-operative in the reference projection contract.
+- `ordering` is similarly reserved / non-operative; projected collections retain original document order.
+- `sizeLimit` is accepted as a no-op; no truncation metadata is emitted until a separate deterministic truncation policy is approved.
 - No `tokenBudget` or provider-specific concepts.
 
 **Expected projection survival at `asOf` 2026-06-30:**
@@ -196,7 +197,7 @@ Conceptual `BusinessContextProjectionRequest` (contract definition in schema `$d
 - Q2-valid assertions (revenue Q2, complaints Q2, margin corrected, supplier facts); Q1 revenue excluded by temporal filter
 - Both recommendations, 3 signals, 2 inferences
 - `conflict-supplier-capacity-status` when `includeConflicts: true`
-- Evidence and sources referenced by projected objects per adapter evidence policy
+- Evidence included by deterministic projection closure, plus Sources referenced by that included Evidence (document order; unreferenced Sources excluded)
 
 ## Schema Pressure Notes
 

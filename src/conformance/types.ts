@@ -98,6 +98,29 @@ export type TemporalProjectionExpectation = {
   };
 };
 
+/** Ordered Source ID list — document order is significant (EVI-L4-013). */
+export type ProjectionSourceClosureCase = {
+  readonly caseId: string;
+  readonly projectionRequest: {
+    readonly entityIds?: readonly Id[];
+    readonly relationTraversal?: {
+      readonly maxDepth?: number;
+    };
+  };
+  /** Expected projected Evidence IDs (set semantics). */
+  readonly expectedEvidenceIds: readonly Id[];
+  /**
+   * Expected projected Source IDs in document.sources order.
+   * Empty array means `sources` MUST be omitted from the projection result.
+   */
+  readonly expectedSourceIds: readonly Id[];
+};
+
+export type ProjectionSourceClosureExpectation = {
+  readonly kind: "projection-source-closure";
+  readonly cases: readonly ProjectionSourceClosureCase[];
+};
+
 /** Closed L4 category expectation discriminants (DATA ≠ INSTRUCTION). */
 export type L4CategoryExpectation =
   | FactQualificationExpectation
@@ -106,7 +129,8 @@ export type L4CategoryExpectation =
   | ContradictionExpectation
   | RecommendationAssessmentExpectation
   | RecommendationPolicyExpectation
-  | TemporalProjectionExpectation;
+  | TemporalProjectionExpectation
+  | ProjectionSourceClosureExpectation;
 
 export type ConformanceExpectation =
   | ValidationExpectation

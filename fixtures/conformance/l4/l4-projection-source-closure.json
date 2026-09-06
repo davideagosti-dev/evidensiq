@@ -1,0 +1,203 @@
+{
+  "specVersion": "0.1",
+  "organizationId": "org-1",
+  "entities": [
+    {
+      "id": "org-1",
+      "type": "Organization",
+      "name": "Org One"
+    },
+    {
+      "id": "product-a",
+      "type": "Product",
+      "name": "Product A"
+    },
+    {
+      "id": "product-ab",
+      "type": "Product",
+      "name": "Product AB"
+    },
+    {
+      "id": "product-bc",
+      "type": "Product",
+      "name": "Product BC"
+    },
+    {
+      "id": "product-empty",
+      "type": "Product",
+      "name": "Product Empty"
+    },
+    {
+      "id": "product-orphan",
+      "type": "Product",
+      "name": "Product Orphan"
+    }
+  ],
+  "sources": [
+    {
+      "id": "S2",
+      "type": "Source",
+      "name": "source-2.txt",
+      "reference": "source-2.txt",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "imported",
+        "trustAssessment": "trusted"
+      }
+    },
+    {
+      "id": "S1",
+      "type": "Source",
+      "name": "source-1.txt",
+      "reference": "source-1.txt",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "imported",
+        "trustAssessment": "trusted"
+      }
+    },
+    {
+      "id": "S3",
+      "type": "Source",
+      "name": "source-3.txt",
+      "reference": "source-3.txt",
+      "provenance": {
+        "originScope": "internal",
+        "acquisitionMethod": "imported",
+        "trustAssessment": "trusted"
+      }
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "type": "Evidence",
+      "sourceId": "S1",
+      "contentRef": "S1#fragment",
+      "description": "Evidence one",
+      "observedAt": "2026-06-01T00:00:00Z"
+    },
+    {
+      "id": "E2",
+      "type": "Evidence",
+      "sourceId": "S1",
+      "contentRef": "S1#fragment",
+      "description": "Evidence two",
+      "observedAt": "2026-06-01T00:00:00Z"
+    },
+    {
+      "id": "E3",
+      "type": "Evidence",
+      "sourceId": "S2",
+      "contentRef": "S2#fragment",
+      "description": "Evidence three",
+      "observedAt": "2026-06-01T00:00:00Z"
+    },
+    {
+      "id": "E4",
+      "type": "Evidence",
+      "sourceId": "S3",
+      "contentRef": "S3#fragment",
+      "description": "Orphan-path evidence",
+      "observedAt": "2026-06-01T00:00:00Z"
+    }
+  ],
+  "assertions": [
+    {
+      "id": "asrt-a",
+      "type": "Assertion",
+      "subject": "product-a",
+      "predicate": "status",
+      "value": "active",
+      "evidenceIds": ["E1"],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "asrt-ab-1",
+      "type": "Assertion",
+      "subject": "product-ab",
+      "predicate": "status",
+      "value": "active",
+      "evidenceIds": ["E1"],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "asrt-ab-2",
+      "type": "Assertion",
+      "subject": "product-ab",
+      "predicate": "tier",
+      "value": "gold",
+      "evidenceIds": ["E2"],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "asrt-bc-1",
+      "type": "Assertion",
+      "subject": "product-bc",
+      "predicate": "status",
+      "value": "active",
+      "evidenceIds": ["E1"],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "asrt-bc-2",
+      "type": "Assertion",
+      "subject": "product-bc",
+      "predicate": "region",
+      "value": "EMEA",
+      "evidenceIds": ["E3"],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "validFrom": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "asrt-orphan",
+      "type": "Assertion",
+      "subject": "product-orphan",
+      "predicate": "status",
+      "value": "archived",
+      "evidenceIds": ["E4"],
+      "observedAt": "2026-06-01T00:00:00Z",
+      "classification": "validated",
+      "validation": {
+        "policyId": "evidensiq.default-fact-v0.1",
+        "evaluatedAt": "2026-06-30T12:00:00Z",
+        "result": "valid"
+      },
+      "validFrom": "2026-01-01T00:00:00Z"
+    }
+  ]
+}

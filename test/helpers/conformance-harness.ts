@@ -218,6 +218,36 @@ export function l4ExpectationToCase(
       };
       break;
     }
+    case "projection-source-closure": {
+      const cases = raw.cases as readonly {
+        readonly caseId: string;
+        readonly projectionRequest: {
+          readonly entityIds?: readonly string[];
+          readonly relationTraversal?: {
+            readonly maxDepth?: number;
+          };
+        };
+        readonly expectedEvidenceIds: readonly string[];
+        readonly expectedSourceIds: readonly string[];
+      }[];
+      expectation = {
+        kind: "projection-source-closure",
+        cases: cases.map((c) => ({
+          caseId: c.caseId,
+          projectionRequest: {
+            ...(c.projectionRequest.entityIds !== undefined
+              ? { entityIds: c.projectionRequest.entityIds }
+              : {}),
+            ...(c.projectionRequest.relationTraversal !== undefined
+              ? { relationTraversal: c.projectionRequest.relationTraversal }
+              : {}),
+          },
+          expectedEvidenceIds: c.expectedEvidenceIds,
+          expectedSourceIds: c.expectedSourceIds,
+        })),
+      };
+      break;
+    }
     default:
       throw new TypeError(`Unknown L4 category in fixture oracle: ${category}`);
   }

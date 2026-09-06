@@ -59,7 +59,7 @@ L3 uses semantic JSON tree equality (`jsonEquals` / round-trip), not byte-identi
 
 ## L4
 
-L4 expectations use a **closed** category registry (for example: `fact-qualification`, `current-truth`, `historical-change`, `contradiction`, `recommendation-assessment`, `recommendation-policy`, `temporal-projection`). Unknown categories throw.
+L4 expectations use a **closed** category registry (for example: `fact-qualification`, `current-truth`, `historical-change`, `contradiction`, `recommendation-assessment`, `recommendation-policy`, `temporal-projection`, `projection-source-closure`). Unknown categories throw.
 
 Malformed levels / categories throw `TypeError` rather than silently skipping.
 
