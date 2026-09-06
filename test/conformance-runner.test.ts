@@ -401,7 +401,7 @@ describe("conformance runner L4 corpus", () => {
   const expectations = loadL4Expectations().expectations;
 
   it("discovers all L4 expectation records", () => {
-    expect(expectations).toHaveLength(7);
+    expect(expectations).toHaveLength(8);
   });
 
   for (const record of expectations) {

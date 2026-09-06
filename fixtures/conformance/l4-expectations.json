@@ -101,6 +101,50 @@
           "visibleConflictIds": ["conflict-1"]
         }
       }
+    },
+    {
+      "id": "l4-exp-projection-source-closure",
+      "fixtureId": "l4-projection-source-closure",
+      "fixture": "fixtures/conformance/l4/l4-projection-source-closure.json",
+      "ruleIds": ["EVI-L4-013"],
+      "category": "projection-source-closure",
+      "expectation": {
+        "cases": [
+          {
+            "caseId": "A-single-evidence-single-source",
+            "projectionRequest": {
+              "entityIds": ["product-a"]
+            },
+            "expectedEvidenceIds": ["E1"],
+            "expectedSourceIds": ["S1"]
+          },
+          {
+            "caseId": "B-multiple-evidence-same-source",
+            "projectionRequest": {
+              "entityIds": ["product-ab"]
+            },
+            "expectedEvidenceIds": ["E1", "E2"],
+            "expectedSourceIds": ["S1"]
+          },
+          {
+            "caseId": "C-D-document-order-and-orphan-exclusion",
+            "projectionRequest": {
+              "entityIds": ["product-bc"]
+            },
+            "expectedEvidenceIds": ["E1", "E3"],
+            "expectedSourceIds": ["S2", "S1"]
+          },
+          {
+            "caseId": "E-no-included-evidence",
+            "projectionRequest": {
+              "entityIds": ["product-empty"]
+            },
+            "expectedEvidenceIds": [],
+            "expectedSourceIds": []
+          }
+        ]
+      },
+      "notes": "EVI-L4-013: Evidence → Source closure preserves document.sources order, deduplicates Sources, excludes orphans, and omits sources when no Evidence qualifies."
     }
   ]
 }

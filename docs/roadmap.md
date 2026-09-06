@@ -60,24 +60,30 @@ Non-goals (unchanged):
 - Agent orchestration
 - Vector search
 
-Package remains `@evidensiq/core@0.0.0` until a separately authorized release action.
+Package remains `@evidensiq/core@0.1.0` as the current public stable baseline. Phase 3 Portable Context Consumption builds on this baseline without a package version bump in EVI-3.1.
 
 ---
 
-## Phase 3 — .NET Reference Implementation
+## Phase 3 — Portable Context Consumption
 
-**Status: Not started**
+**Status: In progress (EVI-3.1 authorized)**
 
-Goals (intent only; not started):
+Theme: make Evidensiq projection a complete, deterministic, provenance-preserving consumption contract for external reasoners while preserving Phase 1/2 semantics.
 
-- Reference implementation of the deterministic core in .NET
-- Parity with TypeScript reference core capabilities
-- Shared conformance test suite
-- NuGet package publication (when ready)
+Goals (Phase 3 scope; individual EVI items gated separately):
 
-Rationale: Enterprise adoption requires first-class .NET support alongside TypeScript.
+- Portable projection / consumption contract (Evidence → Source closure)
+- Consumer security / DATA ≠ INSTRUCTION contract work (later EVI items)
+- Additional portable consumption primitives as separately authorized
 
-An application-readiness review for Open Source Europe fiscal hosting has been completed for the Phase 2 baseline. Application submission and hosting acceptance are separate steps and are not claimed here. Phase 3 remains not started.
+Non-goals for early Phase 3 items:
+
+- Query DSL / `queryBusinessContext()`
+- Fact wire types or Fact-only projection flags
+- Provider-specific ranking, truncation, or LLM behavior
+- npm republish / version bump unless separately authorized
+
+A .NET reference implementation remains a deferred multi-language option and is **not** the Phase 3 theme. It is not deleted from all future possibilities; it is simply not assigned a detailed phase number here.
 
 ---
 

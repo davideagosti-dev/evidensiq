@@ -719,6 +719,16 @@ L4 defines reproducible policy evaluation and derived outcomes for behavior that
 | **Machine-testable** | yes |
 | **Requirement** | When `BusinessContextProjectionRequest.includeConflicts` = `true`, unresolved Conflicts referenced by projected Assertions MUST remain visible in the projection result. |
 
+### EVI-L4-013 — Projection Source Closure
+
+| Attribute | Value |
+|-----------|-------|
+| **Classification** | NORMATIVE RULE |
+| **Level** | L4 |
+| **Severity** | error |
+| **Machine-testable** | yes |
+| **Requirement** | Projection results that contain Evidence MUST include exactly the Sources referenced by that included Evidence (`Evidence.sourceId`), subject to L1+L2-valid document reference semantics. Projected Sources MUST preserve original `document.sources` order, MUST appear at most once, MUST exclude Sources not referenced by included Evidence, and MUST omit the `sources` field when no Source qualifies. Projection assumes L1+L2-valid input; unresolved Source references MUST NOT fabricate Sources. |
+
 ---
 
 ## Currently Non-Normative L4 Behavior

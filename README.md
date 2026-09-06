@@ -33,7 +33,7 @@ Evidensiq is **not**:
 |------|--------|
 | **Phase 1** — Specification & reference architecture | **Closed** |
 | **Phase 2** — TypeScript reference implementation | **Closed** (EVI-2.1–EVI-2.7 complete for approved Phase 2 scope) |
-| **Phase 3** — .NET reference implementation | **Not started** |
+| **Phase 3** — Portable Context Consumption | **In progress** (EVI-3.1 authorized; .NET deferred) |
 | **Package** | `@evidensiq/core@0.1.0` (first intended public release; pre-1.0) |
 | **Node** | `>=22` |
 | **Module format** | **ESM-only** (TypeScript declarations included) |
