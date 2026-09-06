@@ -23,11 +23,12 @@ Import from repository sources while developing against this checkout:
 
 ```ts
 import {
+  buildProjectionTrace,
   parseJson,
   validateBusinessContext,
   projectBusinessContext,
   selectCurrentFactAssertions,
-  isFactQualified,
+  buildRecommendationTrace,
 } from "../src/index.js";
 ```
 
@@ -154,6 +155,11 @@ const projection = projectBusinessContext(document, {
 });
 // projection.evidence — Evidence closed from projected objects
 // projection.sources — Sources referenced by that Evidence (document order)
+
+const projectionTrace = buildProjectionTrace(projection);
+const recommendationTrace = buildRecommendationTrace(document, "rec-1", {
+  asOf: "2026-06-30T00:00:00Z",
+});
 ```
 
 Context Query is composition of existing primitives (`projectBusinessContext`, explicit `asOf`, Fact helpers, conflict inclusion, recommendation assessment) — not a separate query language. Fact-qualified views compose projection with `isFactQualified` / `selectCurrentFactAssertions`; projection itself is not Fact-only.
@@ -161,8 +167,10 @@ Context Query is composition of existing primitives (`projectBusinessContext`, e
 ### 6. Optional next steps
 
 - **Recommendation assessment:** `assessRecommendation` (bounded; absence of a hard violation does not imply `supported`)
+- **Structured deterministic traces:** `buildProjectionTrace`, `buildRecommendationTrace`
 - **Conformance:** [Conformance Runner](conformance-runner.md)
 - **Northstar demo:** [Northstar Evaluation](northstar-evaluation.md) — run `npm run demo:northstar`
+- **Custom runtime example:** [Custom Runtime Consumption](custom-runtime-consumption.md) — run `npm run demo:custom-runtime`
 
 ## Runnable repository example
 
@@ -178,5 +186,6 @@ Use the repository-pinned `tsx` from `npm ci` (avoid `npx --yes tsx` fetching un
 
 - Normative specification ≠ TypeScript reference implementation
 - Northstar harness is **not** public package API
+- `DATA != INSTRUCTION` remains a consumer/runtime boundary; see [Consumer Security Contract](consumer-security-contract.md)
 - This reference is not an agent framework, LLM runtime, RAG system, or workflow engine
 - No production / stability SLA is claimed
