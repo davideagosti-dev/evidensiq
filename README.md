@@ -41,7 +41,7 @@ Evidensiq is **not**:
 
 This repository provides a **TypeScript reference implementation** of the frozen Phase 1 scope, complete for the approved Phase 2 scope. Version `0.1.0` is the first intended public release of `@evidensiq/core`. npm publication is a separate Product Owner authorization step.
 
-See the [Roadmap](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/roadmap.md).
+See the [Roadmap](https://github.com/EvidensIQ/evidensiq/blob/main/docs/roadmap.md).
 
 ## Install
 
@@ -127,9 +127,9 @@ Additional public capabilities (same root entrypoint):
 - **Projection / traces / recommendation assessment:** `projectBusinessContext`, `buildProjectionTrace`, `buildRecommendationTrace`, `assessRecommendation`, `buildRecommendationSupportGraph`
 - **Conformance runner:** `runConformanceCase`, `runConformanceSuite`
 
-Full walkthrough: [TypeScript Quickstart](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/typescript-quickstart.md). API map: [API Overview](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/api-overview.md).
+Full walkthrough: [TypeScript Quickstart](https://github.com/EvidensIQ/evidensiq/blob/main/docs/reference/typescript-quickstart.md). API map: [API Overview](https://github.com/EvidensIQ/evidensiq/blob/main/docs/reference/api-overview.md).
 
-The **Northstar Manufacturing** reference scenario (Q1–Q14) demonstrates the integrated Phase 2 baseline; see [Northstar Evaluation](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/northstar-evaluation.md).
+The **Northstar Manufacturing** reference scenario (Q1–Q14) demonstrates the integrated Phase 2 baseline; see [Northstar Evaluation](https://github.com/EvidensIQ/evidensiq/blob/main/docs/reference/northstar-evaluation.md).
 
 ## Core Thesis
 
@@ -153,7 +153,7 @@ DATA ≠ INSTRUCTION
 
 Business documents and data are **evidence**, never privileged system instructions. **Fact** is a semantic classification (validated assertion), not a persisted wire type.
 
-See [Terminology](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/specification/terminology.md).
+See [Terminology](https://github.com/EvidensIQ/evidensiq/blob/main/docs/specification/terminology.md).
 
 ## Normative vs Reference
 
@@ -171,7 +171,7 @@ See [Terminology](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/s
 
 ## Portable Format
 
-Validated against the schema shipped in the package (`specification/business-context.schema.json`). Repository copy: [`specification/business-context.schema.json`](https://github.com/davideagosti-dev/evidensiq/blob/main/specification/business-context.schema.json).
+Validated against the schema shipped in the package (`specification/business-context.schema.json`). Repository copy: [`specification/business-context.schema.json`](https://github.com/EvidensIQ/evidensiq/blob/main/specification/business-context.schema.json).
 
 ```json
 {
@@ -196,39 +196,39 @@ Repository documentation (not all paths are included in the npm package tarball)
 
 | Document | Description |
 |----------|-------------|
-| [Business Context Specification](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/specification/business-context-spec.md) | Normative v0.1 specification |
-| [Terminology](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/specification/terminology.md) | Core terms and invariants |
-| [Conformance](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/specification/conformance.md) | L1–L4 conformance model |
-| [Evaluation](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/specification/evaluation.md) | Evaluation model (normative Phase 1 text) |
-| [Architecture](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/architecture/architecture.md) | Design boundaries |
+| [Business Context Specification](https://github.com/EvidensIQ/evidensiq/blob/main/docs/specification/business-context-spec.md) | Normative v0.1 specification |
+| [Terminology](https://github.com/EvidensIQ/evidensiq/blob/main/docs/specification/terminology.md) | Core terms and invariants |
+| [Conformance](https://github.com/EvidensIQ/evidensiq/blob/main/docs/specification/conformance.md) | L1–L4 conformance model |
+| [Evaluation](https://github.com/EvidensIQ/evidensiq/blob/main/docs/specification/evaluation.md) | Evaluation model (normative Phase 1 text) |
+| [Architecture](https://github.com/EvidensIQ/evidensiq/blob/main/docs/architecture/architecture.md) | Design boundaries |
 
 ### TypeScript reference
 
 | Document | Description |
 |----------|-------------|
-| [TypeScript Quickstart](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/typescript-quickstart.md) | Install → parse → validate → semantics |
-| [API Overview](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/api-overview.md) | Task-oriented map of the public surface |
-| [Conformance Runner](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/conformance-runner.md) | `runConformanceCase` / `runConformanceSuite` |
-| [Northstar Evaluation](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/northstar-evaluation.md) | Q1–Q14 reference demonstration |
-| [Consumer Security Contract](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/consumer-security-contract.md) | `DATA != INSTRUCTION` consumer/runtime boundary |
-| [Custom Runtime Consumption](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/reference/custom-runtime-consumption.md) | Executable provider-neutral runtime handoff example |
+| [TypeScript Quickstart](https://github.com/EvidensIQ/evidensiq/blob/main/docs/reference/typescript-quickstart.md) | Install → parse → validate → semantics |
+| [API Overview](https://github.com/EvidensIQ/evidensiq/blob/main/docs/reference/api-overview.md) | Task-oriented map of the public surface |
+| [Conformance Runner](https://github.com/EvidensIQ/evidensiq/blob/main/docs/reference/conformance-runner.md) | `runConformanceCase` / `runConformanceSuite` |
+| [Northstar Evaluation](https://github.com/EvidensIQ/evidensiq/blob/main/docs/reference/northstar-evaluation.md) | Q1–Q14 reference demonstration |
+| [Consumer Security Contract](https://github.com/EvidensIQ/evidensiq/blob/main/docs/reference/consumer-security-contract.md) | `DATA != INSTRUCTION` consumer/runtime boundary |
+| [Custom Runtime Consumption](https://github.com/EvidensIQ/evidensiq/blob/main/docs/reference/custom-runtime-consumption.md) | Executable provider-neutral runtime handoff example |
 
 ### Project
 
 | Document | Description |
 |----------|-------------|
-| [Roadmap](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/roadmap.md) | Phase status |
-| [Contributing](https://github.com/davideagosti-dev/evidensiq/blob/main/CONTRIBUTING.md) | Contributor workflow |
-| [Security](https://github.com/davideagosti-dev/evidensiq/blob/main/SECURITY.md) | Disclosure and `DATA ≠ INSTRUCTION` |
-| [Governance](https://github.com/davideagosti-dev/evidensiq/blob/main/GOVERNANCE.md) | Project governance |
-| [Funding](https://github.com/davideagosti-dev/evidensiq/blob/main/docs/funding.md) | Funding status |
+| [Roadmap](https://github.com/EvidensIQ/evidensiq/blob/main/docs/roadmap.md) | Phase status |
+| [Contributing](https://github.com/EvidensIQ/evidensiq/blob/main/CONTRIBUTING.md) | Contributor workflow |
+| [Security](https://github.com/EvidensIQ/evidensiq/blob/main/SECURITY.md) | Disclosure and `DATA ≠ INSTRUCTION` |
+| [Governance](https://github.com/EvidensIQ/evidensiq/blob/main/GOVERNANCE.md) | Project governance |
+| [Funding](https://github.com/EvidensIQ/evidensiq/blob/main/docs/funding.md) | Funding status |
 
 ## Developing from this repository
 
-For contributors working on the reference implementation itself (not the primary npm consumer path), see [Contributing](https://github.com/davideagosti-dev/evidensiq/blob/main/CONTRIBUTING.md). Typical local setup:
+For contributors working on the reference implementation itself (not the primary npm consumer path), see [Contributing](https://github.com/EvidensIQ/evidensiq/blob/main/CONTRIBUTING.md). Typical local setup:
 
 ```bash
-git clone https://github.com/davideagosti-dev/evidensiq.git
+git clone https://github.com/EvidensIQ/evidensiq.git
 cd evidensiq
 npm ci
 npm test

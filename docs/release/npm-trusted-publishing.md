@@ -21,7 +21,7 @@ npm Trusted Publishing is bound to **exact** values:
 |-------|--------|
 | Package | `@evidensiq/core` |
 | Provider | GitHub Actions |
-| GitHub owner | `davideagosti-dev` |
+| GitHub owner | `EvidensIQ` |
 | Repository | `evidensiq` |
 | Workflow filename | `publish-npm.yml` |
 | Environment | *(none)* |
