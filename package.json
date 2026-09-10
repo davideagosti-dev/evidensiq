@@ -33,12 +33,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davideagosti-dev/evidensiq.git"
+    "url": "git+https://github.com/EvidensIQ/evidensiq.git"
   },
   "bugs": {
-    "url": "https://github.com/davideagosti-dev/evidensiq/issues"
+    "url": "https://github.com/EvidensIQ/evidensiq/issues"
   },
-  "homepage": "https://github.com/davideagosti-dev/evidensiq#readme",
+  "homepage": "https://github.com/EvidensIQ/evidensiq#readme",
   "publishConfig": {
     "access": "public"
   },

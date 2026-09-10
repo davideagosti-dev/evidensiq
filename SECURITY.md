@@ -8,7 +8,7 @@ Evidensiq is designed to help AI systems reason over business context with evide
 
 If you believe you have found a security vulnerability:
 
-1. **GitHub Private Vulnerability Reporting** — If enabled for this repository, use [GitHub's private vulnerability reporting](https://github.com/davideagosti-dev/evidensiq/security/advisories/new) to submit details confidentially.
+1. **GitHub Private Vulnerability Reporting** — If enabled for this repository, use [GitHub's private vulnerability reporting](https://github.com/EvidensIQ/evidensiq/security/advisories/new) to submit details confidentially.
 2. **Direct contact** — Alternatively, contact the repository maintainer privately through GitHub (maintainer profile messaging).
 
 Please include:

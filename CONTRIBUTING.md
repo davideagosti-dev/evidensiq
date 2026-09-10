@@ -8,7 +8,7 @@ Thank you for your interest in contributing. Evidensiq is open infrastructure fo
 - npm (comes with Node)
 
 ```bash
-git clone https://github.com/davideagosti-dev/evidensiq.git
+git clone https://github.com/EvidensIQ/evidensiq.git
 cd evidensiq
 npm ci
 ```
