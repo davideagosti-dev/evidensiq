@@ -749,11 +749,7 @@ describe("projectBusinessContext — Evidence → Source closure (EVI-3.1)", () 
 
   it("P-56 orphan Source excluded", () => {
     const doc = contextDocument({
-      entities: [
-        entity(ORG_ID, "Organization"),
-        entity(SUBJECT_ID),
-        entity("orphan-product"),
-      ],
+      entities: [entity(ORG_ID, "Organization"), entity(SUBJECT_ID), entity("orphan-product")],
       sources: [
         {
           id: "S1",

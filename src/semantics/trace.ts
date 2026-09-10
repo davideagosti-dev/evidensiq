@@ -6,10 +6,7 @@ import type {
   Id,
   Recommendation,
 } from "../model.js";
-import {
-  assessRecommendation,
-  type RecommendationAssessmentOptions,
-} from "./recommendation.js";
+import { assessRecommendation, type RecommendationAssessmentOptions } from "./recommendation.js";
 
 export type ProjectionTraceSurface = {
   readonly kind: "projection";
@@ -72,9 +69,7 @@ export type RecommendationTraceMissing = {
   readonly recommendationId: Id;
 };
 
-export type RecommendationTraceSurface =
-  | RecommendationTraceFound
-  | RecommendationTraceMissing;
+export type RecommendationTraceSurface = RecommendationTraceFound | RecommendationTraceMissing;
 
 function sourceIdsInDocumentOrder(
   document: BusinessContextDocument,

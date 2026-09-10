@@ -14,7 +14,7 @@ This guide is **non-normative**. Normative rules live in the [Business Context S
 `@evidensiq/core@0.1.0` is the **current public stable baseline**. Phase 3 (Portable Context Consumption) is under development on top of this baseline.
 
 ```bash
-git clone https://github.com/davideagosti-dev/evidensiq.git
+git clone https://github.com/EvidensIQ/evidensiq.git
 cd evidensiq
 npm ci
 ```
