@@ -34,12 +34,12 @@ Evidensiq is **not**:
 | **Phase 1** — Specification & reference architecture | **Closed** |
 | **Phase 2** — TypeScript reference implementation | **Closed** (EVI-2.1–EVI-2.7 complete for approved Phase 2 scope) |
 | **Phase 3** — Portable Context Consumption | **In progress** (EVI-3.1 authorized; .NET deferred) |
-| **Package** | `@evidensiq/core@0.1.0` (first intended public release; pre-1.0) |
+| **Package** | `@evidensiq/core@0.1.0` (first public release; pre-1.0) |
 | **Node** | `>=22` |
 | **Module format** | **ESM-only** (TypeScript declarations included) |
 | **Production / stability SLA** | **None claimed** |
 
-This repository provides a **TypeScript reference implementation** of the frozen Phase 1 scope, complete for the approved Phase 2 scope. Version `0.1.0` is the first intended public release of `@evidensiq/core`. npm publication is a separate Product Owner authorization step.
+This repository provides a **TypeScript reference implementation** of the frozen Phase 1 scope, complete for the approved Phase 2 scope. Version `0.1.0` is the first public release of `@evidensiq/core` and is available on npm.
 
 See the [Roadmap](https://github.com/EvidensIQ/evidensiq/blob/main/docs/roadmap.md).
 
