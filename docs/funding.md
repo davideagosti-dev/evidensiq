@@ -1,27 +1,29 @@
 # Funding
 
-This document describes the current funding status of Evidensiq and how future funding could support the project. It is intended for transparency and for potential review by fiscal hosts or funding organizations.
+This document describes the current funding and fiscal-hosting status of EvidensIQ and how future funding could support the project. It is intended for transparency and for review by supporters and funding organizations.
 
 ## Current Status
 
 | Item | Status |
 |------|--------|
 | Phase 1 — Specification & reference architecture | Closed |
-| Phase 2 — TypeScript reference implementation | Closed (complete for approved Phase 2 scope) |
-| Phase 3 — .NET reference implementation | Not started |
-| License | Apache 2.0 |
-| Funding | None claimed |
-| Fiscal host affiliation | None claimed |
-| Open Source Europe application | Not yet submitted |
-| Package | `@evidensiq/core@0.0.0` (pre-release; npm publication not yet performed) |
+| Phase 2 — TypeScript reference implementation | Closed |
+| Phase 3 — Portable Context Consumption | In progress |
+| Public package | `@evidensiq/core@0.1.0` |
+| Public release | [`v0.1.0`](https://github.com/EvidensIQ/evidensiq/releases/tag/v0.1.0) |
+| License | Apache-2.0 |
+| Fiscal host | [Open Source Europe](https://opensourceeurope.org/) |
+| Collective | [opencollective.com/evidensiq](https://opencollective.com/evidensiq) |
+| Grant funding | No grant award claimed |
 
-Evidensiq has completed an application-readiness review for Open Source Europe. No application has been submitted yet, no fiscal hosting acceptance is claimed, and no funding has been awarded. No funding is currently claimed or implied unless explicitly stated in repository records.
+EvidensIQ is fiscally hosted by Open Source Europe. No grant funding is claimed as awarded unless an award is explicitly documented in repository records.
 
 ## Why Funding May Be Needed
 
-Open infrastructure projects require sustained effort beyond initial specification:
+Open infrastructure projects require sustained effort beyond the completed Phase 1 specification and Phase 2 TypeScript reference implementation:
 
-- Specification design and community review
+- Specification maturation and community review
+- Interoperability and cross-implementation conformance
 - Reference implementations in multiple ecosystems
 - Documentation and examples
 - Conformance and evaluation tooling
@@ -43,10 +45,9 @@ Funding should support **project-related work and public project outcomes**. Pot
 
 ### Reference Implementations
 
-- Specification and reference architecture (Phase 1)
-- TypeScript reference implementation (Phase 2)
-- .NET reference implementation (Phase 3)
-- Shared test suites across implementations
+- Portable Context Consumption work building on the TypeScript reference implementation
+- Additional cross-runtime reference implementations, potentially including .NET
+- Shared conformance suites across implementations
 
 ### Documentation and Examples
 
@@ -98,16 +99,15 @@ Any future funding arrangement should adhere to:
 
 ## Fiscal Hosting
 
-Evidensiq may seek a fiscal host such as [Open Source Europe](https://opensourceeurope.org/) to receive donations and manage funds on behalf of the project. The current Open Source Europe application path is published at [opencollective.com/europe/apply](https://opencollective.com/europe/apply).
+EvidensIQ is fiscally hosted by [Open Source Europe](https://opensourceeurope.org/).
 
-**No affiliation or acceptance by any fiscal host is claimed at this time. An Open Source Europe application has not yet been submitted.**
+The live EvidensIQ collective is available at [opencollective.com/evidensiq](https://opencollective.com/evidensiq).
 
-If a fiscal host relationship is established, details will be documented in this file and in the repository.
+Fiscal hosting does not imply that a grant has been awarded. Any future grant award will be documented explicitly in repository records.
 
 ## How to Support the Project Today
 
-Before formal funding mechanisms exist:
-
+- Support EvidensIQ through its [Open Collective](https://opencollective.com/evidensiq)
 - Contribute documentation, specification feedback, or issues
 - Share the project with teams working on AI and business context
 - Propose adapters or integrations (future phases)
